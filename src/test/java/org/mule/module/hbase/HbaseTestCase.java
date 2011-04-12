@@ -3,25 +3,44 @@
  */
 package org.mule.module.hbase;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
-import org.mule.module.hbase.HbaseCloudConnector;
+import org.apache.hadoop.hbase.client.Result;
+import org.junit.Before;
+import org.junit.Test;
+import org.mule.module.hbase.api.HBaseService;
 
 public class HbaseTestCase
 {
+    private static final String SOME_ROW_KEY = "some-row-key";
+    private static final String TABLE_NAME = "table-name";
+    private HbaseCloudConnector connector;
+    private HBaseService facade;
+
+    @Before
+    public void before() {
+        connector = new HbaseCloudConnector();
+        facade = mock(HBaseService.class);
+        connector.setFacade(facade);
+    }
+    
     @Test
-    public void invokeSomeMethodOnTheCloudConnector()
+    public void testTableAdmin()
     {
-    /*
-        Add code that tests the cloud connector at the API level. This means that you'll
-        instantiate your cloud connector directly, invoke one of its methods and assert
-        you get the correct result.
-
-        Example:
-
-        HbaseCloudConnector connector = new HbaseCloudConnector();
-        Object result = connector.someMethod("sample input");
-        assertEquals("expected output", result);
-     */
+        connector.createTable(TABLE_NAME);
+        verify(facade).createTable(eq(TABLE_NAME));
+    }
+    
+    @Test
+    public void testGetByRow()
+    {
+        Result mockResult = mock(Result.class);
+        when(mockResult.isEmpty()).thenReturn(false);
+        when(facade.get(eq(TABLE_NAME), eq(SOME_ROW_KEY))).thenReturn(mockResult);
+        
+        Result result = connector.get(TABLE_NAME, SOME_ROW_KEY);
+        assertFalse(result.isEmpty());
     }
 }

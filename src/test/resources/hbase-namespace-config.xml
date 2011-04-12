@@ -13,14 +13,12 @@
                           http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
                           http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0-SNAPSHOT/mule-hbase.xsd">
 
-        <!--
-           Declare one flow like this one per element you add in your schema.
+<!--    <hbase:config facade-ref="mockFacade" />-->
+<!--    -->
+<!--    <flow name="flowGetByKey">-->
+<!--        <hbase:get tableName="some-table" row="some-row" />-->
+<!--    </flow>-->
+<!---->
+<!--    <spring:bean name="mockFacade" class="org.mule.module.hbase.api.impl.MockHBaseService" />-->
 
-           See the comment in HbaseNamespaceHandlerTestCase for an example how to send
-           Mule events directly to this flow.
-
-       <flow name="theFlow">
-           <hbase:operation parameter="#[payload]"/>
-       </flow>
-        -->
 </mule>

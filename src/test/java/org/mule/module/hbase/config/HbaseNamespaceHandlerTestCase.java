@@ -3,6 +3,8 @@
  */
 package org.mule.module.hbase.config;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.mule.api.MuleEvent;
 import org.mule.construct.SimpleFlowConstruct;
 import org.mule.tck.FunctionalTestCase;
 
@@ -16,22 +18,13 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
 
     public void testSendMessageToFlow()throws Exception
     {
-    /*
-        This test case tests your Mule integration.
-
-        To test your flow directly (i.e. without any inbound endpoints, declare a flow in
-        hbase-namespace-config.xml and put the element from your
-        cloud connector's namespace that you want to test into it.
-        A proper example was put into hbase-namespace-config.xml
-
-        Now you can send data to your test flow from the unit test:
-
-        String payload = <your input to the flow here>;
-        SimpleFlowConstruct flow = lookupFlowConstruct("theFlow");
-        MuleEvent event = getTestEvent(payload);
-        MuleEvent responseEvent = flow.process(event);
-        assertEquals(<expected test output>, responseEvent.getMessage().getPayloadAsString());
-    */
+//        String payload = "some-row";
+//        SimpleFlowConstruct flow = lookupFlowConstruct("flowGetByKey");
+//        MuleEvent event = getTestEvent(payload);
+//        MuleEvent responseEvent = flow.process(event);
+//        
+//        Result response = responseEvent.getMessage().getPayload(Result.class);
+//        assertTrue(response.isEmpty());
     }
 
     private SimpleFlowConstruct lookupFlowConstruct(String name)

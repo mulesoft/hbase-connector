@@ -12,13 +12,15 @@
     <url>http://www.muleforge.org/projects/mule-module-hbase</url>
 
     <properties>
-                <mule.version>3.1.0</mule.version>
+        <mule.version>3.1.0</mule.version>
         <!-- Tools properties -->
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
-                <jdk.name>J2SE-1.5</jdk.name>
+        <jdk.name>J2SE-1.5</jdk.name>
+        <hbase.version>0.90.0</hbase.version>
         <jdk.version>1.5</jdk.version>
-            </properties>
+        <slf4j.version>1.6.1</slf4j.version>
+    </properties>
 
     <build>
         <extensions>
@@ -150,6 +152,21 @@
         </plugins>
     </reporting>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- Mule Dependencies -->
         <dependency>
@@ -158,7 +175,18 @@
             <version>${mule.version}</version>
             <optional>true</optional>
         </dependency>
-                        <!-- for testing -->
+        <dependency>
+            <groupId>org.mule.tools</groupId>
+            <artifactId>mule-cloud-connector-annotations</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+        
+        <!-- for testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -171,10 +199,10 @@
             <version>${mule.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mule.tools</groupId>
-            <artifactId>mule-cloud-connector-annotations</artifactId>
-            <version>2.0.12</version>
-        </dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.4</version>
+		</dependency>
     </dependencies>
 
     <repositories>
