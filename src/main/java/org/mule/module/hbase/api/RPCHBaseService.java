@@ -15,14 +15,17 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MasterNotRunningException;
+import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.ZooKeeperConnectionException;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
@@ -64,14 +67,49 @@ public class RPCHBaseService implements HBaseService {
             HBaseAdmin hBaseAdmin = new HBaseAdmin(configuration);
             HTableDescriptor descriptor = new HTableDescriptor(name);
             hBaseAdmin.createTable(descriptor);
+            hBaseAdmin.flush(name);
         } catch (MasterNotRunningException e) {
-            // TODO: Define what to do!
             throw new UnhandledException(e);
         } catch (ZooKeeperConnectionException e) {
-            // TODO: Define what to do!
             throw new UnhandledException(e);
         } catch (IOException e) {
-            // TODO: Define what to do!
+            throw new UnhandledException(e);
+        } catch (InterruptedException e) {
+            throw new UnhandledException(e);
+        }
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#existsTable(java.lang.String) */
+    public boolean existsTable(String name) {
+        try {
+            HBaseAdmin hBaseAdmin = new HBaseAdmin(configuration);
+            HTableDescriptor descriptor = hBaseAdmin.getTableDescriptor(name.getBytes(UTF8));
+            return descriptor != null;
+        } catch (MasterNotRunningException e) {
+            throw new UnhandledException(e);
+        } catch (ZooKeeperConnectionException e) {
+            throw new UnhandledException(e);
+        } catch (TableNotFoundException e) {
+            return false;
+        } catch (IOException e) {
+            throw new UnhandledException(e);
+        }
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
+    public void deleteTable(String name) {
+        try {
+            HBaseAdmin hBaseAdmin = new HBaseAdmin(configuration);
+            hBaseAdmin.disableTable(name);
+            hBaseAdmin.deleteTable(name);
+            hBaseAdmin.flush(name);
+        } catch (MasterNotRunningException e) {
+            throw new UnhandledException(e);
+        } catch (ZooKeeperConnectionException e) {
+            throw new UnhandledException(e);
+        } catch (IOException e) {
+            throw new UnhandledException(e);
+        } catch (InterruptedException e) {
             throw new UnhandledException(e);
         }
     }

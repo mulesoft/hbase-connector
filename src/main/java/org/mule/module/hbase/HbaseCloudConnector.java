@@ -47,7 +47,16 @@ public class HbaseCloudConnector
     public void createTable(@Parameter(optional = false) final String name) {
         facade.createTable(name);
     }
+    
+    @Operation
+    public boolean existsTable(@Parameter(optional = false) final String name) {
+        return facade.existsTable(name);
+    }
 
+    @Operation
+    public void deleteTable(@Parameter(optional = false) String name) {
+        facade.deleteTable(name);
+    }
     
     //------------ Row Operations
     

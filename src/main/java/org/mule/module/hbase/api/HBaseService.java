@@ -40,4 +40,8 @@ public interface HBaseService {
      */
     void addProperties(Map<String, String> properties);
 
+    boolean existsTable(String name);
+
+    void deleteTable(String name);
+
 }

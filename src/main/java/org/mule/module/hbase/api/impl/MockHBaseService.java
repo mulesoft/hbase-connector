@@ -38,4 +38,14 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
+    /** @see org.mule.module.hbase.api.HBaseService#existsTable(java.lang.String) */
+    public boolean existsTable(String name) {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
+    public void deleteTable(String name) {
+        throw new NotImplementedException();
+    }
+
 }

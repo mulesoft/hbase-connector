@@ -42,8 +42,14 @@ public class HbaseTestCase
     @Test
     public void testTableAdmin()
     {
+        assertFalse(connector.existsTable(TABLE_NAME));
+        verify(facade).existsTable(eq(TABLE_NAME));
+        
         connector.createTable(TABLE_NAME);
         verify(facade).createTable(eq(TABLE_NAME));
+        
+        connector.deleteTable(TABLE_NAME);
+        verify(facade).deleteTable(eq(TABLE_NAME));
     }
     
     @Test
