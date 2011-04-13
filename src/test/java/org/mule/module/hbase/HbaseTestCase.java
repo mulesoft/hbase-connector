@@ -27,6 +27,19 @@ public class HbaseTestCase
     }
     
     @Test
+    public void testAlive()
+    {
+        when(facade.alive()).thenReturn(false);
+        assertFalse(connector.alive());
+        verify(facade).alive();
+        
+        reset(facade);
+        when(facade.alive()).thenReturn(true);
+        assertTrue(connector.alive());
+        verify(facade).alive();
+    }
+    
+    @Test
     public void testTableAdmin()
     {
         connector.createTable(TABLE_NAME);

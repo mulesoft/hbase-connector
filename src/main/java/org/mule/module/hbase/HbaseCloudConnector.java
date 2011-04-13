@@ -39,6 +39,11 @@ public class HbaseCloudConnector
     //------------ Admin Operations
 
     @Operation
+    public boolean alive() {
+        return facade.alive(); 
+    }
+    
+    @Operation
     public void createTable(@Parameter(optional = false) final String name) {
         facade.createTable(name);
     }

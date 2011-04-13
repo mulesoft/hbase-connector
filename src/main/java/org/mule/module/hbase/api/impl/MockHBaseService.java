@@ -33,4 +33,9 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
+    /** @see org.mule.module.hbase.api.HBaseService#alive() */
+    public boolean alive() {
+        throw new NotImplementedException();
+    }
+
 }

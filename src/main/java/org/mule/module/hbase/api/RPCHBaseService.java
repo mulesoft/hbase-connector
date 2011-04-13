@@ -29,8 +29,7 @@ import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Result;
 
 /**
- * TODO: Description of the class, Comments in english by default
- * 
+ * {@link HBaseService} that uses the official RPC client to connect with the database
  * 
  * @author Pablo Martin Grigolatto
  * @since Apr 11, 2011
@@ -45,6 +44,19 @@ public class RPCHBaseService implements HBaseService {
         hTableInterfaceFactory = new HTableFactory();
         configuration = HBaseConfiguration.create();
     }
+    
+    //------------ Admin Operations
+    /** @see org.mule.module.hbase.api.HBaseService#alive() */
+    public boolean alive() {
+        try {
+            final HBaseAdmin hBaseAdmin = new HBaseAdmin(configuration);
+            return hBaseAdmin.isMasterRunning();
+        } catch (MasterNotRunningException e) {
+            return false;
+        } catch (ZooKeeperConnectionException e) {
+            return false;
+        }
+    }
 
     /** @see org.mule.module.hbase.api.HBaseService#createTable(java.lang.String) */
     public void createTable(String name) {
@@ -53,16 +65,32 @@ public class RPCHBaseService implements HBaseService {
             HTableDescriptor descriptor = new HTableDescriptor(name);
             hBaseAdmin.createTable(descriptor);
         } catch (MasterNotRunningException e) {
-             // TODO: Define what to do!
+            // TODO: Define what to do!
             throw new UnhandledException(e);
         } catch (ZooKeeperConnectionException e) {
-             // TODO: Define what to do!
+            // TODO: Define what to do!
             throw new UnhandledException(e);
         } catch (IOException e) {
             // TODO: Define what to do!
             throw new UnhandledException(e);
         }
     }
+    
+    //------------ Row Operations
+    /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String) */
+    public Result get(String tableName, String row) {
+        return doGet(getHTable(tableName), row);
+    }
+    
+    //------------ Configuration
+    /** @see org.mule.module.hbase.api.HBaseService#addProperties(java.util.Map) */
+    public void addProperties(Map<String, String> properties) {
+        for (Entry<String, String> entry : properties.entrySet()) {
+            configuration.set(entry.getKey(), entry.getValue());
+        }
+    }
+    
+    //------------ Private
     
     private Result doGet(final HTableInterface hTableInterface, final String rowKey) {
         try {
@@ -80,18 +108,6 @@ public class RPCHBaseService implements HBaseService {
 
     private HTableInterface getHTable(String tableName) {
         return hTableInterfaceFactory.createHTableInterface(configuration, tableName.getBytes(UTF8));
-    }
-
-    /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String) */
-    public Result get(String tableName, String row) {
-        return doGet(getHTable(tableName), row);
-    }
-
-    /** @see org.mule.module.hbase.api.HBaseService#addProperties(java.util.Map) */
-    public void addProperties(Map<String, String> properties) {
-        for (Entry<String, String> entry : properties.entrySet()) {
-            configuration.set(entry.getKey(), entry.getValue());
-        }
     }
 
 }
