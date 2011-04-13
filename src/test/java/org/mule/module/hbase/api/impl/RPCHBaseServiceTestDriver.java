@@ -8,11 +8,11 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.UnhandledException;
 import org.apache.hadoop.hbase.TableExistsException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mule.module.hbase.api.HBaseServiceException;
 import org.mule.module.hbase.api.RPCHBaseService;
 
 /**
@@ -57,12 +57,14 @@ public class RPCHBaseServiceTestDriver {
 
     /** should fail because the server is running at 2181 by default */
     @Test
+    @Ignore
     public void testNotAlive() {
         properties.put("hbase.zookeeper.property.clientPort", "5000");
         rpchBaseService.addProperties(properties);
         assertFalse(rpchBaseService.alive());
     }
 
+    /** table management */
     @Test
     public void testTableAdmin() {
         //creates a new table
@@ -74,7 +76,7 @@ public class RPCHBaseServiceTestDriver {
         try {
             rpchBaseService.createTable(SOME_TABLE_NAME);
             fail("table should exist");
-        } catch (UnhandledException e) {
+        } catch (HBaseServiceException e) {
             if (e.getCause() instanceof TableExistsException) {
                 //ok
             } else {
@@ -85,6 +87,27 @@ public class RPCHBaseServiceTestDriver {
         //delete the table
         rpchBaseService.deleteTable(SOME_TABLE_NAME);
         assertFalse(rpchBaseService.existsTable(SOME_TABLE_NAME));
+    }
+    
+    /** table enable/disable */
+    @Test
+    public void testTableEnable() {
+        rpchBaseService.createTable(SOME_TABLE_NAME);
+        assertFalse(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
+
+        rpchBaseService.disabeTable(SOME_TABLE_NAME);
+        assertTrue(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
+        
+        rpchBaseService.enableTable(SOME_TABLE_NAME);
+        assertFalse(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
+    }
+        
+    /** a table is not disabled even if it does not exists */
+    @Test
+    public void testTableNotDisabled() {
+        properties.put("hbase.zookeeper.property.clientPort", "5000");
+        rpchBaseService.addProperties(properties);
+        assertFalse(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
     }
     
     //------------ Row Operations

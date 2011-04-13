@@ -15,7 +15,7 @@ import java.util.Map;
 import org.apache.hadoop.hbase.client.Result;
 
 /**
- * The service exposes several actions to adminitrate and use an HBase database
+ * The service exposes several actions to manage and use an HBase database
  * 
  * @author Pablo Martin Grigolatto
  * @since Apr 11, 2011
@@ -24,13 +24,24 @@ public interface HBaseService {
 
     //------------ Admin Operations
     /** @return true only if the server can be reached and the master node is alive, false otherwise. */
-    boolean alive();
+    boolean alive() throws HBaseServiceException;
     
-    void createTable(String name);
+    void createTable(String name) throws HBaseServiceException;
 
+    /** @return true only if the table exists, regardless it is enabled or not */
+    boolean existsTable(String name) throws HBaseServiceException;
+    
+    void deleteTable(String name) throws HBaseServiceException;
+    
+    /** @return true only if the table was disabled. 
+     * <em>You should check if the table exists before calling this method.</em> */
+    boolean isDisabledTable(String name) throws HBaseServiceException;
+    
+    void enableTable(String name) throws HBaseServiceException;
+    void disabeTable(String name) throws HBaseServiceException;
     
     //------------ Row Operations
-    Result get(String tableName, String row);
+    Result get(String tableName, String row) throws HBaseServiceException;
     
     
     //------------ Configuration
@@ -40,8 +51,5 @@ public interface HBaseService {
      */
     void addProperties(Map<String, String> properties);
 
-    boolean existsTable(String name);
-
-    void deleteTable(String name);
 
 }

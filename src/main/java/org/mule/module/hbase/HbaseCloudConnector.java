@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.RPCHBaseService;
@@ -24,7 +25,7 @@ import org.mule.tools.cloudconnect.annotations.Parameter;
 import org.mule.tools.cloudconnect.annotations.Property;
 
 @Connector(namespacePrefix="hbase")
-public class HbaseCloudConnector
+public class HbaseCloudConnector implements Initialisable
 {
     @Property(name = "facade-ref", optional = true) 
     private HBaseService facade;
@@ -54,8 +55,23 @@ public class HbaseCloudConnector
     }
 
     @Operation
-    public void deleteTable(@Parameter(optional = false) String name) {
+    public void deleteTable(@Parameter(optional = false) final String name) {
         facade.deleteTable(name);
+    }
+    
+    @Operation
+    public boolean isEnabledTable(@Parameter(optional = false) final String name) {
+        return facade.isDisabledTable(name);
+    }
+    
+    @Operation
+    public void enableTable(@Parameter(optional = false) final String name) {
+        facade.enableTable(name);
+    }
+    
+    @Operation
+    public void disableTable(@Parameter(optional = false) final String name) {
+        facade.disabeTable(name);
     }
     
     //------------ Row Operations

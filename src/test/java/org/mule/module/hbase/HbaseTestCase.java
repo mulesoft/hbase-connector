@@ -50,6 +50,15 @@ public class HbaseTestCase
         
         connector.deleteTable(TABLE_NAME);
         verify(facade).deleteTable(eq(TABLE_NAME));
+        
+        connector.isEnabledTable(TABLE_NAME);
+        verify(facade).isDisabledTable(eq(TABLE_NAME));
+        
+        connector.enableTable(TABLE_NAME);
+        verify(facade).enableTable(eq(TABLE_NAME));
+        
+        connector.disableTable(TABLE_NAME);
+        verify(facade).disabeTable(eq(TABLE_NAME));
     }
     
     @Test

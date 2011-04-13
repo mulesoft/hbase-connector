@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.hbase.client.Result;
 import org.mule.module.hbase.api.HBaseService;
+import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
  * TODO: Description of the class, Comments in english by default  
@@ -45,6 +46,21 @@ public class MockHBaseService implements HBaseService {
 
     /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
     public void deleteTable(String name) {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#isDisabledTable(java.lang.String) */
+    public boolean isDisabledTable(String name) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#enableTable(java.lang.String) */
+    public void enableTable(String name) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#disabeTable(java.lang.String) */
+    public void disabeTable(String name) throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
