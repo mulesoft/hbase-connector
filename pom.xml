@@ -17,7 +17,7 @@
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
         <jdk.name>J2SE-1.5</jdk.name>
-        <hbase.version>0.90.0</hbase.version>
+        <hbase.version>0.90.3-SNAPSHOT</hbase.version>
         <jdk.version>1.5</jdk.version>
         <slf4j.version>1.6.1</slf4j.version>
     </properties>
@@ -224,7 +224,19 @@
             <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
             <layout>default</layout>
         </repository>
-            </repositories>
+        <repository>
+            <id>apache-releases</id>
+            <name>Apache Releases</name>
+            <url>https://repository.apache.org/content/repositories/releases/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>apache-snapshots</id>
+            <name>Apache Snapshots</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
     <pluginRepositories>
         <pluginRepository>

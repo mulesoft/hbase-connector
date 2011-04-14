@@ -25,39 +25,45 @@ import org.mule.module.hbase.api.RPCHBaseService;
 public class RPCHBaseServiceTestDriver {
 
     private static final String SOME_TABLE_NAME = "some-table-name";
+    private static final String SOME_COLUMN_FAMILY_NAME = "some-column-family-name";
 
-    private RPCHBaseService rpchBaseService;
-    private Map<String, String> properties;
+    private static RPCHBaseService rpchBaseService = new RPCHBaseService(); //shared between all tests
+    private static Map<String, String> properties;
 
     @Before
     public void before() {
-        rpchBaseService = new RPCHBaseService();
         properties = new HashMap<String, String>();
         properties.put("hbase.zookeeper.quorum", "127.0.0.1");
+        properties.put("hbase.zookeeper.property.clientPort", "2181");
         
         properties.put("ipc.client.connect.max.retries", "2");
         properties.put("hbase.client.retries.number", "2");
         properties.put("hbase.client.rpc.maxattempts", "2");
         properties.put("hbase.rpc.timeout", "7000");
         properties.put("hbase.client.prefetch.limit", "3");
+
+        properties.put("ipc.client.connection.maxidletime", "10000");
+        properties.put("zookeeper.session.timeout", "10000");
+        properties.put("hbase.zookeeper.property.maxClientCnxns", "3");
         
+        //reset properties for each test
         rpchBaseService.addProperties(properties);
         
+        //reset the database for each test
         if (rpchBaseService.existsTable(SOME_TABLE_NAME)) {
             rpchBaseService.deleteTable(SOME_TABLE_NAME);
         }
     }
-
+    
     //------------ Admin Operations
     
     @Test
     public void testAlive() {
         assertTrue(rpchBaseService.alive());
     }
-
+    
     /** should fail because the server is running at 2181 by default */
     @Test
-    @Ignore
     public void testNotAlive() {
         properties.put("hbase.zookeeper.property.clientPort", "5000");
         rpchBaseService.addProperties(properties);
@@ -101,13 +107,24 @@ public class RPCHBaseServiceTestDriver {
         rpchBaseService.enableTable(SOME_TABLE_NAME);
         assertFalse(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
     }
-        
+    
     /** a table is not disabled even if it does not exists */
     @Test
     public void testTableNotDisabled() {
-        properties.put("hbase.zookeeper.property.clientPort", "5000");
-        rpchBaseService.addProperties(properties);
-        assertFalse(rpchBaseService.isDisabledTable(SOME_TABLE_NAME));
+        assertFalse(rpchBaseService.isDisabledTable("another-table-name"));
+    }
+    
+    /** table column management */
+    @Test
+    public void testColumnAdmin() {
+        rpchBaseService.createTable(SOME_TABLE_NAME);
+        assertFalse(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));
+        
+        rpchBaseService.addColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, 5, false, null);
+        assertTrue(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));
+        
+        rpchBaseService.deleteColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME);
+        assertFalse(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));
     }
     
     //------------ Row Operations

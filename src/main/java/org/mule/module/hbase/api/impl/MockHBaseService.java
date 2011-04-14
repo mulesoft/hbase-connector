@@ -11,8 +11,7 @@ import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
- * TODO: Description of the class, Comments in english by default  
- * 
+ * {@link HBaseService} implementation that always throws exceptions
  * 
  * @author Pablo Martin Grigolatto
  * @since Apr 11, 2011
@@ -61,6 +60,22 @@ public class MockHBaseService implements HBaseService {
 
     /** @see org.mule.module.hbase.api.HBaseService#disabeTable(java.lang.String) */
     public void disabeTable(String name) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#addColumn(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer) */
+    public void addColumn(String tableName, String columnFamilyName,
+            Integer maxVersions, Boolean inMemory, Integer scope) {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#existsColumn(java.lang.String, java.lang.String) */
+    public boolean existsColumn(String tableName, String columnFamilyName) {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#deleteColumn(java.lang.String, java.lang.String) */
+    public void deleteColumn(String tableName, String columnFamilyName) {
         throw new NotImplementedException();
     }
 

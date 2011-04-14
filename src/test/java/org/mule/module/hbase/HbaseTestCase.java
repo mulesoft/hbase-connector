@@ -16,6 +16,7 @@ public class HbaseTestCase
 {
     private static final String SOME_ROW_KEY = "some-row-key";
     private static final String TABLE_NAME = "table-name";
+    private static final String COLUMN_NAME = "column-name";
     private HbaseCloudConnector connector;
     private HBaseService facade;
 
@@ -59,6 +60,15 @@ public class HbaseTestCase
         
         connector.disableTable(TABLE_NAME);
         verify(facade).disabeTable(eq(TABLE_NAME));
+        
+        connector.addColumn(TABLE_NAME, COLUMN_NAME, 3, true, 7);
+        verify(facade).addColumn(eq(TABLE_NAME), eq(COLUMN_NAME), eq(3), eq(true), eq(7));
+        
+        connector.existsColumn(TABLE_NAME, COLUMN_NAME);
+        verify(facade).existsColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
+        
+        connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
+        verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
     }
     
     @Test

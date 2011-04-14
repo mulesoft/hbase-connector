@@ -74,6 +74,32 @@ public class HbaseCloudConnector implements Initialisable
         facade.disabeTable(name);
     }
     
+    @Operation
+    public void addColumn(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String columnFamilyName, 
+            @Parameter(optional = true) final Integer maxVersions, 
+            @Parameter(optional = true) final Boolean inMemory, 
+            @Parameter(optional = true) final Integer scope) {
+        facade.addColumn(tableName, columnFamilyName, maxVersions, inMemory, scope);
+    }
+    
+    @Operation
+    public boolean existsColumn(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String columnFamilyName) {
+        return facade.existsColumn(tableName, columnFamilyName);
+    }
+    
+    @Operation
+    public void deleteColumn(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String columnFamilyName) {
+        facade.deleteColumn(tableName, columnFamilyName);
+    }
+    
+    
+    
     //------------ Row Operations
     
     @Operation

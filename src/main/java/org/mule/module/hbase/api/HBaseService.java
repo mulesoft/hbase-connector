@@ -40,6 +40,11 @@ public interface HBaseService {
     void enableTable(String name) throws HBaseServiceException;
     void disabeTable(String name) throws HBaseServiceException;
     
+    
+    void addColumn(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope);
+    boolean existsColumn(String tableName, String columnFamilyName);
+    void deleteColumn(String tableName, String columnFamilyName);
+    
     //------------ Row Operations
     Result get(String tableName, String row) throws HBaseServiceException;
     
