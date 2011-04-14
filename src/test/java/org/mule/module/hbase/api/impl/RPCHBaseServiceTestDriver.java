@@ -10,10 +10,8 @@ import java.util.Map;
 
 import org.apache.hadoop.hbase.TableExistsException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.module.hbase.api.HBaseServiceException;
-import org.mule.module.hbase.api.RPCHBaseService;
 
 /**
  * <p>Testing the {@link RPCHBaseService} implementation.</p>

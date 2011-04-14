@@ -18,7 +18,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.module.hbase.api.HBaseService;
-import org.mule.module.hbase.api.RPCHBaseService;
+import org.mule.module.hbase.api.impl.RPCHBaseService;
 import org.mule.tools.cloudconnect.annotations.Connector;
 import org.mule.tools.cloudconnect.annotations.Operation;
 import org.mule.tools.cloudconnect.annotations.Parameter;

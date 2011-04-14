@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.module.hbase.api;
+package org.mule.module.hbase.api.impl;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -29,6 +29,8 @@ import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Result;
+import org.mule.module.hbase.api.HBaseService;
+import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
  * {@link HBaseService} that uses the official RPC client to connect with the database.
