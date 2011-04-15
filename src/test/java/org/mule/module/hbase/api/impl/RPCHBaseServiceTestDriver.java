@@ -32,7 +32,15 @@ public class RPCHBaseServiceTestDriver {
     public void before() {
         properties = new HashMap<String, String>();
         properties.put("hbase.zookeeper.quorum", "127.0.0.1");
+        properties.put("hbase.zookeeper.peerport", "2888");
         properties.put("hbase.zookeeper.property.clientPort", "2181");
+        properties.put("hbase.zookeeper.leaderport", "3888");
+        properties.put("hbase.master.port", "60000");
+        properties.put("hbase.master.info.port", "60010");
+        properties.put("hbase.regionserver.port", "60020");
+        properties.put("hbase.regionserver.info.port", "60030");
+        properties.put("hbase.rest.port", "8080");
+        properties.put("zookeeper.znode.parent", "/hbase");
         
         properties.put("ipc.client.connect.max.retries", "2");
         properties.put("hbase.client.retries.number", "2");
@@ -63,7 +71,16 @@ public class RPCHBaseServiceTestDriver {
     /** should fail because the server is running at 2181 by default */
     @Test
     public void testNotAlive() {
-        properties.put("hbase.zookeeper.property.clientPort", "5000");
+        properties.put("hbase.zookeeper.peerport", "2889");
+        properties.put("hbase.zookeeper.property.clientPort", "2182");
+        properties.put("hbase.zookeeper.leaderport", "3889");
+        properties.put("hbase.master.port", "60001");
+        properties.put("hbase.master.info.port", "60011");
+        properties.put("hbase.regionserver.port", "60021");
+        properties.put("hbase.regionserver.info.port", "60031");
+        properties.put("hbase.rest.port", "8081");
+        properties.put("zookeeper.znode.parent", "/anotherpath");
+        
         rpchBaseService.addProperties(properties);
         assertFalse(rpchBaseService.alive());
     }

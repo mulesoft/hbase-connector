@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.ZooKeeperConnectionException;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnectionManager;
+import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
@@ -61,189 +62,179 @@ public class RPCHBaseService implements HBaseService {
     //------------ Admin Operations
     /** @see org.mule.module.hbase.api.HBaseService#alive() */
     public boolean alive() {
-        HBaseAdmin hBaseAdmin = null;
         try {
-            hBaseAdmin = createHBaseAdmin();
-            boolean ret = hBaseAdmin.isMasterRunning();
-            return ret;
-        } catch (HBaseServiceException e) {
+            return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
+                public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                    try {
+                        return hBaseAdmin.isMasterRunning();
+                    } catch (MasterNotRunningException e) {
+                        return false;
+                    } catch (ZooKeeperConnectionException e) {
+                        return false;
+                    } catch (HBaseServiceException e) {
+                        return false;
+                    }
+                }
+            });
+        } catch (Exception e) {
             return false;
-        } catch (MasterNotRunningException e) {
-            return false;
-        } catch (ZooKeeperConnectionException e) {
-            return false;
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
         }
     }
 
     /** @see org.mule.module.hbase.api.HBaseService#createTable(java.lang.String) */
-    public void createTable(String name) {
-        final HBaseAdmin hBaseAdmin = createHBaseAdmin();
-        try {
-            hBaseAdmin.createTable(new HTableDescriptor(name));
-            doFlush(hBaseAdmin, name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-
-    /** @see org.mule.module.hbase.api.HBaseService#existsTable(java.lang.String) */
-    public boolean existsTable(String name) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            HTableDescriptor descriptor = hBaseAdmin.getTableDescriptor(name.getBytes(UTF8));
-            return descriptor != null;
-        } catch (MasterNotRunningException e) {
-            throw new HBaseServiceException(e);
-        } catch (ZooKeeperConnectionException e) {
-            throw new HBaseServiceException(e);
-        } catch (TableNotFoundException e) {
-            return false;
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-
-    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
-    public void deleteTable(String name) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            hBaseAdmin.disableTable(name);
-            hBaseAdmin.deleteTable(name);
-            doFlush(hBaseAdmin, name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-    
-    /** @see org.mule.module.hbase.api.HBaseService#isDisabledTable(java.lang.String) */
-    public boolean isDisabledTable(String name) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            return hBaseAdmin.isTableDisabled(name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-    
-    /** @see org.mule.module.hbase.api.HBaseService#enableTable(java.lang.String) */
-    public void enableTable(String name) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            hBaseAdmin.enableTable(name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-    
-    /** @see org.mule.module.hbase.api.HBaseService#disabeTable(java.lang.String) */
-    public void disabeTable(String name) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            hBaseAdmin.disableTable(name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-    
-    /** @see org.mule.module.hbase.api.HBaseService#addColumn(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer) */
-    public void addColumn(String name, String someColumnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope) {
-        final HColumnDescriptor descriptor = new HColumnDescriptor(someColumnFamilyName);
-        if (maxVersions != null) {
-            descriptor.setMaxVersions(maxVersions);
-        }
-        if (inMemory != null) {
-            descriptor.setInMemory(inMemory);
-        }
-        if (scope != null) {
-            descriptor.setScope(scope);
-        }
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            hBaseAdmin.disableTable(name);
-            hBaseAdmin.addColumn(name, descriptor);
-            hBaseAdmin.enableTable(name);
-            doFlush(hBaseAdmin, name);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
-    }
-    
-    /** @see org.mule.module.hbase.api.HBaseService#existsColumn(java.lang.String, java.lang.String) */
-    public boolean existsColumn(String tableName, String columnFamilyName) {
-        HTableInterface hTable = null;
-        try {
-            hTable = createHTable(tableName);
-            final boolean ret = hTable.getTableDescriptor().getFamily(columnFamilyName.getBytes(UTF8)) != null;
-            return ret;
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            if (hTable != null) {
+    public void createTable(final String name) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
-                    hTable.close();
+                    hBaseAdmin.createTable(new HTableDescriptor(name));
+                    doFlush(hBaseAdmin, name);
+                    return null;
                 } catch (IOException e) {
                     throw new HBaseServiceException(e);
                 }
             }
-        }
+        });
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#existsTable(java.lang.String) */
+    public boolean existsTable(final String name) {
+        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
+            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    return hBaseAdmin.getTableDescriptor(name.getBytes(UTF8)) != null;
+                } catch (TableNotFoundException e) {
+                    return false;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
+    public void deleteTable(final String name) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    hBaseAdmin.disableTable(name);
+                    hBaseAdmin.deleteTable(name);
+                    doFlush(hBaseAdmin, name);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#isDisabledTable(java.lang.String) */
+    public boolean isDisabledTable(final String name) {
+        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
+            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    return hBaseAdmin.isTableDisabled(name);
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#enableTable(java.lang.String) */
+    public void enableTable(final String name) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    hBaseAdmin.enableTable(name);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#disabeTable(java.lang.String) */
+    public void disabeTable(final String name) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    hBaseAdmin.disableTable(name);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#addColumn(
+     *  java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer) */
+    public void addColumn(final String name, final String someColumnFamilyName, 
+            final Integer maxVersions, final Boolean inMemory, final Integer scope) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                final HColumnDescriptor descriptor = new HColumnDescriptor(someColumnFamilyName);
+                if (maxVersions != null) {
+                    descriptor.setMaxVersions(maxVersions);
+                }
+                if (inMemory != null) {
+                    descriptor.setInMemory(inMemory);
+                }
+                if (scope != null) {
+                    descriptor.setScope(scope);
+                }
+                try {
+                    hBaseAdmin.disableTable(name);
+                    hBaseAdmin.addColumn(name, descriptor);
+                    hBaseAdmin.enableTable(name);
+                    doFlush(hBaseAdmin, name);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
+    }
+    
+    /** @see org.mule.module.hbase.api.HBaseService#existsColumn(java.lang.String, java.lang.String) */
+    public boolean existsColumn(String tableName, final String columnFamilyName) {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable) {
+                try {
+                    return hTable.getTableDescriptor().getFamily(columnFamilyName.getBytes(UTF8)) != null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
     }
     
     /** @see org.mule.module.hbase.api.HBaseService#deleteColumn(java.lang.String, java.lang.String) */
-    public void deleteColumn(String tableName, String columnFamilyName) {
-        HBaseAdmin hBaseAdmin = null;
-        try {
-            hBaseAdmin = createHBaseAdmin();
-            hBaseAdmin.disableTable(tableName);
-            hBaseAdmin.deleteColumn(tableName, columnFamilyName);
-            hBaseAdmin.enableTable(tableName);
-            doFlush(hBaseAdmin, tableName);
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        } finally {
-            destroyHBaseAdmin(hBaseAdmin);
-        }
+    public void deleteColumn(final String tableName, final String columnFamilyName) {
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    hBaseAdmin.disableTable(tableName);
+                    hBaseAdmin.deleteColumn(tableName, columnFamilyName);
+                    hBaseAdmin.enableTable(tableName);
+                    doFlush(hBaseAdmin, tableName);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        });
     }
     
     //------------ Row Operations
     /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String) */
-    public Result get(String tableName, String row) {
-        HTableInterface hTable = null;
-        Result result = null;
-        try {
-            hTable = createHTable(tableName);
-            result = doGet(hTable, row);
-        } finally {
-            if (hTable != null) {
-                try {
-                    hTable.close();
-                } catch (IOException e) {
-                    throw new HBaseServiceException(e);
-                }
+    public Result get(String tableName, final String row) {
+        return (Result) doWithHTable(tableName, new TableCallback<Result>() {
+            public Result doWithHBaseAdmin(HTableInterface hTable) {
+                return doGet(hTable, row);
             }
-        }
-        return result;
+        });
     }
     
     //------------ Configuration
@@ -304,4 +295,41 @@ public class RPCHBaseService implements HBaseService {
         }
     }
 
+    /** Retain and release the {@link HBaseAdmin} */
+    private Object doWithHBaseAdmin(AdminCallback<?> callback) {
+        HBaseAdmin hBaseAdmin = null;
+        try {
+            hBaseAdmin = createHBaseAdmin();
+            return callback.doWithHBaseAdmin(hBaseAdmin);
+        } finally {
+            destroyHBaseAdmin(hBaseAdmin);
+        }
+    }
+    
+    /** Retain and release the {@link HTable} */
+    private Object doWithHTable(final String tableName, final TableCallback<?> callback) {
+        HTableInterface hTable = null;
+        try {
+            hTable = createHTable(tableName);
+            return callback.doWithHBaseAdmin(hTable);
+        } finally {
+            if (hTable != null) {
+                try {
+                    hTable.close();
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+        }
+    }
+
+    /** Callback for using the {@link HBaseAdmin} without worry about releasing it */
+    interface AdminCallback<T> {
+        T doWithHBaseAdmin(final HBaseAdmin hBaseAdmin);
+    }
+    
+    /** Callback for using the {@link HTableInterface} without worry about releasing it */
+    interface TableCallback<T> {
+        T doWithHBaseAdmin(final HTableInterface hTable);
+    }
 }
