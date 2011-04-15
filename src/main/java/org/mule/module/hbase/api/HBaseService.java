@@ -57,7 +57,14 @@ public interface HBaseService {
     void deleteColumn(String tableName, String columnFamilyName);
     
     //------------ Row Operations
-    Result get(String tableName, String row) throws HBaseServiceException;
+    Result get(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
+    /**
+     * Saves the value at the specified cell (row + family:qualifier + timestamp)
+     * 
+     * @param timestamp (optional) a specific version
+     */
+    void put(String tableName, String row, String columnFamilyName, 
+            String columnQualifier, Long timestamp, String value) throws HBaseServiceException;
     
     
     //------------ Configuration

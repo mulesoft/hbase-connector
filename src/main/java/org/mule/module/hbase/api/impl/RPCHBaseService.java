@@ -29,9 +29,14 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterBase;
+import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
 import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
@@ -282,11 +287,29 @@ public class RPCHBaseService implements HBaseService {
     }
     
     //------------ Row Operations
-    /** @see HBaseService#get(String, String) */
-    public Result get(String tableName, final String row) {
+    /** @see HBaseService#get(String, String, Integer, Long) */
+    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestap) {
         return (Result) doWithHTable(tableName, new TableCallback<Result>() {
             public Result doWithHBaseAdmin(HTableInterface hTable) {
-                return doGet(hTable, row);
+                return doGet(hTable, row, maxVersions, timestap);
+            }
+        });
+    }
+    
+    /** @see HBaseService#put(String, String, String, String, Long, String) */
+    public void put(String tableName, final String row, final String columnFamilyName, 
+            final String columnQualifier, final Long timestamp, final String value) {
+        
+        doWithHTable(tableName, new TableCallback<Void>() {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                Put put = new Put(row.getBytes(UTF8));
+                if (timestamp == null) {
+                    put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
+                } else {
+                    put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp, value.getBytes(UTF8));
+                }
+                hTable.put(put);
+                return null;
             }
         });
     }
@@ -311,16 +334,24 @@ public class RPCHBaseService implements HBaseService {
         }
     }
 
-    private Result doGet(final HTableInterface hTableInterface, final String rowKey) {
+    private Result doGet(final HTableInterface hTableInterface, final String rowKey, Integer maxVersions, Long timestamp) {
         try {
-            return hTableInterface.get(createGet(rowKey));
+            return hTableInterface.get(createGet(rowKey, maxVersions, timestamp));
         } catch (IOException e) {
             throw new HBaseServiceException(e);
         }
     }
 
-    private Get createGet(String rowKey) {
+    private Get createGet(String rowKey, Integer maxVersions, Long timestamp) {
         Get get = new Get(rowKey.getBytes(UTF8));
+        if (maxVersions != null) {
+            try {
+                get.setMaxVersions(maxVersions);
+            } catch (IOException e) {
+                new HBaseServiceException(e);
+            }
+        }
+        if (timestamp != null) get.setTimeStamp(timestamp);
         return get;
     }
 
@@ -366,6 +397,8 @@ public class RPCHBaseService implements HBaseService {
         try {
             hTable = createHTable(tableName);
             return callback.doWithHBaseAdmin(hTable);
+        } catch (Exception e) {
+            throw new HBaseServiceException(e);
         } finally {
             if (hTable != null) {
                 try {
@@ -384,7 +417,7 @@ public class RPCHBaseService implements HBaseService {
     
     /** Callback for using the {@link HTableInterface} without worry about releasing it */
     interface TableCallback<T> {
-        T doWithHBaseAdmin(final HTableInterface hTable);
+        T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
 
 }

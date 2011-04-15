@@ -125,8 +125,21 @@ public class HbaseCloudConnector implements Initialisable
     @Operation
     public Result get(
             @Parameter(optional = false) final String tableName, 
-            @Parameter(optional = false) final String row) {
-        return facade.get(tableName, row);
+            @Parameter(optional = false) final String row, 
+            @Parameter(optional = true) final Integer maxVersions, 
+            @Parameter(optional = true) final Long timestamp) {
+        return facade.get(tableName, row, maxVersions, timestamp);
+    }
+    
+    @Operation
+    public void put(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String row,
+            @Parameter(optional = false) final String columnFamilyName,
+            @Parameter(optional = false) final String columnQualifier, 
+            @Parameter(optional = true) final Long timestamp,
+            @Parameter(optional = false) final String value) {
+        facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value);
     }
 
     

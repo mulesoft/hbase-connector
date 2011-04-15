@@ -23,11 +23,6 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#get(String, String) */
-    public Result get(String tableName, String row) {
-        throw new NotImplementedException();
-    }
-
     /** @see org.mule.module.hbase.api.HBaseService#addProperties(java.util.Map) */
     public void addProperties(Map<String, String> properties) {
         throw new NotImplementedException();
@@ -86,6 +81,18 @@ public class MockHBaseService implements HBaseService {
 
     /** @see org.mule.module.hbase.api.HBaseService#deleteColumn(String, String) */
     public void deleteColumn(String tableName, String columnFamilyName) {
+        throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long) */
+    public Result get(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException {
+            throw new NotImplementedException();
+    }
+
+    /** @see org.mule.module.hbase.api.HBaseService#put(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String) */
+    public void put(String tableName, String row, String columnFamilyName,
+            String columnQualifier, Long timestamp, String value)
+            throws HBaseServiceException {
         throw new NotImplementedException();
     }
 

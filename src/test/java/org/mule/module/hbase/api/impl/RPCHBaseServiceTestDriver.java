@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.TableExistsException;
+import org.apache.hadoop.hbase.client.Result;
 import org.junit.Before;
 import org.junit.Test;
 import org.mule.module.hbase.api.HBaseServiceException;
@@ -24,6 +25,9 @@ public class RPCHBaseServiceTestDriver {
 
     private static final String SOME_TABLE_NAME = "some-table-name";
     private static final String SOME_COLUMN_FAMILY_NAME = "some-column-family-name";
+    private static final String SOME_ROW_NAME = "some-row-name";
+    private static final String SOME_COLUMN_QUALIFIER = "some-qualifier";
+    private static final String SOME_VALUE = "some-value";
 
     private static RPCHBaseService rpchBaseService = new RPCHBaseService(); //shared between all tests
     private static Map<String, String> properties;
@@ -148,6 +152,31 @@ public class RPCHBaseServiceTestDriver {
     }
     
     //------------ Row Operations
-
+    
+    @Test
+    public void testRow() {
+        rpchBaseService.createTable(SOME_TABLE_NAME);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, null, null, null);
+        
+        Result ret0 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
+        assertTrue(ret0.isEmpty());
+        
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q1", null, "value1");
+        Result ret1 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
+        assertEquals(1, ret1.list().size());
+        long ret1timestamp = ret1.list().get(0).getTimestamp();
+        
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q2", null, "value2");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q3", null, "value3");
+        Result ret2 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
+        assertEquals(3, ret2.list().size());
+        
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q2", null, "value2-2");
+        Result ret3 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, null);
+        assertEquals(4, ret3.list().size()); //3 + 1 old version
+        
+        Result ret4 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, ret1timestamp);
+        assertEquals(1, ret4.list().size()); //the first version
+    }
     
 }

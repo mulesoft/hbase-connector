@@ -83,9 +83,12 @@ public class HbaseTestCase
     {
         Result mockResult = mock(Result.class);
         when(mockResult.isEmpty()).thenReturn(false);
-        when(facade.get(eq(TABLE_NAME), eq(SOME_ROW_KEY))).thenReturn(mockResult);
+        when(facade.get(eq(TABLE_NAME), eq(SOME_ROW_KEY), anyInt(), anyLong())).thenReturn(mockResult);
         
-        Result result = connector.get(TABLE_NAME, SOME_ROW_KEY);
+        Result result = connector.get(TABLE_NAME, SOME_ROW_KEY, 3, 12345L);
         assertFalse(result.isEmpty());
+        
+        connector.put(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value");
+        verify(facade).put(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_NAME), eq("q"), eq(123L), eq("value"));
     }
 }
