@@ -138,6 +138,11 @@ public class RPCHBaseServiceTestDriver {
         rpchBaseService.addColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, 5, false, null);
         assertTrue(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));
         
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("some-key", "some value");
+        rpchBaseService.modifyColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, 
+                7, 2048, null, "GZ", false, 123456, false, "ROW", 1, map);
+        
         rpchBaseService.deleteColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME);
         assertFalse(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));
     }

@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Map;
+
 import org.apache.hadoop.hbase.client.Result;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +68,11 @@ public class HbaseTestCase
         
         connector.existsColumn(TABLE_NAME, COLUMN_NAME);
         verify(facade).existsColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
+        
+        Map<String, String> map = mock(Map.class);
+        connector.modifyColumn(TABLE_NAME, COLUMN_NAME, 5, 123, "LZO", "LZO", false, 0, true, "NONE", 12, map);
+        verify(facade).modifyColumn(eq(TABLE_NAME), eq(COLUMN_NAME), 
+            eq(5), eq(123), eq("LZO"), eq("LZO"), eq(false), eq(0), eq(true), eq("NONE"), eq(12), eq(map));
         
         connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
         verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));

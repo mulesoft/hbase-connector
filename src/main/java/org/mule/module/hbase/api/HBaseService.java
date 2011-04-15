@@ -43,6 +43,17 @@ public interface HBaseService {
     
     void addColumn(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope);
     boolean existsColumn(String tableName, String columnFamilyName);
+    /**
+     * Changes a column family in a table, all <code>null</code> parameters will be ignored. 
+     *   
+     * @param tableName required
+     * @param columnFamilyName required
+     * @param values (optional) an extension point for arbitrary data
+     */
+    void modifyColumn(String tableName, String columnFamilyName, Integer maxVersions, Integer blocksize,
+            String compressionType, String compactionCompressionType, Boolean inMemory, Integer timeToLive,
+            Boolean blockCacheEnabled, String bloomFilterType, Integer replicationScope, 
+            Map<String, String> values);
     void deleteColumn(String tableName, String columnFamilyName);
     
     //------------ Row Operations
@@ -55,6 +66,5 @@ public interface HBaseService {
      * It overrides old properties if they where already added.
      */
     void addProperties(Map<String, String> properties);
-
 
 }

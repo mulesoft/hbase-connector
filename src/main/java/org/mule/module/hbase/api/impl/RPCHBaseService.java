@@ -30,6 +30,8 @@ import org.apache.hadoop.hbase.client.HTableFactory;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
+import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
@@ -60,7 +62,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     //------------ Admin Operations
-    /** @see org.mule.module.hbase.api.HBaseService#alive() */
+    /** @see HBaseService#alive() */
     public boolean alive() {
         try {
             return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
@@ -81,7 +83,7 @@ public class RPCHBaseService implements HBaseService {
         }
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#createTable(java.lang.String) */
+    /** @see HBaseService#createTable(String) */
     public void createTable(final String name) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -96,7 +98,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#existsTable(java.lang.String) */
+    /** @see HBaseService#existsTable(String) */
     public boolean existsTable(final String name) {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -111,7 +113,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(java.lang.String) */
+    /** @see HBaseService#deleteTable(String) */
     public void deleteTable(final String name) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -127,7 +129,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#isDisabledTable(java.lang.String) */
+    /** @see HBaseService#isDisabledTable(String) */
     public boolean isDisabledTable(final String name) {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -140,7 +142,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#enableTable(java.lang.String) */
+    /** @see HBaseService#enableTable(String) */
     public void enableTable(final String name) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -154,7 +156,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#disabeTable(java.lang.String) */
+    /** @see HBaseService#disabeTable(String) */
     public void disabeTable(final String name) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -168,8 +170,8 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#addColumn(
-     *  java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer) */
+    /** @see HBaseService#addColumn(
+     *  String, String, Integer, Boolean, Integer) */
     public void addColumn(final String name, final String someColumnFamilyName, 
             final Integer maxVersions, final Boolean inMemory, final Integer scope) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
@@ -197,7 +199,7 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#existsColumn(java.lang.String, java.lang.String) */
+    /** @see HBaseService#existsColumn(String, String) */
     public boolean existsColumn(String tableName, final String columnFamilyName) {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) {
@@ -210,7 +212,59 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#deleteColumn(java.lang.String, java.lang.String) */
+    /** @see HBaseService#modifyColumn(String, String, Integer, Integer, String, String, Boolean, Integer, Boolean, String, Integer, Map) */
+    public void modifyColumn(final String tableName, final String columnFamilyName,
+            final Integer maxVersions, final Integer blocksize, final String compressionType,
+            final String compactionCompressionType, final Boolean inMemory,
+            final Integer timeToLive, final Boolean blockCacheEnabled,
+            final String bloomFilterType, final Integer replicationScope,
+            final Map<String, String> values) {
+        
+        doWithHBaseAdmin(new AdminCallback<Void>() {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+                try {
+                    HTableDescriptor otd = hBaseAdmin.getTableDescriptor(tableName.getBytes(UTF8));
+                    HColumnDescriptor ocd = otd.getFamily(columnFamilyName.getBytes(UTF8));
+                    HColumnDescriptor descriptor = new HColumnDescriptor(ocd);
+                    loadPropertiesInDescriptor(descriptor, maxVersions, blocksize, compressionType, 
+                            compactionCompressionType, inMemory, timeToLive, blockCacheEnabled, 
+                            bloomFilterType, replicationScope, values);
+                    hBaseAdmin.disableTable(tableName);
+                    hBaseAdmin.modifyColumn(tableName, descriptor);
+                    hBaseAdmin.enableTable(tableName);
+                    doFlush(hBaseAdmin, tableName);
+                    return null;
+                } catch (IOException e) {
+                    throw new HBaseServiceException(e);
+                }
+            }
+
+            private void loadPropertiesInDescriptor(
+                    HColumnDescriptor descriptor, Integer maxVersions,
+                    Integer blocksize, String compressionType,
+                    String compactionCompressionType, Boolean inMemory,
+                    Integer timeToLive, Boolean blockCacheEnabled,
+                    String bloomFilterType, Integer replicationScope,
+                    Map<String, String> values) {
+                if (maxVersions != null) descriptor.setMaxVersions(maxVersions);
+                if (blocksize != null) descriptor.setBlocksize(blocksize);
+                if (compressionType != null) descriptor.setCompressionType(Algorithm.valueOf(compressionType));
+                if (compactionCompressionType != null) descriptor.setCompactionCompressionType(Algorithm.valueOf(compactionCompressionType));
+                if (inMemory != null) descriptor.setInMemory(inMemory);
+                if (timeToLive != null) descriptor.setTimeToLive(timeToLive);
+                if (blockCacheEnabled != null) descriptor.setBlockCacheEnabled(blockCacheEnabled);
+                if (bloomFilterType != null) descriptor.setBloomFilterType(BloomType.valueOf(bloomFilterType));
+                if (replicationScope != null) descriptor.setScope(replicationScope);
+                if (values != null) {
+                    for (Entry<String, String> entry : values.entrySet()) {
+                        descriptor.setValue(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        });
+    }
+    
+    /** @see HBaseService#deleteColumn(String, String) */
     public void deleteColumn(final String tableName, final String columnFamilyName) {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -228,7 +282,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     //------------ Row Operations
-    /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String) */
+    /** @see HBaseService#get(String, String) */
     public Result get(String tableName, final String row) {
         return (Result) doWithHTable(tableName, new TableCallback<Result>() {
             public Result doWithHBaseAdmin(HTableInterface hTable) {
@@ -238,7 +292,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     //------------ Configuration
-    /** @see org.mule.module.hbase.api.HBaseService#addProperties(java.util.Map) */
+    /** @see HBaseService#addProperties(Map) */
     public void addProperties(Map<String, String> properties) {
         for (Entry<String, String> entry : properties.entrySet()) {
             configuration.set(entry.getKey(), entry.getValue());
@@ -332,4 +386,5 @@ public class RPCHBaseService implements HBaseService {
     interface TableCallback<T> {
         T doWithHBaseAdmin(final HTableInterface hTable);
     }
+
 }

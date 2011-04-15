@@ -92,6 +92,26 @@ public class HbaseCloudConnector implements Initialisable
     }
     
     @Operation
+    public void modifyColumn(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String columnFamilyName,
+            @Parameter(optional = true) final Integer maxVersions, 
+            @Parameter(optional = true) final Integer blocksize,
+            @Parameter(optional = true) final String compressionType, 
+            @Parameter(optional = true) final String compactionCompressionType, 
+            @Parameter(optional = true) final Boolean inMemory, 
+            @Parameter(optional = true) final Integer timeToLive,
+            @Parameter(optional = true) final Boolean blockCacheEnabled, 
+            @Parameter(optional = true) final String bloomFilterType, 
+            @Parameter(optional = true) final Integer replicationScope,
+            @Parameter(optional = true) final Map<String, String> values) {
+        facade.modifyColumn(
+            tableName, columnFamilyName, maxVersions, blocksize, compressionType,              
+            compactionCompressionType, inMemory, timeToLive, 
+            blockCacheEnabled, bloomFilterType, replicationScope, values);
+    }
+    
+    @Operation
     public void deleteColumn(
             @Parameter(optional = false) final String tableName, 
             @Parameter(optional = false) final String columnFamilyName) {
