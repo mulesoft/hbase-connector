@@ -157,26 +157,46 @@ public class RPCHBaseServiceTestDriver {
     public void testRow() {
         rpchBaseService.createTable(SOME_TABLE_NAME);
         rpchBaseService.addColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, null, null, null);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family2", null, null, null);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family3", null, null, null);
         
         Result ret0 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
         assertTrue(ret0.isEmpty());
+        assertFalse(rpchBaseService.exists(SOME_TABLE_NAME, SOME_ROW_NAME, null, null));
         
         rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q1", null, "value1");
         Result ret1 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
         assertEquals(1, ret1.list().size());
+        assertTrue(rpchBaseService.exists(SOME_TABLE_NAME, SOME_ROW_NAME, null, null));
         long ret1timestamp = ret1.list().get(0).getTimestamp();
+        assertTrue(rpchBaseService.exists(SOME_TABLE_NAME, SOME_ROW_NAME, null, ret1timestamp));
         
         rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q2", null, "value2");
         rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q3", null, "value3");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family2", "q4", null, "value4");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family2", "q5", null, "value5");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family3", "q6", null, "value6");
         Result ret2 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
-        assertEquals(3, ret2.list().size());
+        assertEquals(6, ret2.list().size()); //every family
         
         rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q2", null, "value2-2");
         Result ret3 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, null);
-        assertEquals(4, ret3.list().size()); //3 + 1 old version
+        assertEquals(7, ret3.list().size()); //6 + 1 old version
         
         Result ret4 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, ret1timestamp);
         assertEquals(1, ret4.list().size()); //the first version
+        
+        rpchBaseService.delete(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, "q2", null, true);
+        Result ret5 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, null);
+        assertEquals(5, ret5.list().size()); //q1 + q3 + q4 + q5 + q6
+        
+        rpchBaseService.delete(SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, null, null, true);
+        Result ret6 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, null);
+        assertEquals(3, ret6.list().size()); //q4 + q5 + q6
+        
+        rpchBaseService.delete(SOME_TABLE_NAME, SOME_ROW_NAME, null, null, null, true);
+        Result ret7 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, 10, null);
+        assertTrue(ret7.isEmpty());
     }
     
 }

@@ -24,6 +24,14 @@ import org.mule.tools.cloudconnect.annotations.Operation;
 import org.mule.tools.cloudconnect.annotations.Parameter;
 import org.mule.tools.cloudconnect.annotations.Property;
 
+/**
+ * <p>HBase connector</p>
+ * <p>It delegates each operation on a {@link HBaseService} 
+ *    and it accepts custom configuration in a Key-Value fashion</p>
+ * 
+ * @author Pablo Martin Grigolatto
+ * @since Apr 18, 2011
+ */
 @Connector(namespacePrefix="hbase")
 public class HbaseCloudConnector implements Initialisable
 {
@@ -118,8 +126,7 @@ public class HbaseCloudConnector implements Initialisable
         facade.deleteColumn(tableName, columnFamilyName);
     }
     
-    
-    
+
     //------------ Row Operations
     
     @Operation
@@ -140,6 +147,17 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = true) final Long timestamp,
             @Parameter(optional = false) final String value) {
         facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value);
+    }
+    
+    @Operation
+    public void delete(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String row,
+            @Parameter(optional = true) final String columnFamilyName, 
+            @Parameter(optional = true) final String columnQualifier, 
+            @Parameter(optional = true) final Long timestamp, 
+            @Parameter(optional = true) final Boolean deleteAllVersions) {
+        facade.delete(tableName, row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions);
     }
 
     

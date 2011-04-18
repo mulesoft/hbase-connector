@@ -58,14 +58,29 @@ public interface HBaseService {
     
     //------------ Row Operations
     Result get(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
+    
     /**
      * Saves the value at the specified cell (row + family:qualifier + timestamp)
      * 
      * @param timestamp (optional) a specific version
      */
     void put(String tableName, String row, String columnFamilyName, 
-            String columnQualifier, Long timestamp, String value) throws HBaseServiceException;
+        String columnQualifier, Long timestamp, String value) throws HBaseServiceException;
     
+    /** @return true only if the row exists and is not null */
+    boolean exists(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
+    
+    /**
+     * This method can delete a row in several levels depending on the parameters combination. 
+     * 
+     * @param columnFamilyName set <code>null</code> to delete all column families in the specified row
+     * @param columnQualifier set <code>null</code> to delete all columns in the specified column family
+     * @param timestamp set it to delete all versions of the specified column or column family 
+     *        with a timestamp less than or equal to the specified timestamp
+     * @param deleteAllVersions set <code>false</code> to delete only the latest version of the specified column
+     */
+    public void delete(String tableName, String row, String columnFamilyName, 
+            String columnQualifier, Long timestamp, boolean deleteAllVersions) throws HBaseServiceException;
     
     //------------ Configuration
     /**

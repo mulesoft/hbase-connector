@@ -18,58 +18,59 @@ import org.mule.module.hbase.api.HBaseServiceException;
  */
 public class MockHBaseService implements HBaseService {
 
-    /** @see org.mule.module.hbase.api.HBaseService#createTable(String) */
+    /** @see HBaseService#createTable(String) */
     public void createTable(String name) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#addProperties(java.util.Map) */
+    /** @see HBaseService#addProperties(Map) */
     public void addProperties(Map<String, String> properties) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#alive() */
+    /** @see HBaseService#alive() */
     public boolean alive() {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#existsTable(String) */
+    /** @see HBaseService#existsTable(String) */
     public boolean existsTable(String name) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#deleteTable(String) */
+    /** @see HBaseService#deleteTable(String) */
     public void deleteTable(String name) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#isDisabledTable(String) */
+    /** @see HBaseService#isDisabledTable(String) */
     public boolean isDisabledTable(String name) throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#enableTable(String) */
+    /** @see HBaseService#enableTable(String) */
     public void enableTable(String name) throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#disabeTable(String) */
+    /** @see HBaseService#disabeTable(String) */
     public void disabeTable(String name) throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#addColumn(String, String, Integer, Boolean, Integer) */
+    /** @see HBaseService#addColumn(String, String, Integer, Boolean, Integer) */
     public void addColumn(String tableName, String columnFamilyName,
             Integer maxVersions, Boolean inMemory, Integer scope) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#existsColumn(String, String) */
+    /** @see HBaseService#existsColumn(String, String) */
     public boolean existsColumn(String tableName, String columnFamilyName) {
         throw new NotImplementedException();
     }
     
-    /** @see org.mule.module.hbase.api.HBaseService#modifyColumn(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.Integer, java.lang.Boolean, java.lang.String, java.lang.Integer, java.util.Map) */
+    /** @see HBaseService#modifyColumn(String, String, Integer, Integer, String, 
+     *  String, Boolean, Integer, Boolean, String, Integer, Map) */
     public void modifyColumn(String tableName, String columnFamilyName,
             Integer maxVersions, Integer blocksize, String compressionType,
             String compactionCompressionType, Boolean inMemory,
@@ -79,19 +80,33 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#deleteColumn(String, String) */
+    /** @see HBaseService#deleteColumn(String, String) */
     public void deleteColumn(String tableName, String columnFamilyName) {
         throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#get(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long) */
-    public Result get(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException {
-            throw new NotImplementedException();
+    /** @see HBaseService#get(String, String, Integer, Long) */
+    public Result get(String tableName, String row, Integer maxVersions, Long timestamp) 
+            throws HBaseServiceException {
+        throw new NotImplementedException();
     }
 
-    /** @see org.mule.module.hbase.api.HBaseService#put(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String) */
+    /** @see HBaseService#put(String, String, String, String, Long, String) */
     public void put(String tableName, String row, String columnFamilyName,
             String columnQualifier, Long timestamp, String value)
+            throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#exists(String, String, Integer, Long) */
+    public boolean exists(String tableName, String row, Integer maxVersions,
+            Long timestamp) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#delete(String, String, String, String, Long, boolean) */
+    public void delete(String tableName, String row, String columnFamilyName,
+            String columnQualifier, Long timestamp, boolean deleteAllVersions)
             throws HBaseServiceException {
         throw new NotImplementedException();
     }

@@ -76,6 +76,9 @@ public class HbaseTestCase
         
         connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
         verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
+        
+        connector.delete(TABLE_NAME, COLUMN_NAME, "family", "qualifier", 123L, false);
+        verify(facade).delete(eq(TABLE_NAME), eq(COLUMN_NAME), eq("family"), eq("qualifier"), eq(123L), eq(false));
     }
     
     @Test

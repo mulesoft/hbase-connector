@@ -22,6 +22,7 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MasterNotRunningException;
 import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.ZooKeeperConnectionException;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HConnectionManager;
@@ -31,12 +32,8 @@ import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.filter.Filter;
-import org.apache.hadoop.hbase.filter.FilterBase;
-import org.apache.hadoop.hbase.filter.QualifierFilter;
 import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
 import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
@@ -288,10 +285,10 @@ public class RPCHBaseService implements HBaseService {
     
     //------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestap) {
+    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp) {
         return (Result) doWithHTable(tableName, new TableCallback<Result>() {
             public Result doWithHBaseAdmin(HTableInterface hTable) {
-                return doGet(hTable, row, maxVersions, timestap);
+                return doGet(hTable, row, maxVersions, timestamp);
             }
         });
     }
@@ -314,6 +311,47 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
+    /** @see HBaseService#exists(String, String, Integer, Long) */
+    public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp) {
+        final Result result = get(tableName, row, maxVersions, timestamp);
+        return result != null && !result.isEmpty();
+    }
+    
+    /** @see HBaseService#delete(String, String, String, String, Long, boolean) */
+    public void delete(final String tableName, final String row, final String columnFamilyName, 
+            final String columnQualifier, final Long timestamp, final boolean deleteAllVersions) {
+        doWithHTable(tableName, new TableCallback<Void>() {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                final Delete delete = new Delete(row.getBytes(UTF8));
+                if (columnFamilyName != null) {
+                    if (columnQualifier != null) {
+                        if (timestamp != null) {
+                            if (deleteAllVersions) {
+                                delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
+                            } else {
+                                delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
+                            }
+                        } else {
+                            if (deleteAllVersions) {
+                                delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+                            } else {
+                                delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+                            }
+                        }
+                    } else {
+                        if (timestamp != null) {
+                            delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp); 
+                        } else {
+                            delete.deleteFamily(columnFamilyName.getBytes(UTF8));
+                        }
+                    }
+                }
+                hTable.delete(delete);
+                return null;
+            }
+        });
+    }
+
     //------------ Configuration
     /** @see HBaseService#addProperties(Map) */
     public void addProperties(Map<String, String> properties) {
