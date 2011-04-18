@@ -397,6 +397,23 @@ public class RPCHBaseService implements HBaseService {
             }
         });
     }
+    
+    /** @see HBaseService#increment(String, String, String, String, long, boolean) */
+    public long increment(final String tableName, final String row, final String columnFamilyName, 
+            final String columnQualifier, final long amount, final boolean writeToWAL) 
+            throws HBaseServiceException {
+        Validate.isTrue(StringUtils.isNotBlank(tableName));
+        Validate.isTrue(StringUtils.isNotBlank(row));
+        Validate.isTrue(StringUtils.isNotBlank(columnFamilyName));
+        Validate.isTrue(StringUtils.isNotBlank(columnQualifier));
+        return (Long) doWithHTable(tableName, new TableCallback<Long>() {
+            public Long doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                return hTable.incrementColumnValue(row.getBytes(UTF8), columnFamilyName.getBytes(UTF8), 
+                    columnQualifier.getBytes(UTF8), amount,  writeToWAL);
+            }
+        });
+    }
+
 
     //------------ Configuration
     /** @see HBaseService#addProperties(Map) */
@@ -505,5 +522,5 @@ public class RPCHBaseService implements HBaseService {
     interface TableCallback<T> {
         T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
-    
+
 }

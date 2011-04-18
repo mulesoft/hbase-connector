@@ -3,7 +3,6 @@
  */
 package org.mule.module.hbase;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -84,6 +83,9 @@ public class HbaseTestCase
         connector.scan(TABLE_NAME, "family", "qualifier", 123L, 456L, 2, 3, true, 2, false, "row20", "row30");
         verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), 
             eq(456L), eq(2), eq(3), eq(true), eq(2), eq(false), eq("row20"), eq("row30"));
+        
+        connector.increment(TABLE_NAME, SOME_ROW_KEY, SOME_ROW_KEY, "q", 3L, true);
+        verify(facade).increment(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(SOME_ROW_KEY), eq("q"), eq(3L), eq(true));
     }
     
     @Test

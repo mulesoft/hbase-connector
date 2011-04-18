@@ -106,6 +106,19 @@ public interface HBaseService {
             Integer maxVersions, Boolean allVersions, String startRow, String stopRow) 
             throws HBaseServiceException;
     
+    /**
+     * Atomically increments a column value. 
+     * If the column value does not yet exist it is initialized to <code>amount</code> 
+     * and written to the specified column.
+     * 
+     * @param writeToWAL set it to <code>false</code> means that in a fail scenario, you will lose
+     *        any increments that have not been flushed.
+     * 
+     * @return the new value, post increment
+     */
+    long increment(String tableName, String row, String columnFamilyName, String columnQualifier, 
+            long amount, boolean writeToWAL) throws HBaseServiceException;
+    
     //------------ Configuration
     /**
      * Add the properties to the main configuration. 

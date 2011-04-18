@@ -8,14 +8,8 @@ import static org.junit.Assert.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response.Status.Family;
-
-import org.apache.commons.lang.CharSet;
-import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -324,6 +318,19 @@ public class RPCHBaseServiceTestDriver {
             SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, "r2", "r4")));
         assertEquals(1, count(rpchBaseService.scan(
             SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, null, "r3")));
+    }
+    
+    @Test
+    public void testIncrementValue() {
+        rpchBaseService.createTable(SOME_TABLE_NAME);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, null, null, null);
+        
+        assertEquals(5, rpchBaseService.increment(
+            SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, SOME_COLUMN_QUALIFIER, 5, false));
+        assertEquals(3, rpchBaseService.increment(
+            SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, SOME_COLUMN_QUALIFIER, -2, false));
+        assertEquals(4, rpchBaseService.increment(
+            SOME_TABLE_NAME, SOME_ROW_NAME, SOME_COLUMN_FAMILY_NAME, SOME_COLUMN_QUALIFIER, 1, false));
     }
 
     private <T>int count(Iterable<T> iterator) {

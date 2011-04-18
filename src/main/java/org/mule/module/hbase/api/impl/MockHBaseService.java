@@ -122,4 +122,11 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
+    /** @see HBaseService#increment(String, String, String, String, long, boolean) */
+    public long increment(String tableName, String row,
+            String columnFamilyName, String columnQualifier, long amount,
+            boolean writeToWAL) {
+        throw new NotImplementedException();
+    }
+
 }

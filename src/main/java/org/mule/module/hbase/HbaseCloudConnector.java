@@ -177,6 +177,17 @@ public class HbaseCloudConnector implements Initialisable
         facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching, 
                     batch, cacheBlocks, maxVersions, allVersions, startRow, stopRow);
     }
+    
+    @Operation
+    public void increment(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String row,
+            @Parameter(optional = false) final String columnFamilyName, 
+            @Parameter(optional = false) final String columnQualifier,
+            @Parameter(optional = false) final long amount,
+            @Parameter(optional = false) final boolean writeToWAL) {
+        facade.increment(tableName, row, columnFamilyName, columnQualifier, amount, writeToWAL);
+    }
 
     
     //------------ Configuration
@@ -201,5 +212,4 @@ public class HbaseCloudConnector implements Initialisable
             facade.addProperties(properties);
         }
     }
-
 }
