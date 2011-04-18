@@ -3,6 +3,7 @@
  */
 package org.mule.module.hbase;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -77,8 +78,12 @@ public class HbaseTestCase
         connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
         verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
         
-        connector.delete(TABLE_NAME, COLUMN_NAME, "family", "qualifier", 123L, false);
-        verify(facade).delete(eq(TABLE_NAME), eq(COLUMN_NAME), eq("family"), eq("qualifier"), eq(123L), eq(false));
+        connector.delete(TABLE_NAME, SOME_ROW_KEY, "family", "qualifier", 123L, false);
+        verify(facade).delete(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("family"), eq("qualifier"), eq(123L), eq(false));
+        
+        connector.scan(TABLE_NAME, "family", "qualifier", 123L, 456L, 2, 3, true, 2, false, "row20", "row30");
+        verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), 
+            eq(456L), eq(2), eq(3), eq(true), eq(2), eq(false), eq("row20"), eq("row30"));
     }
     
     @Test

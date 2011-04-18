@@ -5,11 +5,20 @@ package org.mule.module.hbase.api.impl;
 
 import static org.junit.Assert.*;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.Response.Status.Family;
+
+import org.apache.commons.lang.CharSet;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.junit.Before;
 import org.junit.Test;
 import org.mule.module.hbase.api.HBaseServiceException;
@@ -23,6 +32,7 @@ import org.mule.module.hbase.api.HBaseServiceException;
  */
 public class RPCHBaseServiceTestDriver {
 
+    private static final Charset UTF8= Charset.forName("UTF-8");
     private static final String SOME_TABLE_NAME = "some-table-name";
     private static final String SOME_COLUMN_FAMILY_NAME = "some-column-family-name";
     private static final String SOME_ROW_NAME = "some-row-name";
@@ -199,4 +209,128 @@ public class RPCHBaseServiceTestDriver {
         assertTrue(ret7.isEmpty());
     }
     
+    @Test
+    public void testScanRow() {
+        rpchBaseService.createTable(SOME_TABLE_NAME);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family1", null, null, null);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family2", null, null, null);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family3", null, null, null);
+        rpchBaseService.addColumn(SOME_TABLE_NAME, "family4", null, null, null);
+             
+        ResultScanner ret1 = rpchBaseService.scan(SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, null, null);
+        assertFalse(ret1.iterator().hasNext());
+        
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family1", "q1", null, "value1");
+        Result row1 = rpchBaseService.get(SOME_TABLE_NAME, SOME_ROW_NAME, null, null);
+        final long r1Timestamp = row1.list().get(0).getTimestamp();
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family1", "q2", null, "value2");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family1", "q3", null, "value3");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family2", "q4", null, "value4");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family2", "q5", null, "value5");
+        rpchBaseService.put(SOME_TABLE_NAME, SOME_ROW_NAME, "family3", "q6", null, "value6");
+        
+        rpchBaseService.put(SOME_TABLE_NAME, "r2", "family2", "q1", null, "r2f2q1value");
+        rpchBaseService.put(SOME_TABLE_NAME, "r2", "family2", "q2", null, "r2f2q2value");
+        Result row2 = rpchBaseService.get(SOME_TABLE_NAME, "r2", null, null);
+        final long r2Timestamp = row2.list().get(0).getTimestamp();
+        
+        rpchBaseService.put(SOME_TABLE_NAME, "r3", "family2", "q1", null, "r3f2q1value");
+        rpchBaseService.put(SOME_TABLE_NAME, "r3", "family3", "q2", null, "r3f3q2value");
+        Result row3 = rpchBaseService.get(SOME_TABLE_NAME, "r3", null, null);
+        final long r3Timestamp = row3.list().get(0).getTimestamp();
+        
+        rpchBaseService.put(SOME_TABLE_NAME, "r4", "family3", "q1", null, "r4f3q1value");
+        rpchBaseService.put(SOME_TABLE_NAME, "r4", "family4", "q2", null, "r4f4q2value");
+
+        try {
+            rpchBaseService.scan(null, null, null, null, null, null, null, null, null, null, null, null);
+            fail("table name is required");
+        } catch (IllegalArgumentException e) {
+            // ok
+        }
+        
+        //no filters
+        final ResultScanner ret2 = rpchBaseService.scan(
+            SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, null, null);
+        assertEquals(4, count(ret2));
+        
+        //column family
+        final ResultScanner ret3 = rpchBaseService.scan(
+            SOME_TABLE_NAME, "family1", null, null, null, null, null, null, null, null, null, null);
+        Iterator<Result> it3 = ret3.iterator();
+        assertTrue(it3.hasNext());
+        assertEquals("value1", 
+            new String(it3.next().getValue("family1".getBytes(UTF8), "q1".getBytes(UTF8)), UTF8));
+        assertFalse(it3.hasNext());
+        
+        //column qualifier
+        final ResultScanner ret4 = rpchBaseService.scan(
+            SOME_TABLE_NAME, "family2", "q1", null, null, null, null, null, null, null, null, null);
+        assertEquals(2, count(ret4));
+        
+        //exclusive stop
+        final ResultScanner ret5 = rpchBaseService.scan(
+                SOME_TABLE_NAME, "family2", "q1", null, null, null, null, null, null, null, null, "r3");
+        assertEquals(1, count(ret5));
+        
+        //specific timestamp
+        final ResultScanner ret6 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, r1Timestamp, null, null, null, null, null, null, null, null);
+        assertEquals(1, count(ret6));
+        
+        //max timestamp is exclusive
+        final ResultScanner ret7 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, r1Timestamp, r2Timestamp, null, null, null, null, null, null, null);
+        assertEquals(1, count(ret7));
+        
+        //max timestamp is exclusive
+        final ResultScanner ret8 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, r1Timestamp, r3Timestamp, null, null, null, null, null, null, null);
+        assertEquals(2, count(ret8));
+    
+        final ResultScanner ret9 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, null, null, 5, null, null, null, null, null, null);
+        assertEquals(4, count(ret9));
+        
+        final ResultScanner ret10 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, null, null, null, 10, null, null, null, null, null);
+        assertEquals(4, count(ret10));
+        
+
+        final ResultScanner ret11 = rpchBaseService.scan(
+                SOME_TABLE_NAME, null, null, null, null, null, null, true, null, null, null, null);
+        assertEquals(4, count(ret11));
+        
+        //more than one version
+        assertEquals(1, rpchBaseService.scan(
+            SOME_TABLE_NAME, "family4", "q2", null, null, null, null, null, null, null, null, null)
+            .iterator().next().getColumn("family4".getBytes(UTF8), "q2".getBytes(UTF8)).size());
+        rpchBaseService.put(SOME_TABLE_NAME, "r4", "family4", "q2", null, "r4f4q2value-v2");
+        rpchBaseService.put(SOME_TABLE_NAME, "r4", "family4", "q2", null, "r4f4q2value-v3");
+        rpchBaseService.put(SOME_TABLE_NAME, "r4", "family4", "q2", null, "r4f4q2value-v4");
+        assertEquals(2, rpchBaseService.scan(
+            SOME_TABLE_NAME, "family4", "q2", null, null, null, null, null, 2, null, null, null)
+            .iterator().next().getColumn("family4".getBytes(UTF8), "q2".getBytes(UTF8)).size());
+        
+        //all versions
+        assertEquals(3, rpchBaseService.scan(
+            SOME_TABLE_NAME, "family4", "q2", null, null, null, null, null, null, true, null, null)
+            .iterator().next().getColumn("family4".getBytes(UTF8), "q2".getBytes(UTF8)).size());
+            
+        //exclusive stop row
+        assertEquals(1, count(rpchBaseService.scan(
+            SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, "r2", "r3")));
+        assertEquals(2, count(rpchBaseService.scan(
+            SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, "r2", "r4")));
+        assertEquals(1, count(rpchBaseService.scan(
+            SOME_TABLE_NAME, null, null, null, null, null, null, null, null, null, null, "r3")));
+    }
+
+    private <T>int count(Iterable<T> iterator) {
+        int aux = 0;
+        for (T t: iterator) {
+            aux++;
+        }
+        return aux;
+    }
 }

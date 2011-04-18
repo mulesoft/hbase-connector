@@ -15,6 +15,8 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -32,6 +34,8 @@ import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
 import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
 import org.mule.module.hbase.api.HBaseService;
@@ -351,6 +355,48 @@ public class RPCHBaseService implements HBaseService {
             }
         });
     }
+    
+    /** @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer, 
+     *       Boolean, Integer, Boolean, String, String) */
+    public ResultScanner scan(final String tableName, 
+            final String columnFamilyName, final String columnQualifier, 
+            final Long timestamp, final Long maxTimestamp, 
+            final Integer caching, final Integer batch, final Boolean cacheBlocks, 
+            final Integer maxVersions, final Boolean allVersions, 
+            final String startRow, final String stopRow) throws HBaseServiceException {
+        
+        return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>() {
+            public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                Scan scan = new Scan();
+                if (columnFamilyName != null) {
+                    if (columnQualifier != null) {
+                        scan.addColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+                    } else {
+                        scan.addFamily(columnFamilyName.getBytes(UTF8));
+                    }
+                }
+                if (timestamp != null) {
+                    if (maxTimestamp != null) {
+                        scan.setTimeRange(timestamp, maxTimestamp);
+                    } else {
+                        scan.setTimeStamp(timestamp);
+                    }
+                }
+                if (caching != null) scan.setCaching(caching);
+                if (batch != null) scan.setBatch(batch);
+                if (cacheBlocks != null) scan.setCacheBlocks(cacheBlocks);
+                if (allVersions != null && Boolean.TRUE.equals(allVersions)) {
+                    scan.setMaxVersions(); 
+                } else {
+                    if (maxVersions != null) scan.setMaxVersions(maxVersions);
+                }
+                if (startRow != null) scan.setStartRow(startRow.getBytes(UTF8));
+                if (stopRow != null) scan.setStopRow(stopRow.getBytes(UTF8));
+                 
+                return hTable.getScanner(scan);
+            }
+        });
+    }
 
     //------------ Configuration
     /** @see HBaseService#addProperties(Map) */
@@ -431,6 +477,8 @@ public class RPCHBaseService implements HBaseService {
     
     /** Retain and release the {@link HTable} */
     private Object doWithHTable(final String tableName, final TableCallback<?> callback) {
+        Validate.isTrue(StringUtils.isNotBlank(tableName));
+        Validate.notNull(callback);
         HTableInterface hTable = null;
         try {
             hTable = createHTable(tableName);
@@ -457,5 +505,5 @@ public class RPCHBaseService implements HBaseService {
     interface TableCallback<T> {
         T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
-
+    
 }

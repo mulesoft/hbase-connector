@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
@@ -108,6 +109,16 @@ public class MockHBaseService implements HBaseService {
     public void delete(String tableName, String row, String columnFamilyName,
             String columnQualifier, Long timestamp, boolean deleteAllVersions)
             throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer, 
+     *                         Boolean, Integer, Boolean, String, String) */
+    public ResultScanner scan(String tableName, String columnFamilyName,
+            String columnQualifier, Long timestamp, Long maxTimestamp,
+            Integer caching, Integer batch, Boolean cacheBlocks,
+            Integer maxVersions, Boolean allVersions, String startRow,
+            String stopRow) throws HBaseServiceException {
         throw new NotImplementedException();
     }
 

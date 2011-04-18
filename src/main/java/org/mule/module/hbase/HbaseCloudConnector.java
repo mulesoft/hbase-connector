@@ -159,6 +159,24 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = true) final Boolean deleteAllVersions) {
         facade.delete(tableName, row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions);
     }
+    
+    @Operation
+    public void scan(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = true) final String columnFamilyName,
+            @Parameter(optional = true) final String columnQualifier, 
+            @Parameter(optional = true) final Long timestamp, 
+            @Parameter(optional = true) final Long maxTimestamp,
+            @Parameter(optional = true) final Integer caching,
+            @Parameter(optional = true) final Integer batch,
+            @Parameter(optional = true) final Boolean cacheBlocks,
+            @Parameter(optional = true) final Integer maxVersions, 
+            @Parameter(optional = true) final Boolean allVersions, 
+            @Parameter(optional = true) final String startRow,
+            @Parameter(optional = true) final String stopRow) {
+        facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching, 
+                    batch, cacheBlocks, maxVersions, allVersions, startRow, stopRow);
+    }
 
     
     //------------ Configuration
@@ -183,4 +201,5 @@ public class HbaseCloudConnector implements Initialisable
             facade.addProperties(properties);
         }
     }
+
 }

@@ -13,6 +13,7 @@ package org.mule.module.hbase.api;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 
 /**
  * The service exposes several actions to manage and use an HBase database
@@ -81,6 +82,29 @@ public interface HBaseService {
      */
     public void delete(String tableName, String row, String columnFamilyName, 
             String columnQualifier, Long timestamp, boolean deleteAllVersions) throws HBaseServiceException;
+    
+    /**
+     * Scan across all rows in a table. 
+     * 
+     * @param tableName limits the scan to a specific table. This is the only required argument.
+     * @param columnFamilyName limits the scan to a specific column family or <code>null</code>
+     * @param columnQualifier limits the scan to a specific column or <code>null</code>. 
+     *        Requires a columnFamilyName to be defined.
+     * @param timestamp limits the scan to a specific timestamp
+     * @param maxTimestamp get versions of columns 
+     *        only within the specified timestamp range: [timestamp, maxTimestamp)
+     * @param caching the number of rows for caching
+     * @param batch the maximum number of values to return for each call to next() in the {@link ResultScanner}
+     * @param cacheBlocks the number of rows for caching that will be passed to scanners
+     * @param maxVersions limits the number of versions on each column
+     * @param allVersions get all available versions on each column
+     * @param startRow limits the beginning of the scan to the specified row inclusive
+     * @param stopRow limits the end of the scan to the specified row exclusive
+     */
+    public ResultScanner scan(String tableName, String columnFamilyName, String columnQualifier, 
+            Long timestamp, Long maxTimestamp, Integer caching, Integer batch, Boolean cacheBlocks, 
+            Integer maxVersions, Boolean allVersions, String startRow, String stopRow) 
+            throws HBaseServiceException;
     
     //------------ Configuration
     /**
