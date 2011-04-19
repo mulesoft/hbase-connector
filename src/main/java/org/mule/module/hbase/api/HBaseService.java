@@ -132,6 +132,17 @@ public interface HBaseService {
             String putColumnFamilyName, String putColumnQualifier, 
             Long putTimestamp, String putValue, Boolean putWriteToWAL) throws HBaseServiceException;
     
+    /**
+     * Atomically checks if a row/family/qualifier value matches the expected value. 
+     * If it does, it adds the delete.
+     * 
+     * @return true if the new delete was executed, false otherwise
+     */
+    boolean checkAndDelete(String tableName, String row, 
+            String checkColumnFamilyName, String checkColumnQualifier, String checkValue,
+            String deleteColumnFamilyName, String deleteColumnQualifier, 
+            Long deleteTimestamp, Boolean deleteAllVersions) throws HBaseServiceException;
+    
     //------------ Configuration
     /**
      * Add the properties to the main configuration. 

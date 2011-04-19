@@ -321,30 +321,8 @@ public class RPCHBaseService implements HBaseService {
             final String columnQualifier, final Long timestamp, final boolean deleteAllVersions) {
         doWithHTable(tableName, new TableCallback<Void>() {
             public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Delete delete = new Delete(row.getBytes(UTF8));
-                if (columnFamilyName != null) {
-                    if (columnQualifier != null) {
-                        if (timestamp != null) {
-                            if (deleteAllVersions) {
-                                delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
-                            } else {
-                                delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
-                            }
-                        } else {
-                            if (deleteAllVersions) {
-                                delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                            } else {
-                                delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                            }
-                        }
-                    } else {
-                        if (timestamp != null) {
-                            delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp); 
-                        } else {
-                            delete.deleteFamily(columnFamilyName.getBytes(UTF8));
-                        }
-                    }
-                }
+                final Delete delete = createDelete(
+                    row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions);
                 hTable.delete(delete);
                 return null;
             }
@@ -427,6 +405,22 @@ public class RPCHBaseService implements HBaseService {
             }
         });
     }
+    
+    /** @see HBaseService#checkAndDelete(
+     *       String, String, String, String, String, String, String, Long, Boolean) */
+    public boolean checkAndDelete(final String tableName, final String row, 
+            final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
+            final String deleteColumnFamilyName, final String deleteColumnQualifier, 
+            final Long deleteTimestamp, final Boolean deleteAllVersions) {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                final Delete delete = createDelete(
+                    row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions);
+                return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
+                        checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), delete);
+            }
+        });
+    }
 
 
     //------------ Configuration
@@ -484,6 +478,36 @@ public class RPCHBaseService implements HBaseService {
         }
         return put;
     }
+    
+    private Delete createDelete(final String row, final String columnFamilyName, final String columnQualifier, 
+            final Long timestamp, final Boolean deleteAllVersions) {
+        final Delete delete = new Delete(row.getBytes(UTF8));
+        if (columnFamilyName != null) {
+            if (columnQualifier != null) {
+                if (timestamp != null) {
+                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions)) {
+                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
+                    } else {
+                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
+                    }
+                } else {
+                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions)) {
+                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+                    } else {
+                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+                    }
+                }
+            } else {
+                if (timestamp != null) {
+                    delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp); 
+                } else {
+                    delete.deleteFamily(columnFamilyName.getBytes(UTF8));
+                }
+            }
+        }
+        return delete;
+    }
+    
 
     private HTableInterface createHTable(String tableName) {
         return hTableInterfaceFactory.createHTableInterface(configuration, tableName.getBytes(UTF8));
@@ -551,4 +575,5 @@ public class RPCHBaseService implements HBaseService {
     interface TableCallback<T> {
         T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
+
 }

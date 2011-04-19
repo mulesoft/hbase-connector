@@ -139,4 +139,14 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
+    /** @see HBaseService#checkAndDelete(
+     *      String, String, String, String, String, String, String, Long, Boolean) */
+    public boolean checkAndDelete(String tableName, String row,
+            String checkColumnFamilyName, String checkColumnQualifier,
+            String checkValue, String deleteColumnFamilyName,
+            String deleteColumnQualifier, Long deleteTimestamp,
+            Boolean deleteAllVersions) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
 }

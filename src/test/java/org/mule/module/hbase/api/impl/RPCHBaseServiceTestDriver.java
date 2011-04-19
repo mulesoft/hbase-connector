@@ -339,14 +339,37 @@ public class RPCHBaseServiceTestDriver {
         rpchBaseService.addColumn(SOME_TABLE_NAME, "f1", null, null, null);
         rpchBaseService.addColumn(SOME_TABLE_NAME, "f2", null, null, null);
         
+        assertFalse(rpchBaseService.checkAndDelete(
+            SOME_TABLE_NAME, "r1", "f1", "q1", "v1", "f2", "q2", null, true));
         assertFalse(rpchBaseService.checkAndPut(
             SOME_TABLE_NAME, "r1", "f1", "q1", "v1", "f2", "q2", null, "v2", false));
+        
         rpchBaseService.put(SOME_TABLE_NAME, "r1", "f1", "q1", null, "v1", false);
         assertTrue(rpchBaseService.checkAndPut(
             SOME_TABLE_NAME, "r1", "f1", "q1", "v1", "f2", "q2", null, "v2", false));
+        
         Result r2 = rpchBaseService.get(SOME_TABLE_NAME, "r1", null, null);
         assertEquals("v2", new String(
-            r2.getColumnLatest("f2".getBytes(UTF8), "q2".getBytes(UTF8)).getValue(), UTF8));
+                r2.getColumnLatest("f2".getBytes(UTF8), "q2".getBytes(UTF8)).getValue(), UTF8));
+        
+        assertTrue(rpchBaseService.get(
+                SOME_TABLE_NAME, "r1", null, null).containsColumn("f2".getBytes(UTF8), "q2".getBytes(UTF8)));
+        assertFalse(rpchBaseService.checkAndDelete(
+                SOME_TABLE_NAME, "r1", "f2", "q1", "v1", "f2", "q2", null, true));
+        assertTrue(rpchBaseService.get(
+                SOME_TABLE_NAME, "r1", null, null).containsColumn("f2".getBytes(UTF8), "q2".getBytes(UTF8)));
+        assertFalse(rpchBaseService.checkAndDelete(
+                SOME_TABLE_NAME, "r1", "f1", "q2", "v1", "f2", "q2", null, true));
+        assertTrue(rpchBaseService.get(
+                SOME_TABLE_NAME, "r1", null, null).containsColumn("f2".getBytes(UTF8), "q2".getBytes(UTF8)));
+        assertFalse(rpchBaseService.checkAndDelete(
+                SOME_TABLE_NAME, "r1", "f1", "q1", "v2", "f2", "q2", null, true));
+        assertTrue(rpchBaseService.get(
+                SOME_TABLE_NAME, "r1", null, null).containsColumn("f2".getBytes(UTF8), "q2".getBytes(UTF8)));
+        assertTrue(rpchBaseService.checkAndDelete(
+                SOME_TABLE_NAME, "r1", "f1", "q1", "v1", "f2", "q2", null, true));
+        assertFalse(rpchBaseService.get(
+                SOME_TABLE_NAME, "r1", null, null).containsColumn("f2".getBytes(UTF8), "q2".getBytes(UTF8)));
     }
 
     private <T>int count(Iterable<T> iterator) {

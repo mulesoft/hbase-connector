@@ -205,6 +205,22 @@ public class HbaseCloudConnector implements Initialisable
         return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, 
             checkValue, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL);
     }
+    
+    @Operation
+    public boolean checkAndDelete(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String row,
+            @Parameter(optional = false) final String checkColumnFamilyName, 
+            @Parameter(optional = false) final String checkColumnQualifier, 
+            @Parameter(optional = false) final String checkValue,
+            @Parameter(optional = false) final String deleteColumnFamilyName, 
+            @Parameter(optional = false) final String deleteColumnQualifier, 
+            @Parameter(optional = true) final Long deleteTimestamp, 
+            @Parameter(optional = true) final Boolean deleteAllVersions) {
+        return facade.checkAndDelete(tableName, row, 
+            checkColumnFamilyName, checkColumnQualifier, checkValue, 
+            deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions);
+    }
 
     
     //------------ Configuration
@@ -229,4 +245,5 @@ public class HbaseCloudConnector implements Initialisable
             facade.addProperties(properties);
         }
     }
+
 }
