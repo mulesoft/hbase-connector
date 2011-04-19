@@ -145,8 +145,9 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = false) final String columnFamilyName,
             @Parameter(optional = false) final String columnQualifier, 
             @Parameter(optional = true) final Long timestamp,
-            @Parameter(optional = false) final String value) {
-        facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value);
+            @Parameter(optional = false) final String value,
+            @Parameter(optional = true) final Boolean writeToWAL) {
+        facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL);
     }
     
     @Operation
@@ -187,6 +188,22 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = false) final long amount,
             @Parameter(optional = false) final boolean writeToWAL) {
         facade.increment(tableName, row, columnFamilyName, columnQualifier, amount, writeToWAL);
+    }
+    
+    @Operation
+    public boolean checkAndPut(
+            @Parameter(optional = false) final String tableName, 
+            @Parameter(optional = false) final String row,
+            @Parameter(optional = false) final String checkColumnFamilyName, 
+            @Parameter(optional = false) final String checkColumnQualifier, 
+            @Parameter(optional = false) final String checkValue,
+            @Parameter(optional = false) final String putColumnFamilyName, 
+            @Parameter(optional = false) final String putColumnQualifier, 
+            @Parameter(optional = true) final Long putTimestamp, 
+            @Parameter(optional = false) final String putValue, 
+            @Parameter(optional = true) final Boolean putWriteToWAL) {
+        return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, 
+            checkValue, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL);
     }
 
     

@@ -92,9 +92,9 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
-    /** @see HBaseService#put(String, String, String, String, Long, String) */
+    /** @see HBaseService#put(String, String, String, String, Long, String, Boolean) */
     public void put(String tableName, String row, String columnFamilyName,
-            String columnQualifier, Long timestamp, String value)
+            String columnQualifier, Long timestamp, String value, Boolean writeToWAL)
             throws HBaseServiceException {
         throw new NotImplementedException();
     }
@@ -126,6 +126,16 @@ public class MockHBaseService implements HBaseService {
     public long increment(String tableName, String row,
             String columnFamilyName, String columnQualifier, long amount,
             boolean writeToWAL) {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#checkAndPut(
+     *       String, String, String, String, String, String, String, Long, String, Boolean) */
+    public boolean checkAndPut(String tableName, String row,
+            String checkColumnFamilyName, String checkColumnQualifier,
+            String checkValue, String putColumnFamilyName,
+            String putColumnQualifier, Long putTimestamp, String putValue,
+            Boolean putWriteToWAL) {
         throw new NotImplementedException();
     }
 

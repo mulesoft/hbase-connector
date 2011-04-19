@@ -84,8 +84,15 @@ public class HbaseTestCase
         verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), 
             eq(456L), eq(2), eq(3), eq(true), eq(2), eq(false), eq("row20"), eq("row30"));
         
-        connector.increment(TABLE_NAME, SOME_ROW_KEY, SOME_ROW_KEY, "q", 3L, true);
-        verify(facade).increment(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(SOME_ROW_KEY), eq("q"), eq(3L), eq(true));
+        connector.increment(TABLE_NAME, SOME_ROW_KEY, "f1", "q", 3L, true);
+        verify(facade).increment(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("f1"), eq("q"), eq(3L), eq(true));
+        
+        connector.checkAndPut(TABLE_NAME, SOME_ROW_KEY, "f1", "q1", "v1", "f2", "q2", 123L, "v2", true);
+        verify(facade).checkAndPut(
+                eq(TABLE_NAME), eq(SOME_ROW_KEY), 
+                eq("f1"), eq("q1"), eq("v1"), 
+                eq("f2"), eq("q2"), 
+                eq(123L), eq("v2"), eq(true));
     }
     
     @Test
@@ -98,7 +105,7 @@ public class HbaseTestCase
         Result result = connector.get(TABLE_NAME, SOME_ROW_KEY, 3, 12345L);
         assertFalse(result.isEmpty());
         
-        connector.put(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value");
-        verify(facade).put(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_NAME), eq("q"), eq(123L), eq("value"));
+        connector.put(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value", true);
+        verify(facade).put(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_NAME), eq("q"), eq(123L), eq("value"), eq(true));
     }
 }

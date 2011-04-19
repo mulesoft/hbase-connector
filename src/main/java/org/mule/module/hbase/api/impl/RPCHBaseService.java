@@ -297,18 +297,13 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see HBaseService#put(String, String, String, String, Long, String) */
+    /** @see HBaseService#put(String, String, String, String, Long, String, boolean) */
     public void put(String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final Long timestamp, final String value) {
+            final String columnQualifier, final Long timestamp, final String value, final Boolean writeToWAL) {
         
         doWithHTable(tableName, new TableCallback<Void>() {
             public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                Put put = new Put(row.getBytes(UTF8));
-                if (timestamp == null) {
-                    put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
-                } else {
-                    put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp, value.getBytes(UTF8));
-                }
+                final Put put = createPut(row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL);
                 hTable.put(put);
                 return null;
             }
@@ -413,6 +408,25 @@ public class RPCHBaseService implements HBaseService {
             }
         });
     }
+    
+    /** @see HBaseService#checkAndPut(
+     *  String, String, String, String, String, String, String, Long, String, boolean) */
+    public boolean checkAndPut(
+            final String tableName, final String row, 
+            final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
+            final String putColumnFamilyName, final String putColumnQualifier, 
+            final Long putTimestamp, final String putValue, final Boolean putWriteToWAL) {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                final Put put = createPut(
+                    row, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL);
+                return hTable.checkAndPut(
+                    row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
+                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), 
+                    put);
+            }
+        });
+    }
 
 
     //------------ Configuration
@@ -454,6 +468,21 @@ public class RPCHBaseService implements HBaseService {
         }
         if (timestamp != null) get.setTimeStamp(timestamp);
         return get;
+    }
+    
+    private Put createPut(final String row, final String columnFamilyName,
+            final String columnQualifier, final Long timestamp,
+            final String value, final Boolean writeToWAL) {
+        final Put put = new Put(row.getBytes(UTF8));
+        if (timestamp == null) {
+            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
+        } else {
+            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp, value.getBytes(UTF8));
+        }
+        if (writeToWAL != null && Boolean.TRUE.equals(writeToWAL)) {
+            put.setWriteToWAL(writeToWAL);
+        }
+        return put;
     }
 
     private HTableInterface createHTable(String tableName) {
@@ -522,5 +551,4 @@ public class RPCHBaseService implements HBaseService {
     interface TableCallback<T> {
         T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
-
 }

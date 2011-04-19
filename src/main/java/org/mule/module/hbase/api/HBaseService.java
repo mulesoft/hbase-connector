@@ -66,7 +66,7 @@ public interface HBaseService {
      * @param timestamp (optional) a specific version
      */
     void put(String tableName, String row, String columnFamilyName, 
-        String columnQualifier, Long timestamp, String value) throws HBaseServiceException;
+        String columnQualifier, Long timestamp, String value, Boolean writeToWAL) throws HBaseServiceException;
     
     /** @return true only if the row exists and is not null */
     boolean exists(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
@@ -111,13 +111,26 @@ public interface HBaseService {
      * If the column value does not yet exist it is initialized to <code>amount</code> 
      * and written to the specified column.
      * 
-     * @param writeToWAL set it to <code>false</code> means that in a fail scenario, you will lose
-     *        any increments that have not been flushed.
+     * @param writeToWAL set it to <code>false</code> means that in a fail scenario, 
+     *        you will lose any increments that have not been flushed.
      * 
      * @return the new value, post increment
      */
     long increment(String tableName, String row, String columnFamilyName, String columnQualifier, 
             long amount, boolean writeToWAL) throws HBaseServiceException;
+    /**
+     * Atomically checks if a row/family/qualifier value matches the expected value. 
+     * If it does, it adds the put.
+     * 
+     * @param writeToWAL set it to <code>false</code> means that in a fail scenario, 
+     *        you will lose any increments that have not been flushed.
+     * 
+     * @return true if the new put was executed, false otherwise
+     */
+    boolean checkAndPut(String tableName, String row, 
+            String checkColumnFamilyName, String checkColumnQualifier, String checkValue,
+            String putColumnFamilyName, String putColumnQualifier, 
+            Long putTimestamp, String putValue, Boolean putWriteToWAL) throws HBaseServiceException;
     
     //------------ Configuration
     /**
