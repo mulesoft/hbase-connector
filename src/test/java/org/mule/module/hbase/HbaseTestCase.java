@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.RowLock;
 import org.junit.Before;
 import org.junit.Test;
 import org.mule.module.hbase.api.HBaseService;
@@ -21,12 +22,14 @@ public class HbaseTestCase
     private static final String COLUMN_NAME = "column-name";
     private HbaseCloudConnector connector;
     private HBaseService facade;
+    private RowLock lock;
 
     @Before
     public void before() {
         connector = new HbaseCloudConnector();
         facade = mock(HBaseService.class);
         connector.setFacade(facade);
+        lock = mock(RowLock.class);
     }
     
     @Test
@@ -77,8 +80,9 @@ public class HbaseTestCase
         connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
         verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
         
-        connector.delete(TABLE_NAME, SOME_ROW_KEY, "family", "qualifier", 123L, false);
-        verify(facade).delete(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("family"), eq("qualifier"), eq(123L), eq(false));
+        
+        connector.delete(TABLE_NAME, SOME_ROW_KEY, "family", "qualifier", 123L, false, lock);
+        verify(facade).delete(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("family"), eq("qualifier"), eq(123L), eq(false), eq(lock));
         
         connector.scan(TABLE_NAME, "family", "qualifier", 123L, 456L, 2, 3, true, 2, false, "row20", "row30");
         verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), 
@@ -88,19 +92,19 @@ public class HbaseTestCase
         verify(facade).increment(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("f1"), eq("q"), eq(3L), eq(true));
         
         assertFalse(connector.checkAndPut(
-                TABLE_NAME, SOME_ROW_KEY, "f1", "q1", "v1", "f2", "q2", 123L, "v2", true));
+                TABLE_NAME, SOME_ROW_KEY, "f1", "q1", "v1", "f2", "q2", 123L, "v2", true, lock));
         verify(facade).checkAndPut(
                 eq(TABLE_NAME), eq(SOME_ROW_KEY), 
                 eq("f1"), eq("q1"), eq("v1"), 
                 eq("f2"), eq("q2"), 
-                eq(123L), eq("v2"), eq(true));
+                eq(123L), eq("v2"), eq(true), eq(lock));
         
         assertFalse(connector.checkAndDelete(
-                TABLE_NAME, SOME_ROW_KEY, "f1", "q1", "v1", "f2", "q2", 123L, false));
+                TABLE_NAME, SOME_ROW_KEY, "f1", "q1", "v1", "f2", "q2", 123L, false, lock));
         verify(facade).checkAndDelete(
                 eq(TABLE_NAME), eq(SOME_ROW_KEY), 
                 eq("f1"), eq("q1"), eq("v1"), 
-                eq("f2"), eq("q2"), eq(123L), eq(false));
+                eq("f2"), eq("q2"), eq(123L), eq(false), eq(lock));
     }
     
     @Test
@@ -113,7 +117,9 @@ public class HbaseTestCase
         Result result = connector.get(TABLE_NAME, SOME_ROW_KEY, 3, 12345L);
         assertFalse(result.isEmpty());
         
-        connector.put(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value", true);
-        verify(facade).put(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_NAME), eq("q"), eq(123L), eq("value"), eq(true));
+        connector.put(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value", true, lock);
+        verify(facade).put(
+                eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_NAME), eq("q"), 
+                eq(123L), eq("value"), eq(true), eq(lock));
     }
 }

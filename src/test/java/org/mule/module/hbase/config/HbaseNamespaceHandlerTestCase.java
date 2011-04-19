@@ -13,7 +13,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
     @Override
     protected String getConfigResources()
     {
-        return"hbase-namespace-config.xml";
+        return "hbase-namespace-config.xml";
     }
 
     public void testSendMessageToFlow()throws Exception

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.RowLock;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
 import org.mule.module.hbase.api.HBaseService;
@@ -146,8 +147,9 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = false) final String columnQualifier, 
             @Parameter(optional = true) final Long timestamp,
             @Parameter(optional = false) final String value,
-            @Parameter(optional = true) final Boolean writeToWAL) {
-        facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL);
+            @Parameter(optional = true) final Boolean writeToWAL, 
+            @Parameter(optional = true) final RowLock lock) {
+        facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL, lock);
     }
     
     @Operation
@@ -157,8 +159,9 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = true) final String columnFamilyName, 
             @Parameter(optional = true) final String columnQualifier, 
             @Parameter(optional = true) final Long timestamp, 
-            @Parameter(optional = true) final Boolean deleteAllVersions) {
-        facade.delete(tableName, row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions);
+            @Parameter(optional = true) final Boolean deleteAllVersions, 
+            @Parameter(optional = true) final RowLock lock) {
+        facade.delete(tableName, row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions, lock);
     }
     
     @Operation
@@ -201,9 +204,10 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = false) final String putColumnQualifier, 
             @Parameter(optional = true) final Long putTimestamp, 
             @Parameter(optional = false) final String putValue, 
-            @Parameter(optional = true) final Boolean putWriteToWAL) {
+            @Parameter(optional = true) final Boolean putWriteToWAL, 
+            @Parameter(optional = true) final RowLock lock) {
         return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, 
-            checkValue, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL);
+            checkValue, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, lock);
     }
     
     @Operation
@@ -216,10 +220,11 @@ public class HbaseCloudConnector implements Initialisable
             @Parameter(optional = false) final String deleteColumnFamilyName, 
             @Parameter(optional = false) final String deleteColumnQualifier, 
             @Parameter(optional = true) final Long deleteTimestamp, 
-            @Parameter(optional = true) final Boolean deleteAllVersions) {
+            @Parameter(optional = true) final Boolean deleteAllVersions, 
+            @Parameter(optional = true) final RowLock lock) {
         return facade.checkAndDelete(tableName, row, 
             checkColumnFamilyName, checkColumnQualifier, checkValue, 
-            deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions);
+            deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, lock);
     }
 
     

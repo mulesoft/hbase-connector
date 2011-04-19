@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowLock;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
@@ -92,23 +93,9 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
-    /** @see HBaseService#put(String, String, String, String, Long, String, Boolean) */
-    public void put(String tableName, String row, String columnFamilyName,
-            String columnQualifier, Long timestamp, String value, Boolean writeToWAL)
-            throws HBaseServiceException {
-        throw new NotImplementedException();
-    }
-
     /** @see HBaseService#exists(String, String, Integer, Long) */
     public boolean exists(String tableName, String row, Integer maxVersions,
             Long timestamp) throws HBaseServiceException {
-        throw new NotImplementedException();
-    }
-
-    /** @see HBaseService#delete(String, String, String, String, Long, boolean) */
-    public void delete(String tableName, String row, String columnFamilyName,
-            String columnQualifier, Long timestamp, boolean deleteAllVersions)
-            throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
@@ -129,23 +116,51 @@ public class MockHBaseService implements HBaseService {
         throw new NotImplementedException();
     }
 
+    /** @see HBaseService#put(String, String, String, String, Long, String, Boolean, RowLock) */
+    public void put(String tableName, String row, String columnFamilyName,
+            String columnQualifier, Long timestamp, String value,
+            Boolean writeToWAL, RowLock lock) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#delete(String, String, String, String, Long, Boolean, RowLock) */
+    public void delete(String tableName, String row, String columnFamilyName,
+            String columnQualifier, Long timestamp, Boolean deleteAllVersions,
+            RowLock lock) throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
     /** @see HBaseService#checkAndPut(
-     *       String, String, String, String, String, String, String, Long, String, Boolean) */
+     *  String, String, String, String, String, String, String, Long, String, Boolean, RowLock) */
     public boolean checkAndPut(String tableName, String row,
             String checkColumnFamilyName, String checkColumnQualifier,
             String checkValue, String putColumnFamilyName,
             String putColumnQualifier, Long putTimestamp, String putValue,
-            Boolean putWriteToWAL) {
+            Boolean putWriteToWAL, RowLock putLock)
+            throws HBaseServiceException {
         throw new NotImplementedException();
     }
 
     /** @see HBaseService#checkAndDelete(
-     *      String, String, String, String, String, String, String, Long, Boolean) */
+     *  String, String, String, String, String, String, String, Long, Boolean, RowLock) */
     public boolean checkAndDelete(String tableName, String row,
             String checkColumnFamilyName, String checkColumnQualifier,
             String checkValue, String deleteColumnFamilyName,
             String deleteColumnQualifier, Long deleteTimestamp,
-            Boolean deleteAllVersions) throws HBaseServiceException {
+            Boolean deleteAllVersions, RowLock deleteLock)
+            throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#lock(String, String) */
+    public RowLock lock(String tableName, String row)
+            throws HBaseServiceException {
+        throw new NotImplementedException();
+    }
+
+    /** @see HBaseService#unlock(String, RowLock) */
+    public void unlock(String tableName, RowLock lock)
+            throws HBaseServiceException {
         throw new NotImplementedException();
     }
 

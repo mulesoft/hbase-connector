@@ -20,6 +20,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MasterNotRunningException;
 import org.apache.hadoop.hbase.TableNotFoundException;
@@ -35,6 +36,7 @@ import org.apache.hadoop.hbase.client.HTableInterfaceFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowLock;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
 import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
@@ -69,7 +71,7 @@ public class RPCHBaseService implements HBaseService {
     
     //------------ Admin Operations
     /** @see HBaseService#alive() */
-    public boolean alive() {
+    public boolean alive() throws HBaseServiceException {
         try {
             return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
                 public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -90,7 +92,7 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** @see HBaseService#createTable(String) */
-    public void createTable(final String name) {
+    public void createTable(final String name) throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -105,7 +107,7 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** @see HBaseService#existsTable(String) */
-    public boolean existsTable(final String name) {
+    public boolean existsTable(final String name) throws HBaseServiceException {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -120,7 +122,7 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** @see HBaseService#deleteTable(String) */
-    public void deleteTable(final String name) {
+    public void deleteTable(final String name) throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -136,7 +138,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#isDisabledTable(String) */
-    public boolean isDisabledTable(final String name) {
+    public boolean isDisabledTable(final String name) throws HBaseServiceException {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -149,7 +151,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#enableTable(String) */
-    public void enableTable(final String name) {
+    public void enableTable(final String name) throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -163,7 +165,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#disabeTable(String) */
-    public void disabeTable(final String name) {
+    public void disabeTable(final String name) throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -176,10 +178,10 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see HBaseService#addColumn(
-     *  String, String, Integer, Boolean, Integer) */
+    /** @see HBaseService#addColumn(String, String, Integer, Boolean, Integer) */
     public void addColumn(final String name, final String someColumnFamilyName, 
-            final Integer maxVersions, final Boolean inMemory, final Integer scope) {
+            final Integer maxVersions, final Boolean inMemory, final Integer scope) 
+            throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 final HColumnDescriptor descriptor = new HColumnDescriptor(someColumnFamilyName);
@@ -206,7 +208,7 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#existsColumn(String, String) */
-    public boolean existsColumn(String tableName, final String columnFamilyName) {
+    public boolean existsColumn(String tableName, final String columnFamilyName) throws HBaseServiceException {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) {
                 try {
@@ -218,13 +220,14 @@ public class RPCHBaseService implements HBaseService {
         });
     }
     
-    /** @see HBaseService#modifyColumn(String, String, Integer, Integer, String, String, Boolean, Integer, Boolean, String, Integer, Map) */
+    /** @see HBaseService#modifyColumn(String, String, Integer, Integer, 
+     *       String, String, Boolean, Integer, Boolean, String, Integer, Map) */
     public void modifyColumn(final String tableName, final String columnFamilyName,
             final Integer maxVersions, final Integer blocksize, final String compressionType,
             final String compactionCompressionType, final Boolean inMemory,
             final Integer timeToLive, final Boolean blockCacheEnabled,
             final String bloomFilterType, final Integer replicationScope,
-            final Map<String, String> values) {
+            final Map<String, String> values) throws HBaseServiceException {
         
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
@@ -271,7 +274,8 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#deleteColumn(String, String) */
-    public void deleteColumn(final String tableName, final String columnFamilyName) {
+    public void deleteColumn(final String tableName, final String columnFamilyName) 
+            throws HBaseServiceException {
         doWithHBaseAdmin(new AdminCallback<Void>() {
             public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
                 try {
@@ -289,21 +293,22 @@ public class RPCHBaseService implements HBaseService {
     
     //------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp) {
+    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp) 
+            throws HBaseServiceException {
         return (Result) doWithHTable(tableName, new TableCallback<Result>() {
-            public Result doWithHBaseAdmin(HTableInterface hTable) {
-                return doGet(hTable, row, maxVersions, timestamp);
+            public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                return hTable.get(createGet(row, maxVersions, timestamp));
             }
         });
     }
     
-    /** @see HBaseService#put(String, String, String, String, Long, String, boolean) */
+    /** @see HBaseService#put(String, String, String, String, Long, String, Boolean, RowLock) */
     public void put(String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final Long timestamp, final String value, final Boolean writeToWAL) {
-        
+            final String columnQualifier, final Long timestamp, final String value, 
+            final Boolean writeToWAL, final RowLock lock) throws HBaseServiceException {
         doWithHTable(tableName, new TableCallback<Void>() {
             public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Put put = createPut(row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL);
+                final Put put = createPut(row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL, lock);
                 hTable.put(put);
                 return null;
             }
@@ -311,18 +316,20 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#exists(String, String, Integer, Long) */
-    public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp) {
+    public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp) 
+            throws HBaseServiceException {
         final Result result = get(tableName, row, maxVersions, timestamp);
         return result != null && !result.isEmpty();
     }
-    
-    /** @see HBaseService#delete(String, String, String, String, Long, boolean) */
+
+    /** @see HBaseService#delete(String, String, String, String, Long, Boolean, RowLock) */
     public void delete(final String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final Long timestamp, final boolean deleteAllVersions) {
+            final String columnQualifier, final Long timestamp, final Boolean deleteAllVersions, 
+            final RowLock lock) throws HBaseServiceException {
         doWithHTable(tableName, new TableCallback<Void>() {
             public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
                 final Delete delete = createDelete(
-                    row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions);
+                        row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions, lock);
                 hTable.delete(delete);
                 return null;
             }
@@ -337,7 +344,6 @@ public class RPCHBaseService implements HBaseService {
             final Integer caching, final Integer batch, final Boolean cacheBlocks, 
             final Integer maxVersions, final Boolean allVersions, 
             final String startRow, final String stopRow) throws HBaseServiceException {
-        
         return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>() {
             public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception {
                 Scan scan = new Scan();
@@ -388,16 +394,18 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#checkAndPut(
-     *  String, String, String, String, String, String, String, Long, String, boolean) */
+     *  String, String, String, String, String, String, String, Long, String, Boolean, RowLock) */
     public boolean checkAndPut(
             final String tableName, final String row, 
             final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
             final String putColumnFamilyName, final String putColumnQualifier, 
-            final Long putTimestamp, final String putValue, final Boolean putWriteToWAL) {
+            final Long putTimestamp, final String putValue, final Boolean putWriteToWAL, final RowLock putLock)
+            throws HBaseServiceException {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
                 final Put put = createPut(
-                    row, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL);
+                    row, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, 
+                    putLock);
                 return hTable.checkAndPut(
                     row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
                     checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), 
@@ -407,17 +415,38 @@ public class RPCHBaseService implements HBaseService {
     }
     
     /** @see HBaseService#checkAndDelete(
-     *       String, String, String, String, String, String, String, Long, Boolean) */
+     *       String, String, String, String, String, String, String, Long, Boolean, RowLock) */
     public boolean checkAndDelete(final String tableName, final String row, 
             final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
             final String deleteColumnFamilyName, final String deleteColumnQualifier, 
-            final Long deleteTimestamp, final Boolean deleteAllVersions) {
+            final Long deleteTimestamp, final Boolean deleteAllVersions, final RowLock deleteLock) 
+            throws HBaseServiceException {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
                 final Delete delete = createDelete(
-                    row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions);
+                    row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, 
+                    deleteLock);
                 return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
                         checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), delete);
+            }
+        });
+    }
+    
+    /** @see HBaseService#lock(String, String) */
+    public RowLock lock(final String tableName, final String row) throws HBaseServiceException {
+        return (RowLock) doWithHTable(tableName, new TableCallback<RowLock>() {
+            public RowLock doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                return hTable.lockRow(row.getBytes(UTF8));
+            }
+        });
+    }
+
+    /** @see HBaseService#unlock(String, RowLock) */
+    public void unlock(final String tableName, final RowLock lock) throws HBaseServiceException {
+        doWithHTable(tableName, new TableCallback<Void>() {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+                hTable.unlockRow(lock);
+                return null;
             }
         });
     }
@@ -443,14 +472,6 @@ public class RPCHBaseService implements HBaseService {
         }
     }
 
-    private Result doGet(final HTableInterface hTableInterface, final String rowKey, Integer maxVersions, Long timestamp) {
-        try {
-            return hTableInterface.get(createGet(rowKey, maxVersions, timestamp));
-        } catch (IOException e) {
-            throw new HBaseServiceException(e);
-        }
-    }
-
     private Get createGet(String rowKey, Integer maxVersions, Long timestamp) {
         Get get = new Get(rowKey.getBytes(UTF8));
         if (maxVersions != null) {
@@ -466,8 +487,13 @@ public class RPCHBaseService implements HBaseService {
     
     private Put createPut(final String row, final String columnFamilyName,
             final String columnQualifier, final Long timestamp,
-            final String value, final Boolean writeToWAL) {
-        final Put put = new Put(row.getBytes(UTF8));
+            final String value, final Boolean writeToWAL, final RowLock lock) {
+        final Put put;
+        if (lock == null) {
+            put = new Put(row.getBytes(UTF8));
+        } else {
+            put = new Put(row.getBytes(UTF8), lock);
+        }
         if (timestamp == null) {
             put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
         } else {
@@ -480,8 +506,13 @@ public class RPCHBaseService implements HBaseService {
     }
     
     private Delete createDelete(final String row, final String columnFamilyName, final String columnQualifier, 
-            final Long timestamp, final Boolean deleteAllVersions) {
-        final Delete delete = new Delete(row.getBytes(UTF8));
+            final Long timestamp, final Boolean deleteAllVersions, final RowLock lock) {
+        final Delete delete;
+        if (lock == null) {
+            delete = new Delete(row.getBytes(UTF8));
+        } else {
+            delete = new Delete(row.getBytes(UTF8), HConstants.LATEST_TIMESTAMP, lock);
+        }
         if (columnFamilyName != null) {
             if (columnQualifier != null) {
                 if (timestamp != null) {

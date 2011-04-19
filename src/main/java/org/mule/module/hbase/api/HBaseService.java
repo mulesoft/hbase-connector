@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.RowLock;
 
 /**
  * The service exposes several actions to manage and use an HBase database
@@ -42,8 +43,8 @@ public interface HBaseService {
     void disabeTable(String name) throws HBaseServiceException;
     
     
-    void addColumn(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope);
-    boolean existsColumn(String tableName, String columnFamilyName);
+    void addColumn(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope) throws HBaseServiceException;
+    boolean existsColumn(String tableName, String columnFamilyName) throws HBaseServiceException;
     /**
      * Changes a column family in a table, all <code>null</code> parameters will be ignored. 
      *   
@@ -54,8 +55,9 @@ public interface HBaseService {
     void modifyColumn(String tableName, String columnFamilyName, Integer maxVersions, Integer blocksize,
             String compressionType, String compactionCompressionType, Boolean inMemory, Integer timeToLive,
             Boolean blockCacheEnabled, String bloomFilterType, Integer replicationScope, 
-            Map<String, String> values);
-    void deleteColumn(String tableName, String columnFamilyName);
+            Map<String, String> values) throws HBaseServiceException;
+    
+    void deleteColumn(String tableName, String columnFamilyName) throws HBaseServiceException;
     
     //------------ Row Operations
     Result get(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
@@ -66,7 +68,8 @@ public interface HBaseService {
      * @param timestamp (optional) a specific version
      */
     void put(String tableName, String row, String columnFamilyName, 
-        String columnQualifier, Long timestamp, String value, Boolean writeToWAL) throws HBaseServiceException;
+            String columnQualifier, Long timestamp, String value, Boolean writeToWAL, RowLock lock) 
+            throws HBaseServiceException;
     
     /** @return true only if the row exists and is not null */
     boolean exists(String tableName, String row, Integer maxVersions, Long timestamp) throws HBaseServiceException;
@@ -81,7 +84,8 @@ public interface HBaseService {
      * @param deleteAllVersions set <code>false</code> to delete only the latest version of the specified column
      */
     public void delete(String tableName, String row, String columnFamilyName, 
-            String columnQualifier, Long timestamp, boolean deleteAllVersions) throws HBaseServiceException;
+            String columnQualifier, Long timestamp, Boolean deleteAllVersions, RowLock lock) 
+            throws HBaseServiceException;
     
     /**
      * Scan across all rows in a table. 
@@ -130,7 +134,8 @@ public interface HBaseService {
     boolean checkAndPut(String tableName, String row, 
             String checkColumnFamilyName, String checkColumnQualifier, String checkValue,
             String putColumnFamilyName, String putColumnQualifier, 
-            Long putTimestamp, String putValue, Boolean putWriteToWAL) throws HBaseServiceException;
+            Long putTimestamp, String putValue, Boolean putWriteToWAL, RowLock putLock) 
+            throws HBaseServiceException;
     
     /**
      * Atomically checks if a row/family/qualifier value matches the expected value. 
@@ -141,7 +146,19 @@ public interface HBaseService {
     boolean checkAndDelete(String tableName, String row, 
             String checkColumnFamilyName, String checkColumnQualifier, String checkValue,
             String deleteColumnFamilyName, String deleteColumnQualifier, 
-            Long deleteTimestamp, Boolean deleteAllVersions) throws HBaseServiceException;
+            Long deleteTimestamp, Boolean deleteAllVersions, RowLock deleteLock) 
+            throws HBaseServiceException;
+    
+    /**
+     * Locks a row in a table. You should eventually call {@link HBaseService#unlock(String, RowLock)}.
+     * 
+     * @return the lock 
+     */
+    RowLock lock(String tableName, String row) throws HBaseServiceException;
+    
+    /** Unlock the row */
+    void unlock(String tableName, RowLock lock) throws HBaseServiceException;
+    
     
     //------------ Configuration
     /**
