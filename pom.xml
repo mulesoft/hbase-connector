@@ -13,6 +13,7 @@
 
     <properties>
         <mule.version>3.1.0</mule.version>
+        <cloud.connector.version>2.0.12</cloud.connector.version>
         <!-- Tools properties -->
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
@@ -66,7 +67,7 @@
                         <plugin>
                 <groupId>org.mule.tools</groupId>
                 <artifactId>mule-cloud-connector-maven-plugin</artifactId>
-                <version>2.0.12</version>
+                <version>${cloud.connector.version}</version>
                 <extensions>true</extensions>
             </plugin>
 
@@ -178,7 +179,7 @@
         <dependency>
             <groupId>org.mule.tools</groupId>
             <artifactId>mule-cloud-connector-annotations</artifactId>
-            <version>2.0.12</version>
+            <version>${cloud.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
