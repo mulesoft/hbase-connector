@@ -13,12 +13,16 @@
                           http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
                           http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0-SNAPSHOT/mule-hbase.xsd">
 
-    <hbase:config />
+    <hbase:config facade-ref="mockFacade" />
     
-    <flow name="flowGetByKey">
-        <hbase:get tableName="some-table" row="some-row" />
+    <flow name="flowGet">
+        <hbase:get tableName="t1" row="r1" />
+    </flow>
+    
+    <flow name="flowPut">
+        <hbase:put tableName="t1" row="r1" columnFamilyName="f1" columnQualifier="q1" value="v1" />
     </flow>
 
-    <spring:bean name="mockFacade" class="org.mule.module.hbase.api.impl.MockHBaseService" />
+    <spring:bean id="mockFacade" class="org.mule.module.hbase.config.MockHBaseServiceFactoryBean" factory-method="getObject" />
 
 </mule>

@@ -3,32 +3,59 @@
  */
 package org.mule.module.hbase.config;
 
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.RowLock;
 import org.mule.api.MuleEvent;
 import org.mule.construct.SimpleFlowConstruct;
+import org.mule.module.hbase.api.HBaseService;
 import org.mule.tck.FunctionalTestCase;
 
 public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
 {
+    private HBaseService mockService;
+    
     @Override
     protected String getConfigResources()
     {
         return "hbase-namespace-config.xml";
     }
 
-    public void testSendMessageToFlow()throws Exception
+    @Override
+    protected void doSetUp() throws Exception {
+        mockService = muleContext.getRegistry().lookupObject("mockFacade");
+        reset(mockService);
+    }
+
+    public void testFlowGet() throws Exception
     {
-//        String payload = "some-row";
-//        SimpleFlowConstruct flow = lookupFlowConstruct("flowGetByKey");
-//        MuleEvent event = getTestEvent(payload);
-//        MuleEvent responseEvent = flow.process(event);
-//        
-//        Result response = responseEvent.getMessage().getPayload(Result.class);
-//        assertTrue(response.isEmpty());
+        final Result mockResult = new Result();
+        when(mockService.get(eq("t1"), eq("r1"), anyInt(), anyLong())).thenReturn(mockResult);
+        
+        final SimpleFlowConstruct flow = lookupFlowConstruct("flowGet");
+        final MuleEvent event = getTestEvent(null);
+        final MuleEvent responseEvent = flow.process(event);
+        
+        final Result response = responseEvent.getMessage().getPayload(Result.class);
+        assertEquals(mockResult, response);
+        verify(mockService).get(eq("t1"), eq("r1"), anyInt(), anyLong());
+    }
+    
+    public void testFlowPut() throws Exception
+    {
+        final SimpleFlowConstruct flow = lookupFlowConstruct("flowPut");
+        final MuleEvent event = getTestEvent(null);
+        flow.process(event);
+        
+        verify(mockService).put(
+            eq("t1"), eq("r1"), eq("f1"), eq("q1"), 
+            anyLong(), eq("v1"), anyBoolean(), any(RowLock.class));
     }
 
     private SimpleFlowConstruct lookupFlowConstruct(String name)
     {
-        return(SimpleFlowConstruct)muleContext.getRegistry().lookupFlowConstruct(name);
+        return (SimpleFlowConstruct) muleContext.getRegistry().lookupFlowConstruct(name);
     }
 }
