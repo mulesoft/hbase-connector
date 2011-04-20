@@ -13,7 +13,7 @@
 
     <properties>
         <mule.version>3.1.0</mule.version>
-        <cloud.connector.version>2.0.12</cloud.connector.version>
+        <cloud.connector.version>2.0.13</cloud.connector.version>
         <!-- Tools properties -->
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
