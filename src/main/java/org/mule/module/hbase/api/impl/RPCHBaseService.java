@@ -74,7 +74,7 @@ public class RPCHBaseService implements HBaseService
 
     // ------------ Admin Operations
     /** @see HBaseService#alive() */
-    public boolean alive() throws HBaseServiceException
+    public boolean alive()
     {
         try
         {
@@ -108,7 +108,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#createTable(String) */
-    public void createTable(final String name) throws HBaseServiceException
+    public void createTable(final String name)
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -129,7 +129,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#existsTable(String) */
-    public boolean existsTable(final String name) throws HBaseServiceException
+    public boolean existsTable(final String name)
     {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
         {
@@ -152,7 +152,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#deleteTable(String) */
-    public void deleteTable(final String name) throws HBaseServiceException
+    public void deleteTable(final String name)
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -174,7 +174,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#isDisabledTable(String) */
-    public boolean isDisabledTable(final String name) throws HBaseServiceException
+    public boolean isDisabledTable(final String name)
     {
         return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
         {
@@ -193,7 +193,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#enableTable(String) */
-    public void enableTable(final String name) throws HBaseServiceException
+    public void enableTable(final String name)
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -213,7 +213,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#disabeTable(String) */
-    public void disabeTable(final String name) throws HBaseServiceException
+    public void disabeTable(final String name)
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -237,7 +237,7 @@ public class RPCHBaseService implements HBaseService
                           final String someColumnFamilyName,
                           final Integer maxVersions,
                           final Boolean inMemory,
-                          final Integer scope) throws HBaseServiceException
+                          final Integer scope)
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -273,7 +273,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#existsColumn(String, String) */
-    public boolean existsColumn(String tableName, final String columnFamilyName) throws HBaseServiceException
+    public boolean existsColumn(String tableName, final String columnFamilyName)
     {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
         {
@@ -306,7 +306,7 @@ public class RPCHBaseService implements HBaseService
                              final Boolean blockCacheEnabled,
                              final String bloomFilterType,
                              final Integer replicationScope,
-                             final Map<String, String> values) throws HBaseServiceException
+                             final Map<String, String> values)
     {
 
         doWithHBaseAdmin(new AdminCallback<Void>()
@@ -345,18 +345,42 @@ public class RPCHBaseService implements HBaseService
                                                     Integer replicationScope,
                                                     Map<String, String> values)
             {
-                if (maxVersions != null) descriptor.setMaxVersions(maxVersions);
-                if (blocksize != null) descriptor.setBlocksize(blocksize);
+                if (maxVersions != null)
+                {
+                    descriptor.setMaxVersions(maxVersions);
+                }
+                if (blocksize != null)
+                {
+                    descriptor.setBlocksize(blocksize);
+                }
                 if (compressionType != null)
+                {
                     descriptor.setCompressionType(Algorithm.valueOf(compressionType));
+                }
                 if (compactionCompressionType != null)
+                {
                     descriptor.setCompactionCompressionType(Algorithm.valueOf(compactionCompressionType));
-                if (inMemory != null) descriptor.setInMemory(inMemory);
-                if (timeToLive != null) descriptor.setTimeToLive(timeToLive);
-                if (blockCacheEnabled != null) descriptor.setBlockCacheEnabled(blockCacheEnabled);
+                }
+                if (inMemory != null)
+                {
+                    descriptor.setInMemory(inMemory);
+                }
+                if (timeToLive != null)
+                {
+                    descriptor.setTimeToLive(timeToLive);
+                }
+                if (blockCacheEnabled != null)
+                {
+                    descriptor.setBlockCacheEnabled(blockCacheEnabled);
+                }
                 if (bloomFilterType != null)
+                {
                     descriptor.setBloomFilterType(BloomType.valueOf(bloomFilterType));
-                if (replicationScope != null) descriptor.setScope(replicationScope);
+                }
+                if (replicationScope != null)
+                {
+                    descriptor.setScope(replicationScope);
+                }
                 if (values != null)
                 {
                     for (Entry<String, String> entry : values.entrySet())
@@ -370,7 +394,7 @@ public class RPCHBaseService implements HBaseService
 
     /** @see HBaseService#deleteColumn(String, String) */
     public void deleteColumn(final String tableName, final String columnFamilyName)
-        throws HBaseServiceException
+
     {
         doWithHBaseAdmin(new AdminCallback<Void>()
         {
@@ -395,7 +419,7 @@ public class RPCHBaseService implements HBaseService
     // ------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
     public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp)
-        throws HBaseServiceException
+
     {
         return (Result) doWithHTable(tableName, new TableCallback<Result>()
         {
@@ -417,7 +441,7 @@ public class RPCHBaseService implements HBaseService
                     final Long timestamp,
                     final String value,
                     final Boolean writeToWAL,
-                    final RowLock lock) throws HBaseServiceException
+                    final RowLock lock)
     {
         doWithHTable(tableName, new TableCallback<Void>()
         {
@@ -433,7 +457,7 @@ public class RPCHBaseService implements HBaseService
 
     /** @see HBaseService#exists(String, String, Integer, Long) */
     public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp)
-        throws HBaseServiceException
+
     {
         final Result result = get(tableName, row, maxVersions, timestamp);
         return result != null && !result.isEmpty();
@@ -449,7 +473,7 @@ public class RPCHBaseService implements HBaseService
                        final String columnQualifier,
                        final Long timestamp,
                        final Boolean deleteAllVersions,
-                       final RowLock lock) throws HBaseServiceException
+                       final RowLock lock)
     {
         doWithHTable(tableName, new TableCallback<Void>()
         {
@@ -478,7 +502,7 @@ public class RPCHBaseService implements HBaseService
                               final Integer maxVersions,
                               final Boolean allVersions,
                               final String startRow,
-                              final String stopRow) throws HBaseServiceException
+                              final String stopRow)
     {
         return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>()
         {
@@ -507,19 +531,37 @@ public class RPCHBaseService implements HBaseService
                         scan.setTimeStamp(timestamp);
                     }
                 }
-                if (caching != null) scan.setCaching(caching);
-                if (batch != null) scan.setBatch(batch);
-                if (cacheBlocks != null) scan.setCacheBlocks(cacheBlocks);
+                if (caching != null)
+                {
+                    scan.setCaching(caching);
+                }
+                if (batch != null)
+                {
+                    scan.setBatch(batch);
+                }
+                if (cacheBlocks != null)
+                {
+                    scan.setCacheBlocks(cacheBlocks);
+                }
                 if (allVersions != null && Boolean.TRUE.equals(allVersions))
                 {
                     scan.setMaxVersions();
                 }
                 else
                 {
-                    if (maxVersions != null) scan.setMaxVersions(maxVersions);
+                    if (maxVersions != null)
+                    {
+                        scan.setMaxVersions(maxVersions);
+                    }
                 }
-                if (startRow != null) scan.setStartRow(startRow.getBytes(UTF8));
-                if (stopRow != null) scan.setStopRow(stopRow.getBytes(UTF8));
+                if (startRow != null)
+                {
+                    scan.setStartRow(startRow.getBytes(UTF8));
+                }
+                if (stopRow != null)
+                {
+                    scan.setStopRow(stopRow.getBytes(UTF8));
+                }
 
                 return hTable.getScanner(scan);
             }
@@ -532,7 +574,7 @@ public class RPCHBaseService implements HBaseService
                           final String columnFamilyName,
                           final String columnQualifier,
                           final long amount,
-                          final boolean writeToWAL) throws HBaseServiceException
+                          final boolean writeToWAL)
     {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.isTrue(StringUtils.isNotBlank(row));
@@ -562,7 +604,7 @@ public class RPCHBaseService implements HBaseService
                                final Long putTimestamp,
                                final String putValue,
                                final Boolean putWriteToWAL,
-                               final RowLock putLock) throws HBaseServiceException
+                               final RowLock putLock)
     {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
         {
@@ -589,7 +631,7 @@ public class RPCHBaseService implements HBaseService
                                   final String deleteColumnQualifier,
                                   final Long deleteTimestamp,
                                   final Boolean deleteAllVersions,
-                                  final RowLock deleteLock) throws HBaseServiceException
+                                  final RowLock deleteLock)
     {
         return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
         {
@@ -604,7 +646,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#lock(String, String) */
-    public RowLock lock(final String tableName, final String row) throws HBaseServiceException
+    public RowLock lock(final String tableName, final String row)
     {
         return (RowLock) doWithHTable(tableName, new TableCallback<RowLock>()
         {
@@ -616,7 +658,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** @see HBaseService#unlock(String, RowLock) */
-    public void unlock(final String tableName, final RowLock lock) throws HBaseServiceException
+    public void unlock(final String tableName, final RowLock lock)
     {
         doWithHTable(tableName, new TableCallback<Void>()
         {
@@ -670,7 +712,10 @@ public class RPCHBaseService implements HBaseService
                 new HBaseServiceException(e);
             }
         }
-        if (timestamp != null) get.setTimeStamp(timestamp);
+        if (timestamp != null)
+        {
+            get.setTimeStamp(timestamp);
+        }
         return get;
     }
 

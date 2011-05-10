@@ -30,32 +30,32 @@ public interface HBaseService
      * @return true only if the server can be reached and the master node is alive,
      *         false otherwise.
      */
-    boolean alive() throws HBaseServiceException;
+    boolean alive();
 
-    void createTable(String name) throws HBaseServiceException;
+    void createTable(String name);
 
     /** @return true only if the table exists, regardless it is enabled or not */
-    boolean existsTable(String name) throws HBaseServiceException;
+    boolean existsTable(String name);
 
-    void deleteTable(String name) throws HBaseServiceException;
+    void deleteTable(String name);
 
     /**
      * @return true only if the table was disabled.
      *         <em>You should check if the table exists before calling this method.</em>
      */
-    boolean isDisabledTable(String name) throws HBaseServiceException;
+    boolean isDisabledTable(String name);
 
-    void enableTable(String name) throws HBaseServiceException;
+    void enableTable(String name);
 
-    void disabeTable(String name) throws HBaseServiceException;
+    void disabeTable(String name);
 
     void addColumn(String tableName,
                    String columnFamilyName,
                    Integer maxVersions,
                    Boolean inMemory,
-                   Integer scope) throws HBaseServiceException;
+                   Integer scope);
 
-    boolean existsColumn(String tableName, String columnFamilyName) throws HBaseServiceException;
+    boolean existsColumn(String tableName, String columnFamilyName);
 
     /**
      * Changes a column family in a table, all <code>null</code> parameters will be
@@ -76,13 +76,12 @@ public interface HBaseService
                       Boolean blockCacheEnabled,
                       String bloomFilterType,
                       Integer replicationScope,
-                      Map<String, String> values) throws HBaseServiceException;
+                      Map<String, String> values);
 
-    void deleteColumn(String tableName, String columnFamilyName) throws HBaseServiceException;
+    void deleteColumn(String tableName, String columnFamilyName);
 
     // ------------ Row Operations
-    Result get(String tableName, String row, Integer maxVersions, Long timestamp)
-        throws HBaseServiceException;
+    Result get(String tableName, String row, Integer maxVersions, Long timestamp);
 
     /**
      * Saves the value at the specified cell (row + family:qualifier + timestamp)
@@ -96,11 +95,10 @@ public interface HBaseService
              Long timestamp,
              String value,
              Boolean writeToWAL,
-             RowLock lock) throws HBaseServiceException;
+             RowLock lock);
 
     /** @return true only if the row exists and is not null */
-    boolean exists(String tableName, String row, Integer maxVersions, Long timestamp)
-        throws HBaseServiceException;
+    boolean exists(String tableName, String row, Integer maxVersions, Long timestamp);
 
     /**
      * This method can delete a row in several levels depending on the parameters
@@ -122,7 +120,7 @@ public interface HBaseService
                        String columnQualifier,
                        Long timestamp,
                        Boolean deleteAllVersions,
-                       RowLock lock) throws HBaseServiceException;
+                       RowLock lock);
 
     /**
      * Scan across all rows in a table.
@@ -158,7 +156,7 @@ public interface HBaseService
                               Integer maxVersions,
                               Boolean allVersions,
                               String startRow,
-                              String stopRow) throws HBaseServiceException;
+                              String stopRow);
 
     /**
      * Atomically increments a column value. If the column value does not yet exist
@@ -173,7 +171,7 @@ public interface HBaseService
                    String columnFamilyName,
                    String columnQualifier,
                    long amount,
-                   boolean writeToWAL) throws HBaseServiceException;
+                   boolean writeToWAL);
 
     /**
      * Atomically checks if a row/family/qualifier value matches the expected value.
@@ -193,7 +191,7 @@ public interface HBaseService
                         Long putTimestamp,
                         String putValue,
                         Boolean putWriteToWAL,
-                        RowLock putLock) throws HBaseServiceException;
+                        RowLock putLock);
 
     /**
      * Atomically checks if a row/family/qualifier value matches the expected value.
@@ -210,7 +208,7 @@ public interface HBaseService
                            String deleteColumnQualifier,
                            Long deleteTimestamp,
                            Boolean deleteAllVersions,
-                           RowLock deleteLock) throws HBaseServiceException;
+                           RowLock deleteLock);
 
     /**
      * Locks a row in a table. You should eventually call
@@ -218,10 +216,10 @@ public interface HBaseService
      * 
      * @return the lock
      */
-    RowLock lock(String tableName, String row) throws HBaseServiceException;
+    RowLock lock(String tableName, String row);
 
     /** Unlock the row */
-    void unlock(String tableName, RowLock lock) throws HBaseServiceException;
+    void unlock(String tableName, RowLock lock);
 
     // ------------ Configuration
     /**

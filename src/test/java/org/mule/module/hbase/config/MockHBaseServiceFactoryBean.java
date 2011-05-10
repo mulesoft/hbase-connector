@@ -10,7 +10,7 @@
 
 package org.mule.module.hbase.config;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 import org.mule.module.hbase.api.HBaseService;
 
@@ -20,8 +20,11 @@ import org.mule.module.hbase.api.HBaseService;
  * @author Pablo Martin Grigolatto
  * @since Apr 20, 2011
  */
-public class MockHBaseServiceFactoryBean
+public final class MockHBaseServiceFactoryBean
 {
+    private MockHBaseServiceFactoryBean()
+    {
+    }
 
     public static HBaseService getObject() throws Exception
     {
