@@ -13,7 +13,7 @@
 
     <properties>
         <mule.version>3.1.0</mule.version>
-        <cloud.connector.version>2.0.13</cloud.connector.version>
+        <cloud.connector.version>2.0.15-SNAPSHOT</cloud.connector.version>
         <!-- Tools properties -->
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
@@ -84,6 +84,28 @@
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
+            <plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.8.0</version>
+				<configuration>
+					<header>LICENSE_HEADER.txt</header>
+					<excludes>
+						<exclude>target/**</exclude>
+						<exclude>.gitignore</exclude>
+						<exclude>**/*.txt</exclude>
+						<exclude>**/*.ftl</exclude>
+						<exclude>**/build-number.txt</exclude> <!-- bamboo -->
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
     </build>
 
@@ -252,4 +274,28 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+    
+    
+     <distributionManagement>
+        <repository>
+            <id>muleforge-releases</id>
+            <name>MuleForge Snapshot Repository</name>
+            <url>dav:https://repository.muleforge.org/release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>muleforge-snapshots</id>
+            <name>MuleForge Repository</name>
+            <url>dav:https://repository.muleforge.org/snapshot/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+	<scm>
+        <connection>scm:git:git://github.com:mulesoft/hbase-connector.git</connection>
+        <developerConnection>
+            scm:git:git@github.com:mulesoft/hbase-connector.git
+        </developerConnection>
+        <url>http://github.com/mulesoft/hbase-connector</url>
+    </scm>	
+    
 </project>
