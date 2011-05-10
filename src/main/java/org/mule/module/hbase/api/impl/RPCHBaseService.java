@@ -44,62 +44,84 @@ import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
- * {@link HBaseService} that uses the official RPC client to connect with the database.
- * <br><br>
- * <strong>Important</strong>
- * It requires HBase >= 0.90.3-SNAPSHOT because of this two issues:
+ * {@link HBaseService} that uses the official RPC client to connect with the
+ * database. <br>
+ * <br>
+ * <strong>Important</strong> It requires HBase >= 0.90.3-SNAPSHOT because of this
+ * two issues:
  * <ul>
- *  <li><a href="https://issues.apache.org/jira/browse/HBASE-3712">
- *      https://issues.apache.org/jira/browse/HBASE-3712</a></li>
- *  <li><a href="https://issues.apache.org/jira/browse/HBASE-3734">
- *      https://issues.apache.org/jira/browse/HBASE-3734</a></li>
+ * <li><a href="https://issues.apache.org/jira/browse/HBASE-3712">
+ * https://issues.apache.org/jira/browse/HBASE-3712</a></li>
+ * <li><a href="https://issues.apache.org/jira/browse/HBASE-3734">
+ * https://issues.apache.org/jira/browse/HBASE-3734</a></li>
  * </ul>
  * 
  * @author Pablo Martin Grigolatto
  * @since Apr 11, 2011
  */
-public class RPCHBaseService implements HBaseService {
+public class RPCHBaseService implements HBaseService
+{
 
     private static final Charset UTF8 = Charset.forName("utf-8");
     private HTableInterfaceFactory hTableInterfaceFactory;
     private Configuration configuration;
 
-    public RPCHBaseService() {
+    public RPCHBaseService()
+    {
         hTableInterfaceFactory = new HTableFactory();
         configuration = HBaseConfiguration.create();
     }
-    
-    //------------ Admin Operations
+
+    // ------------ Admin Operations
     /** @see HBaseService#alive() */
-    public boolean alive() throws HBaseServiceException {
-        try {
-            return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
-                public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                    try {
+    public boolean alive() throws HBaseServiceException
+    {
+        try
+        {
+            return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+            {
+                public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+                {
+                    try
+                    {
                         return hBaseAdmin.isMasterRunning();
-                    } catch (MasterNotRunningException e) {
+                    }
+                    catch (MasterNotRunningException e)
+                    {
                         return false;
-                    } catch (ZooKeeperConnectionException e) {
+                    }
+                    catch (ZooKeeperConnectionException e)
+                    {
                         return false;
-                    } catch (HBaseServiceException e) {
+                    }
+                    catch (HBaseServiceException e)
+                    {
                         return false;
                     }
                 }
             });
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return false;
         }
     }
 
     /** @see HBaseService#createTable(String) */
-    public void createTable(final String name) throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public void createTable(final String name) throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     hBaseAdmin.createTable(new HTableDescriptor(name));
                     doFlush(hBaseAdmin, name);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
@@ -107,14 +129,22 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** @see HBaseService#existsTable(String) */
-    public boolean existsTable(final String name) throws HBaseServiceException {
-        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
-            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public boolean existsTable(final String name) throws HBaseServiceException
+    {
+        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+        {
+            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     return hBaseAdmin.getTableDescriptor(name.getBytes(UTF8)) != null;
-                } catch (TableNotFoundException e) {
+                }
+                catch (TableNotFoundException e)
+                {
                     return false;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
@@ -122,475 +152,695 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** @see HBaseService#deleteTable(String) */
-    public void deleteTable(final String name) throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public void deleteTable(final String name) throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     hBaseAdmin.disableTable(name);
                     hBaseAdmin.deleteTable(name);
                     doFlush(hBaseAdmin, name);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#isDisabledTable(String) */
-    public boolean isDisabledTable(final String name) throws HBaseServiceException {
-        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>() {
-            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public boolean isDisabledTable(final String name) throws HBaseServiceException
+    {
+        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+        {
+            public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     return hBaseAdmin.isTableDisabled(name);
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#enableTable(String) */
-    public void enableTable(final String name) throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public void enableTable(final String name) throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     hBaseAdmin.enableTable(name);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#disabeTable(String) */
-    public void disabeTable(final String name) throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public void disabeTable(final String name) throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     hBaseAdmin.disableTable(name);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#addColumn(String, String, Integer, Boolean, Integer) */
-    public void addColumn(final String name, final String someColumnFamilyName, 
-            final Integer maxVersions, final Boolean inMemory, final Integer scope) 
-            throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
+    public void addColumn(final String name,
+                          final String someColumnFamilyName,
+                          final Integer maxVersions,
+                          final Boolean inMemory,
+                          final Integer scope) throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
                 final HColumnDescriptor descriptor = new HColumnDescriptor(someColumnFamilyName);
-                if (maxVersions != null) {
+                if (maxVersions != null)
+                {
                     descriptor.setMaxVersions(maxVersions);
                 }
-                if (inMemory != null) {
+                if (inMemory != null)
+                {
                     descriptor.setInMemory(inMemory);
                 }
-                if (scope != null) {
+                if (scope != null)
+                {
                     descriptor.setScope(scope);
                 }
-                try {
+                try
+                {
                     hBaseAdmin.disableTable(name);
                     hBaseAdmin.addColumn(name, descriptor);
                     hBaseAdmin.enableTable(name);
                     doFlush(hBaseAdmin, name);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#existsColumn(String, String) */
-    public boolean existsColumn(String tableName, final String columnFamilyName) throws HBaseServiceException {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
-            public Boolean doWithHBaseAdmin(HTableInterface hTable) {
-                try {
+    public boolean existsColumn(String tableName, final String columnFamilyName) throws HBaseServiceException
+    {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable)
+            {
+                try
+                {
                     return hTable.getTableDescriptor().getFamily(columnFamilyName.getBytes(UTF8)) != null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
-    /** @see HBaseService#modifyColumn(String, String, Integer, Integer, 
-     *       String, String, Boolean, Integer, Boolean, String, Integer, Map) */
-    public void modifyColumn(final String tableName, final String columnFamilyName,
-            final Integer maxVersions, final Integer blocksize, final String compressionType,
-            final String compactionCompressionType, final Boolean inMemory,
-            final Integer timeToLive, final Boolean blockCacheEnabled,
-            final String bloomFilterType, final Integer replicationScope,
-            final Map<String, String> values) throws HBaseServiceException {
-        
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+
+    /**
+     * @see HBaseService#modifyColumn(String, String, Integer, Integer, String,
+     *      String, Boolean, Integer, Boolean, String, Integer, Map)
+     */
+    public void modifyColumn(final String tableName,
+                             final String columnFamilyName,
+                             final Integer maxVersions,
+                             final Integer blocksize,
+                             final String compressionType,
+                             final String compactionCompressionType,
+                             final Boolean inMemory,
+                             final Integer timeToLive,
+                             final Boolean blockCacheEnabled,
+                             final String bloomFilterType,
+                             final Integer replicationScope,
+                             final Map<String, String> values) throws HBaseServiceException
+    {
+
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     HTableDescriptor otd = hBaseAdmin.getTableDescriptor(tableName.getBytes(UTF8));
                     HColumnDescriptor ocd = otd.getFamily(columnFamilyName.getBytes(UTF8));
                     HColumnDescriptor descriptor = new HColumnDescriptor(ocd);
-                    loadPropertiesInDescriptor(descriptor, maxVersions, blocksize, compressionType, 
-                            compactionCompressionType, inMemory, timeToLive, blockCacheEnabled, 
-                            bloomFilterType, replicationScope, values);
+                    loadPropertiesInDescriptor(descriptor, maxVersions, blocksize, compressionType,
+                        compactionCompressionType, inMemory, timeToLive, blockCacheEnabled, bloomFilterType,
+                        replicationScope, values);
                     hBaseAdmin.disableTable(tableName);
                     hBaseAdmin.modifyColumn(tableName, descriptor);
                     hBaseAdmin.enableTable(tableName);
                     doFlush(hBaseAdmin, tableName);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
 
-            private void loadPropertiesInDescriptor(
-                    HColumnDescriptor descriptor, Integer maxVersions,
-                    Integer blocksize, String compressionType,
-                    String compactionCompressionType, Boolean inMemory,
-                    Integer timeToLive, Boolean blockCacheEnabled,
-                    String bloomFilterType, Integer replicationScope,
-                    Map<String, String> values) {
+            private void loadPropertiesInDescriptor(HColumnDescriptor descriptor,
+                                                    Integer maxVersions,
+                                                    Integer blocksize,
+                                                    String compressionType,
+                                                    String compactionCompressionType,
+                                                    Boolean inMemory,
+                                                    Integer timeToLive,
+                                                    Boolean blockCacheEnabled,
+                                                    String bloomFilterType,
+                                                    Integer replicationScope,
+                                                    Map<String, String> values)
+            {
                 if (maxVersions != null) descriptor.setMaxVersions(maxVersions);
                 if (blocksize != null) descriptor.setBlocksize(blocksize);
-                if (compressionType != null) descriptor.setCompressionType(Algorithm.valueOf(compressionType));
-                if (compactionCompressionType != null) descriptor.setCompactionCompressionType(Algorithm.valueOf(compactionCompressionType));
+                if (compressionType != null)
+                    descriptor.setCompressionType(Algorithm.valueOf(compressionType));
+                if (compactionCompressionType != null)
+                    descriptor.setCompactionCompressionType(Algorithm.valueOf(compactionCompressionType));
                 if (inMemory != null) descriptor.setInMemory(inMemory);
                 if (timeToLive != null) descriptor.setTimeToLive(timeToLive);
                 if (blockCacheEnabled != null) descriptor.setBlockCacheEnabled(blockCacheEnabled);
-                if (bloomFilterType != null) descriptor.setBloomFilterType(BloomType.valueOf(bloomFilterType));
+                if (bloomFilterType != null)
+                    descriptor.setBloomFilterType(BloomType.valueOf(bloomFilterType));
                 if (replicationScope != null) descriptor.setScope(replicationScope);
-                if (values != null) {
-                    for (Entry<String, String> entry : values.entrySet()) {
+                if (values != null)
+                {
+                    for (Entry<String, String> entry : values.entrySet())
+                    {
                         descriptor.setValue(entry.getKey(), entry.getValue());
                     }
                 }
             }
         });
     }
-    
+
     /** @see HBaseService#deleteColumn(String, String) */
-    public void deleteColumn(final String tableName, final String columnFamilyName) 
-            throws HBaseServiceException {
-        doWithHBaseAdmin(new AdminCallback<Void>() {
-            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin) {
-                try {
+    public void deleteColumn(final String tableName, final String columnFamilyName)
+        throws HBaseServiceException
+    {
+        doWithHBaseAdmin(new AdminCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
+            {
+                try
+                {
                     hBaseAdmin.disableTable(tableName);
                     hBaseAdmin.deleteColumn(tableName, columnFamilyName);
                     hBaseAdmin.enableTable(tableName);
                     doFlush(hBaseAdmin, tableName);
                     return null;
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
         });
     }
-    
-    //------------ Row Operations
+
+    // ------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp) 
-            throws HBaseServiceException {
-        return (Result) doWithHTable(tableName, new TableCallback<Result>() {
-            public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp)
+        throws HBaseServiceException
+    {
+        return (Result) doWithHTable(tableName, new TableCallback<Result>()
+        {
+            public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
                 return hTable.get(createGet(row, maxVersions, timestamp));
             }
         });
     }
-    
-    /** @see HBaseService#put(String, String, String, String, Long, String, Boolean, RowLock) */
-    public void put(String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final Long timestamp, final String value, 
-            final Boolean writeToWAL, final RowLock lock) throws HBaseServiceException {
-        doWithHTable(tableName, new TableCallback<Void>() {
-            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Put put = createPut(row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL, lock);
+
+    /**
+     * @see HBaseService#put(String, String, String, String, Long, String, Boolean,
+     *      RowLock)
+     */
+    public void put(String tableName,
+                    final String row,
+                    final String columnFamilyName,
+                    final String columnQualifier,
+                    final Long timestamp,
+                    final String value,
+                    final Boolean writeToWAL,
+                    final RowLock lock) throws HBaseServiceException
+    {
+        doWithHTable(tableName, new TableCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
+                final Put put = createPut(row, columnFamilyName, columnQualifier, timestamp, value,
+                    writeToWAL, lock);
                 hTable.put(put);
                 return null;
             }
         });
     }
-    
+
     /** @see HBaseService#exists(String, String, Integer, Long) */
-    public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp) 
-            throws HBaseServiceException {
+    public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp)
+        throws HBaseServiceException
+    {
         final Result result = get(tableName, row, maxVersions, timestamp);
         return result != null && !result.isEmpty();
     }
 
-    /** @see HBaseService#delete(String, String, String, String, Long, Boolean, RowLock) */
-    public void delete(final String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final Long timestamp, final Boolean deleteAllVersions, 
-            final RowLock lock) throws HBaseServiceException {
-        doWithHTable(tableName, new TableCallback<Void>() {
-            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Delete delete = createDelete(
-                        row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions, lock);
+    /**
+     * @see HBaseService#delete(String, String, String, String, Long, Boolean,
+     *      RowLock)
+     */
+    public void delete(final String tableName,
+                       final String row,
+                       final String columnFamilyName,
+                       final String columnQualifier,
+                       final Long timestamp,
+                       final Boolean deleteAllVersions,
+                       final RowLock lock) throws HBaseServiceException
+    {
+        doWithHTable(tableName, new TableCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
+                final Delete delete = createDelete(row, columnFamilyName, columnQualifier, timestamp,
+                    deleteAllVersions, lock);
                 hTable.delete(delete);
                 return null;
             }
         });
     }
-    
-    /** @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer, 
-     *       Boolean, Integer, Boolean, String, String) */
-    public ResultScanner scan(final String tableName, 
-            final String columnFamilyName, final String columnQualifier, 
-            final Long timestamp, final Long maxTimestamp, 
-            final Integer caching, final Integer batch, final Boolean cacheBlocks, 
-            final Integer maxVersions, final Boolean allVersions, 
-            final String startRow, final String stopRow) throws HBaseServiceException {
-        return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>() {
-            public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+
+    /**
+     * @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer,
+     *      Boolean, Integer, Boolean, String, String)
+     */
+    public ResultScanner scan(final String tableName,
+                              final String columnFamilyName,
+                              final String columnQualifier,
+                              final Long timestamp,
+                              final Long maxTimestamp,
+                              final Integer caching,
+                              final Integer batch,
+                              final Boolean cacheBlocks,
+                              final Integer maxVersions,
+                              final Boolean allVersions,
+                              final String startRow,
+                              final String stopRow) throws HBaseServiceException
+    {
+        return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>()
+        {
+            public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
                 Scan scan = new Scan();
-                if (columnFamilyName != null) {
-                    if (columnQualifier != null) {
+                if (columnFamilyName != null)
+                {
+                    if (columnQualifier != null)
+                    {
                         scan.addColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                    } else {
+                    }
+                    else
+                    {
                         scan.addFamily(columnFamilyName.getBytes(UTF8));
                     }
                 }
-                if (timestamp != null) {
-                    if (maxTimestamp != null) {
+                if (timestamp != null)
+                {
+                    if (maxTimestamp != null)
+                    {
                         scan.setTimeRange(timestamp, maxTimestamp);
-                    } else {
+                    }
+                    else
+                    {
                         scan.setTimeStamp(timestamp);
                     }
                 }
                 if (caching != null) scan.setCaching(caching);
                 if (batch != null) scan.setBatch(batch);
                 if (cacheBlocks != null) scan.setCacheBlocks(cacheBlocks);
-                if (allVersions != null && Boolean.TRUE.equals(allVersions)) {
-                    scan.setMaxVersions(); 
-                } else {
+                if (allVersions != null && Boolean.TRUE.equals(allVersions))
+                {
+                    scan.setMaxVersions();
+                }
+                else
+                {
                     if (maxVersions != null) scan.setMaxVersions(maxVersions);
                 }
                 if (startRow != null) scan.setStartRow(startRow.getBytes(UTF8));
                 if (stopRow != null) scan.setStopRow(stopRow.getBytes(UTF8));
-                 
+
                 return hTable.getScanner(scan);
             }
         });
     }
-    
+
     /** @see HBaseService#increment(String, String, String, String, long, boolean) */
-    public long increment(final String tableName, final String row, final String columnFamilyName, 
-            final String columnQualifier, final long amount, final boolean writeToWAL) 
-            throws HBaseServiceException {
+    public long increment(final String tableName,
+                          final String row,
+                          final String columnFamilyName,
+                          final String columnQualifier,
+                          final long amount,
+                          final boolean writeToWAL) throws HBaseServiceException
+    {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.isTrue(StringUtils.isNotBlank(row));
         Validate.isTrue(StringUtils.isNotBlank(columnFamilyName));
         Validate.isTrue(StringUtils.isNotBlank(columnQualifier));
-        return (Long) doWithHTable(tableName, new TableCallback<Long>() {
-            public Long doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                return hTable.incrementColumnValue(row.getBytes(UTF8), columnFamilyName.getBytes(UTF8), 
-                    columnQualifier.getBytes(UTF8), amount,  writeToWAL);
+        return (Long) doWithHTable(tableName, new TableCallback<Long>()
+        {
+            public Long doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
+                return hTable.incrementColumnValue(row.getBytes(UTF8), columnFamilyName.getBytes(UTF8),
+                    columnQualifier.getBytes(UTF8), amount, writeToWAL);
             }
         });
     }
-    
-    /** @see HBaseService#checkAndPut(
-     *  String, String, String, String, String, String, String, Long, String, Boolean, RowLock) */
-    public boolean checkAndPut(
-            final String tableName, final String row, 
-            final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
-            final String putColumnFamilyName, final String putColumnQualifier, 
-            final Long putTimestamp, final String putValue, final Boolean putWriteToWAL, final RowLock putLock)
-            throws HBaseServiceException {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
-            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Put put = createPut(
-                    row, putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, 
-                    putLock);
-                return hTable.checkAndPut(
-                    row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
-                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), 
-                    put);
+
+    /**
+     * @see HBaseService#checkAndPut(String, String, String, String, String, String,
+     *      String, Long, String, Boolean, RowLock)
+     */
+    public boolean checkAndPut(final String tableName,
+                               final String row,
+                               final String checkColumnFamilyName,
+                               final String checkColumnQualifier,
+                               final String checkValue,
+                               final String putColumnFamilyName,
+                               final String putColumnQualifier,
+                               final Long putTimestamp,
+                               final String putValue,
+                               final Boolean putWriteToWAL,
+                               final RowLock putLock) throws HBaseServiceException
+    {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
+                final Put put = createPut(row, putColumnFamilyName, putColumnQualifier, putTimestamp,
+                    putValue, putWriteToWAL, putLock);
+                return hTable.checkAndPut(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
+                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), put);
             }
         });
     }
-    
-    /** @see HBaseService#checkAndDelete(
-     *       String, String, String, String, String, String, String, Long, Boolean, RowLock) */
-    public boolean checkAndDelete(final String tableName, final String row, 
-            final String checkColumnFamilyName, final String checkColumnQualifier, final String checkValue,
-            final String deleteColumnFamilyName, final String deleteColumnQualifier, 
-            final Long deleteTimestamp, final Boolean deleteAllVersions, final RowLock deleteLock) 
-            throws HBaseServiceException {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>() {
-            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception {
-                final Delete delete = createDelete(
-                    row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, 
-                    deleteLock);
-                return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), 
-                        checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), delete);
+
+    /**
+     * @see HBaseService#checkAndDelete(String, String, String, String, String,
+     *      String, String, Long, Boolean, RowLock)
+     */
+    public boolean checkAndDelete(final String tableName,
+                                  final String row,
+                                  final String checkColumnFamilyName,
+                                  final String checkColumnQualifier,
+                                  final String checkValue,
+                                  final String deleteColumnFamilyName,
+                                  final String deleteColumnQualifier,
+                                  final Long deleteTimestamp,
+                                  final Boolean deleteAllVersions,
+                                  final RowLock deleteLock) throws HBaseServiceException
+    {
+        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        {
+            public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
+                final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier,
+                    deleteTimestamp, deleteAllVersions, deleteLock);
+                return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
+                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), delete);
             }
         });
     }
-    
+
     /** @see HBaseService#lock(String, String) */
-    public RowLock lock(final String tableName, final String row) throws HBaseServiceException {
-        return (RowLock) doWithHTable(tableName, new TableCallback<RowLock>() {
-            public RowLock doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+    public RowLock lock(final String tableName, final String row) throws HBaseServiceException
+    {
+        return (RowLock) doWithHTable(tableName, new TableCallback<RowLock>()
+        {
+            public RowLock doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
                 return hTable.lockRow(row.getBytes(UTF8));
             }
         });
     }
 
     /** @see HBaseService#unlock(String, RowLock) */
-    public void unlock(final String tableName, final RowLock lock) throws HBaseServiceException {
-        doWithHTable(tableName, new TableCallback<Void>() {
-            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception {
+    public void unlock(final String tableName, final RowLock lock) throws HBaseServiceException
+    {
+        doWithHTable(tableName, new TableCallback<Void>()
+        {
+            public Void doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            {
                 hTable.unlockRow(lock);
                 return null;
             }
         });
     }
 
-
-    //------------ Configuration
+    // ------------ Configuration
     /** @see HBaseService#addProperties(Map) */
-    public void addProperties(Map<String, String> properties) {
-        for (Entry<String, String> entry : properties.entrySet()) {
+    public void addProperties(Map<String, String> properties)
+    {
+        for (Entry<String, String> entry : properties.entrySet())
+        {
             configuration.set(entry.getKey(), entry.getValue());
         }
     }
-    
-    //------------ Private
-    
-    private void doFlush(HBaseAdmin hBaseAdmin, String name) {
-        try {
+
+    // ------------ Private
+
+    private void doFlush(HBaseAdmin hBaseAdmin, String name)
+    {
+        try
+        {
             hBaseAdmin.flush(name);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new HBaseServiceException(e);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             throw new HBaseServiceException(e);
         }
     }
 
-    private Get createGet(String rowKey, Integer maxVersions, Long timestamp) {
+    private Get createGet(String rowKey, Integer maxVersions, Long timestamp)
+    {
         Get get = new Get(rowKey.getBytes(UTF8));
-        if (maxVersions != null) {
-            try {
+        if (maxVersions != null)
+        {
+            try
+            {
                 get.setMaxVersions(maxVersions);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 new HBaseServiceException(e);
             }
         }
         if (timestamp != null) get.setTimeStamp(timestamp);
         return get;
     }
-    
-    private Put createPut(final String row, final String columnFamilyName,
-            final String columnQualifier, final Long timestamp,
-            final String value, final Boolean writeToWAL, final RowLock lock) {
+
+    private Put createPut(final String row,
+                          final String columnFamilyName,
+                          final String columnQualifier,
+                          final Long timestamp,
+                          final String value,
+                          final Boolean writeToWAL,
+                          final RowLock lock)
+    {
         final Put put;
-        if (lock == null) {
+        if (lock == null)
+        {
             put = new Put(row.getBytes(UTF8));
-        } else {
+        }
+        else
+        {
             put = new Put(row.getBytes(UTF8), lock);
         }
-        if (timestamp == null) {
+        if (timestamp == null)
+        {
             put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
-        } else {
-            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp, value.getBytes(UTF8));
         }
-        if (writeToWAL != null && Boolean.TRUE.equals(writeToWAL)) {
+        else
+        {
+            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp,
+                value.getBytes(UTF8));
+        }
+        if (writeToWAL != null && Boolean.TRUE.equals(writeToWAL))
+        {
             put.setWriteToWAL(writeToWAL);
         }
         return put;
     }
-    
-    private Delete createDelete(final String row, final String columnFamilyName, final String columnQualifier, 
-            final Long timestamp, final Boolean deleteAllVersions, final RowLock lock) {
+
+    private Delete createDelete(final String row,
+                                final String columnFamilyName,
+                                final String columnQualifier,
+                                final Long timestamp,
+                                final Boolean deleteAllVersions,
+                                final RowLock lock)
+    {
         final Delete delete;
-        if (lock == null) {
+        if (lock == null)
+        {
             delete = new Delete(row.getBytes(UTF8));
-        } else {
+        }
+        else
+        {
             delete = new Delete(row.getBytes(UTF8), HConstants.LATEST_TIMESTAMP, lock);
         }
-        if (columnFamilyName != null) {
-            if (columnQualifier != null) {
-                if (timestamp != null) {
-                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions)) {
-                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
-                    } else {
-                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp);
+        if (columnFamilyName != null)
+        {
+            if (columnQualifier != null)
+            {
+                if (timestamp != null)
+                {
+                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions))
+                    {
+                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
+                            timestamp);
                     }
-                } else {
-                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions)) {
+                    else
+                    {
+                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
+                            timestamp);
+                    }
+                }
+                else
+                {
+                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions))
+                    {
                         delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                    } else {
+                    }
+                    else
+                    {
                         delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
                     }
                 }
-            } else {
-                if (timestamp != null) {
-                    delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp); 
-                } else {
+            }
+            else
+            {
+                if (timestamp != null)
+                {
+                    delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp);
+                }
+                else
+                {
                     delete.deleteFamily(columnFamilyName.getBytes(UTF8));
                 }
             }
         }
         return delete;
     }
-    
 
-    private HTableInterface createHTable(String tableName) {
+    private HTableInterface createHTable(String tableName)
+    {
         return hTableInterfaceFactory.createHTableInterface(configuration, tableName.getBytes(UTF8));
     }
 
     /**
-     * Returns a new instance of {@link HBaseAdmin}. 
-     * Clients should call {@link RPCHBaseService#destroyHBaseAdmin(HBaseAdmin)}. 
+     * Returns a new instance of {@link HBaseAdmin}. Clients should call
+     * {@link RPCHBaseService#destroyHBaseAdmin(HBaseAdmin)}.
      */
-    private HBaseAdmin createHBaseAdmin() {
-        try {
+    private HBaseAdmin createHBaseAdmin()
+    {
+        try
+        {
             return new HBaseAdmin(configuration);
-        } catch (MasterNotRunningException e) {
+        }
+        catch (MasterNotRunningException e)
+        {
             throw new HBaseServiceException(e);
-        } catch (ZooKeeperConnectionException e) {
+        }
+        catch (ZooKeeperConnectionException e)
+        {
             throw new HBaseServiceException(e);
         }
     }
 
     /** Release any resources allocated by {@link HBaseAdmin} */
-    private void destroyHBaseAdmin(final HBaseAdmin hBaseAdmin) {
-        if (hBaseAdmin != null) {
+    private void destroyHBaseAdmin(final HBaseAdmin hBaseAdmin)
+    {
+        if (hBaseAdmin != null)
+        {
             HConnectionManager.deleteConnection(hBaseAdmin.getConfiguration(), true);
         }
     }
 
     /** Retain and release the {@link HBaseAdmin} */
-    private Object doWithHBaseAdmin(AdminCallback<?> callback) {
+    private Object doWithHBaseAdmin(AdminCallback<?> callback)
+    {
         HBaseAdmin hBaseAdmin = null;
-        try {
+        try
+        {
             hBaseAdmin = createHBaseAdmin();
             return callback.doWithHBaseAdmin(hBaseAdmin);
-        } finally {
+        }
+        finally
+        {
             destroyHBaseAdmin(hBaseAdmin);
         }
     }
-    
+
     /** Retain and release the {@link HTable} */
-    private Object doWithHTable(final String tableName, final TableCallback<?> callback) {
+    private Object doWithHTable(final String tableName, final TableCallback<?> callback)
+    {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.notNull(callback);
         HTableInterface hTable = null;
-        try {
+        try
+        {
             hTable = createHTable(tableName);
             return callback.doWithHBaseAdmin(hTable);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new HBaseServiceException(e);
-        } finally {
-            if (hTable != null) {
-                try {
+        }
+        finally
+        {
+            if (hTable != null)
+            {
+                try
+                {
                     hTable.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     throw new HBaseServiceException(e);
                 }
             }
@@ -598,12 +848,17 @@ public class RPCHBaseService implements HBaseService {
     }
 
     /** Callback for using the {@link HBaseAdmin} without worry about releasing it */
-    interface AdminCallback<T> {
+    interface AdminCallback<T>
+    {
         T doWithHBaseAdmin(final HBaseAdmin hBaseAdmin);
     }
-    
-    /** Callback for using the {@link HTableInterface} without worry about releasing it */
-    interface TableCallback<T> {
+
+    /**
+     * Callback for using the {@link HTableInterface} without worry about releasing
+     * it
+     */
+    interface TableCallback<T>
+    {
         T doWithHBaseAdmin(final HTableInterface hTable) throws Exception;
     }
 

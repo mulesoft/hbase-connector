@@ -20,9 +20,11 @@ import org.mule.module.hbase.api.HBaseService;
  * @author Pablo Martin Grigolatto
  * @since Apr 20, 2011
  */
-public class MockHBaseServiceFactoryBean {
+public class MockHBaseServiceFactoryBean
+{
 
-    public static HBaseService getObject() throws Exception {
+    public static HBaseService getObject() throws Exception
+    {
         return mock(HBaseService.class);
     }
 
