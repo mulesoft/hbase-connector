@@ -10,6 +10,8 @@
 
 package org.mule.module.hbase.api;
 
+import org.mule.module.hbase.BloomFilterType;
+
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
@@ -69,12 +71,12 @@ public interface HBaseService
                       String columnFamilyName,
                       Integer maxVersions,
                       Integer blocksize,
-                      String compressionType,
-                      String compactionCompressionType,
+                      CompressionType compressionType,
+                      CompressionType compactionCompressionType,
                       Boolean inMemory,
                       Integer timeToLive,
                       Boolean blockCacheEnabled,
-                      String bloomFilterType,
+                      BloomFilterType bloomFilterType,
                       Integer replicationScope,
                       Map<String, String> values);
 

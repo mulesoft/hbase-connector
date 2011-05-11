@@ -10,6 +10,11 @@
 
 package org.mule.module.hbase.api.impl;
 
+import org.mule.module.hbase.BloomFilterType;
+import org.mule.module.hbase.api.CompressionType;
+import org.mule.module.hbase.api.HBaseService;
+import org.mule.module.hbase.api.HBaseServiceException;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -38,10 +43,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.io.hfile.Compression.Algorithm;
-import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
-import org.mule.module.hbase.api.HBaseService;
-import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
  * {@link HBaseService} that uses the official RPC client to connect with the
@@ -78,7 +79,7 @@ public class RPCHBaseService implements HBaseService
     {
         try
         {
-            return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+            return doWithHBaseAdmin(new AdminCallback<Boolean>()
             {
                 public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
                 {
@@ -131,7 +132,7 @@ public class RPCHBaseService implements HBaseService
     /** @see HBaseService#existsTable(String) */
     public boolean existsTable(final String name)
     {
-        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+        return doWithHBaseAdmin(new AdminCallback<Boolean>()
         {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
             {
@@ -176,7 +177,7 @@ public class RPCHBaseService implements HBaseService
     /** @see HBaseService#isDisabledTable(String) */
     public boolean isDisabledTable(final String name)
     {
-        return (Boolean) doWithHBaseAdmin(new AdminCallback<Boolean>()
+        return doWithHBaseAdmin(new AdminCallback<Boolean>()
         {
             public Boolean doWithHBaseAdmin(HBaseAdmin hBaseAdmin)
             {
@@ -275,7 +276,7 @@ public class RPCHBaseService implements HBaseService
     /** @see HBaseService#existsColumn(String, String) */
     public boolean existsColumn(String tableName, final String columnFamilyName)
     {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        return doWithHTable(tableName, new TableCallback<Boolean>()
         {
             public Boolean doWithHBaseAdmin(HTableInterface hTable)
             {
@@ -299,12 +300,12 @@ public class RPCHBaseService implements HBaseService
                              final String columnFamilyName,
                              final Integer maxVersions,
                              final Integer blocksize,
-                             final String compressionType,
-                             final String compactionCompressionType,
+                             final CompressionType compressionType,
+                             final CompressionType compactionCompressionType,
                              final Boolean inMemory,
                              final Integer timeToLive,
                              final Boolean blockCacheEnabled,
-                             final String bloomFilterType,
+                             final BloomFilterType bloomFilterType,
                              final Integer replicationScope,
                              final Map<String, String> values)
     {
@@ -336,12 +337,12 @@ public class RPCHBaseService implements HBaseService
             private void loadPropertiesInDescriptor(HColumnDescriptor descriptor,
                                                     Integer maxVersions,
                                                     Integer blocksize,
-                                                    String compressionType,
-                                                    String compactionCompressionType,
+                                                    CompressionType compressionType,
+                                                    CompressionType compactionCompressionType,
                                                     Boolean inMemory,
                                                     Integer timeToLive,
                                                     Boolean blockCacheEnabled,
-                                                    String bloomFilterType,
+                                                    BloomFilterType bloomFilterType,
                                                     Integer replicationScope,
                                                     Map<String, String> values)
             {
@@ -355,11 +356,11 @@ public class RPCHBaseService implements HBaseService
                 }
                 if (compressionType != null)
                 {
-                    descriptor.setCompressionType(Algorithm.valueOf(compressionType));
+                    descriptor.setCompressionType(compressionType.getAlgorithm());
                 }
                 if (compactionCompressionType != null)
                 {
-                    descriptor.setCompactionCompressionType(Algorithm.valueOf(compactionCompressionType));
+                    descriptor.setCompactionCompressionType(compactionCompressionType.getAlgorithm());
                 }
                 if (inMemory != null)
                 {
@@ -375,7 +376,7 @@ public class RPCHBaseService implements HBaseService
                 }
                 if (bloomFilterType != null)
                 {
-                    descriptor.setBloomFilterType(BloomType.valueOf(bloomFilterType));
+                    descriptor.setBloomFilterType(bloomFilterType.getBloomType());
                 }
                 if (replicationScope != null)
                 {
@@ -391,7 +392,7 @@ public class RPCHBaseService implements HBaseService
             }
         });
     }
-
+    
     /** @see HBaseService#deleteColumn(String, String) */
     public void deleteColumn(final String tableName, final String columnFamilyName)
 
@@ -421,7 +422,7 @@ public class RPCHBaseService implements HBaseService
     public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp)
 
     {
-        return (Result) doWithHTable(tableName, new TableCallback<Result>()
+        return doWithHTable(tableName, new TableCallback<Result>()
         {
             public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -504,7 +505,7 @@ public class RPCHBaseService implements HBaseService
                               final String startRow,
                               final String stopRow)
     {
-        return (ResultScanner) doWithHTable(tableName, new TableCallback<ResultScanner>()
+        return doWithHTable(tableName, new TableCallback<ResultScanner>()
         {
             public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -580,7 +581,7 @@ public class RPCHBaseService implements HBaseService
         Validate.isTrue(StringUtils.isNotBlank(row));
         Validate.isTrue(StringUtils.isNotBlank(columnFamilyName));
         Validate.isTrue(StringUtils.isNotBlank(columnQualifier));
-        return (Long) doWithHTable(tableName, new TableCallback<Long>()
+        return doWithHTable(tableName, new TableCallback<Long>()
         {
             public Long doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -606,7 +607,7 @@ public class RPCHBaseService implements HBaseService
                                final Boolean putWriteToWAL,
                                final RowLock putLock)
     {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        return doWithHTable(tableName, new TableCallback<Boolean>()
         {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -633,7 +634,7 @@ public class RPCHBaseService implements HBaseService
                                   final Boolean deleteAllVersions,
                                   final RowLock deleteLock)
     {
-        return (Boolean) doWithHTable(tableName, new TableCallback<Boolean>()
+        return doWithHTable(tableName, new TableCallback<Boolean>()
         {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -648,7 +649,7 @@ public class RPCHBaseService implements HBaseService
     /** @see HBaseService#lock(String, String) */
     public RowLock lock(final String tableName, final String row)
     {
-        return (RowLock) doWithHTable(tableName, new TableCallback<RowLock>()
+        return doWithHTable(tableName, new TableCallback<RowLock>()
         {
             public RowLock doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
@@ -847,7 +848,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** Retain and release the {@link HBaseAdmin} */
-    private Object doWithHBaseAdmin(AdminCallback<?> callback)
+    private <T> T doWithHBaseAdmin(AdminCallback<T> callback)
     {
         HBaseAdmin hBaseAdmin = null;
         try
@@ -862,7 +863,7 @@ public class RPCHBaseService implements HBaseService
     }
 
     /** Retain and release the {@link HTable} */
-    private Object doWithHTable(final String tableName, final TableCallback<?> callback)
+    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback)
     {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.notNull(callback);

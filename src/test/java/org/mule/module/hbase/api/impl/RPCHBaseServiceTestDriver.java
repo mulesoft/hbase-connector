@@ -23,6 +23,9 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.mule.module.hbase.BloomFilterType;
+import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseServiceException;
 
 /**
@@ -127,11 +130,7 @@ public class RPCHBaseServiceTestDriver
         }
         catch (HBaseServiceException e)
         {
-            if (e.getCause() instanceof TableExistsException)
-            {
-                // ok
-            }
-            else
+            if (!(e.getCause() instanceof TableExistsException))
             {
                 fail("unexpected exception: " + e.getCause());
             }
@@ -175,8 +174,8 @@ public class RPCHBaseServiceTestDriver
 
         Map<String, String> map = new HashMap<String, String>();
         map.put("some-key", "some value");
-        rpchBaseService.modifyColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, 7, 2048, null, "GZ", false,
-            123456, false, "ROW", 1, map);
+        rpchBaseService.modifyColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME, 7, 2048, null, CompressionType.GZ, false,
+            123456, false, BloomFilterType.ROW, 1, map);
 
         rpchBaseService.deleteColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME);
         assertFalse(rpchBaseService.existsColumn(SOME_TABLE_NAME, SOME_COLUMN_FAMILY_NAME));

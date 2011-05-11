@@ -10,21 +10,22 @@
 
 package org.mule.module.hbase;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RowLock;
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.impl.RPCHBaseService;
 import org.mule.tools.cloudconnect.annotations.Connector;
 import org.mule.tools.cloudconnect.annotations.Operation;
 import org.mule.tools.cloudconnect.annotations.Parameter;
 import org.mule.tools.cloudconnect.annotations.Property;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.RowLock;
 
 /**
  * <p>
@@ -44,6 +45,9 @@ public class HbaseCloudConnector implements Initialisable
     @Property(name = "facade-ref", optional = true)
     private HBaseService facade;
 
+    /**
+     * HBase internal configuration properties. Consult HBase documentation.
+     */
     @Property(name = "properties-ref", optional = true)
     private Map<String, String> properties;
 
@@ -66,6 +70,12 @@ public class HbaseCloudConnector implements Initialisable
         return facade.alive();
     }
 
+    /**
+     * Creates a new table given its name. The descriptor must be unique and not
+     * reserved.
+     * 
+     * @param name the descriptor for the new table.
+     */
     @Operation
     public void createTable(@Parameter(optional = false) final String name)
     {
@@ -83,7 +93,11 @@ public class HbaseCloudConnector implements Initialisable
     {
         return facade.existsTable(name);
     }
-
+    
+    /**
+     * Disables and deletes an existent table TODO if exists?
+     * @param name name of table to delete
+     */
     @Operation
     public void deleteTable(@Parameter(optional = false) final String name)
     {
@@ -102,29 +116,57 @@ public class HbaseCloudConnector implements Initialisable
     {
         return facade.isDisabledTable(name);
     }
-
+    
+    /**
+     * Enables a table given its name
+     *   
+     * @param name name of the table
+     */
     @Operation
     public void enableTable(@Parameter(optional = false) final String name)
     {
         facade.enableTable(name);
     }
 
+    /**
+     * Disables a table given its name  
+     * 
+     * @param name the table name
+     */
     @Operation
     public void disableTable(@Parameter(optional = false) final String name)
     {
         facade.disabeTable(name);
     }
 
+    /**
+     * Adds a column family to a table given a table and column name.
+     * This operation gracefully handles necessary table
+     * disabling and enabled.
+     * 
+     * @param tableName the name of the target table
+     * @param columnFamilyName the name of the column  
+     * @param maxVersions the optional maximum number of versions the column family supports
+     * @param inMemory if all the column values will be stored in the region's cache
+     * @param scope
+     */
     @Operation
     public void addColumn(@Parameter(optional = false) final String tableName,
                           @Parameter(optional = false) final String columnFamilyName,
                           @Parameter(optional = true) final Integer maxVersions,
-                          @Parameter(optional = true) final Boolean inMemory,
+                          @Parameter(optional = true, defaultValue = "false") final Boolean inMemory,
                           @Parameter(optional = true) final Integer scope)
     {
         facade.addColumn(tableName, columnFamilyName, maxVersions, inMemory, scope);
     }
 
+    /**
+     * Answers if column family exists. 
+     * 
+     * @param tableName the target table name
+     * @param columnFamilyName the target column family name
+     * @return true if the column exists, false otherwise
+     */
     @Operation
     public boolean existsColumn(@Parameter(optional = false) final String tableName,
                                 @Parameter(optional = false) final String columnFamilyName)
@@ -133,18 +175,20 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Changes a column family in a table
+     * Changes one or more properties of a column family in a table.
+     * This operation gracefully handles necessary table
+     * disabling and enabled.
      * 
-     * @param tableName required
-     * @param columnFamilyName required
-     * @param maxVersions
-     * @param blocksize
-     * @param compressionType
-     * @param compactionCompressionType
-     * @param inMemory
-     * @param timeToLive
-     * @param blockCacheEnabled
-     * @param bloomFilterType
+     * @param tableName required the target table 
+     * @param columnFamilyName required the target column family
+     * @param maxVersions the new max amount of versions
+     * @param blocksize the the new block size
+     * @param compressionType the new compression type
+     * @param compactionCompressionType  the new compaction compression type
+     * @param inMemory new value for if values are stored in Region's cache 
+     * @param timeToLive new ttl 
+     * @param blockCacheEnabled new value of enabling block cache
+     * @param bloomFilterType new value of bloom filter type
      * @param replicationScope
      * @param values
      */
@@ -153,12 +197,12 @@ public class HbaseCloudConnector implements Initialisable
                              @Parameter(optional = false) final String columnFamilyName,
                              @Parameter(optional = true) final Integer maxVersions,
                              @Parameter(optional = true) final Integer blocksize,
-                             @Parameter(optional = true) final String compressionType,
-                             @Parameter(optional = true) final String compactionCompressionType,
+                             @Parameter(optional = true) final CompressionType compressionType,
+                             @Parameter(optional = true) final CompressionType compactionCompressionType,
                              @Parameter(optional = true) final Boolean inMemory,
                              @Parameter(optional = true) final Integer timeToLive,
                              @Parameter(optional = true) final Boolean blockCacheEnabled,
-                             @Parameter(optional = true) final String bloomFilterType,
+                             @Parameter(optional = true) final BloomFilterType bloomFilterType,
                              @Parameter(optional = true) final Integer replicationScope,
                              @Parameter(optional = true) final Map<String, String> values)
     {
@@ -253,7 +297,7 @@ public class HbaseCloudConnector implements Initialisable
      *            timestamp range: [timestamp, maxTimestamp)
      * @param caching the number of rows for caching
      * @param batch the maximum number of values to return for each call to next() in
-     *            the {@link ResultScanner}
+     *            the ResultScanner
      * @param cacheBlocks the number of rows for caching that will be passed to
      *            scanners
      * @param maxVersions limits the number of versions on each column
@@ -289,8 +333,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param columnFamilyName
      * @param columnQualifier
      * @param amount
-     * @param writeToWAL set it to false means that in a fail scenario,
-     *            you will lose any increments that have not been flushed.
+     * @param writeToWAL set it to false means that in a fail scenario, you will lose
+     *            any increments that have not been flushed.
      * @param writeToWAL
      * @return the new value, post increment
      */
@@ -318,8 +362,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param putColumnQualifier
      * @param putTimestamp
      * @param putValue
-     * @param writeToWAL set it to false means that in a fail scenario,
-     *            you will lose any increments that have not been flushed.
+     * @param writeToWAL set it to false means that in a fail scenario, you will lose
+     *            any increments that have not been flushed.
      * @param lock
      * @return true if the new put was executed, false otherwise
      */
@@ -339,9 +383,9 @@ public class HbaseCloudConnector implements Initialisable
         return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, checkValue,
             putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, lock);
     }
-    
+
     /**
-     * Atomically checks if a row/family/qualifier value matches the expected value. 
+     * Atomically checks if a row/family/qualifier value matches the expected value.
      * If it does, it adds the delete.
      * 
      * @param tableName
