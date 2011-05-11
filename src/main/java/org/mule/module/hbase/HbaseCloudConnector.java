@@ -420,7 +420,7 @@ public class HbaseCloudConnector implements Initialisable
 
     public void setFacade(HBaseService facade)
     {
-        this.facade = facade;
+        this.facade = HBaseServiceAdaptor.adapt(facade);
     }
 
     public HBaseService getFacade()
@@ -443,7 +443,7 @@ public class HbaseCloudConnector implements Initialisable
     {
         if (facade == null)
         {
-            facade = new RPCHBaseService();
+            setFacade(new RPCHBaseService());
             facade.addProperties(properties);
         }
     }
