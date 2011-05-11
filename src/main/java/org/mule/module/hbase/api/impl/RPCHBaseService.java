@@ -15,12 +15,16 @@ import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.lang.Validate;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -43,6 +47,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 import org.apache.hadoop.hbase.client.Scan;
+import org.yecht.Data.Str;
 
 /**
  * {@link HBaseService} that uses the official RPC client to connect with the
@@ -392,7 +397,7 @@ public class RPCHBaseService implements HBaseService
             }
         });
     }
-    
+
     /** @see HBaseService#deleteColumn(String, String) */
     public void deleteColumn(final String tableName, final String columnFamilyName)
 
@@ -440,7 +445,7 @@ public class RPCHBaseService implements HBaseService
                     final String columnFamilyName,
                     final String columnQualifier,
                     final Long timestamp,
-                    final String value,
+                    final Object value,
                     final Boolean writeToWAL,
                     final RowLock lock)
     {
@@ -599,11 +604,11 @@ public class RPCHBaseService implements HBaseService
                                final String row,
                                final String checkColumnFamilyName,
                                final String checkColumnQualifier,
-                               final String checkValue,
+                               final Object checkValue,
                                final String putColumnFamilyName,
                                final String putColumnQualifier,
                                final Long putTimestamp,
-                               final String putValue,
+                               final Object putValue,
                                final Boolean putWriteToWAL,
                                final RowLock putLock)
     {
@@ -614,7 +619,7 @@ public class RPCHBaseService implements HBaseService
                 final Put put = createPut(row, putColumnFamilyName, putColumnQualifier, putTimestamp,
                     putValue, putWriteToWAL, putLock);
                 return hTable.checkAndPut(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
-                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), put);
+                    checkColumnQualifier.getBytes(UTF8), toByteArray(checkValue), put);
             }
         });
     }
@@ -627,7 +632,7 @@ public class RPCHBaseService implements HBaseService
                                   final String row,
                                   final String checkColumnFamilyName,
                                   final String checkColumnQualifier,
-                                  final String checkValue,
+                                  final Object checkValue,
                                   final String deleteColumnFamilyName,
                                   final String deleteColumnQualifier,
                                   final Long deleteTimestamp,
@@ -641,7 +646,7 @@ public class RPCHBaseService implements HBaseService
                 final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier,
                     deleteTimestamp, deleteAllVersions, deleteLock);
                 return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
-                    checkColumnQualifier.getBytes(UTF8), checkValue.getBytes(UTF8), delete);
+                    checkColumnQualifier.getBytes(UTF8), toByteArray(checkValue), delete);
             }
         });
     }
@@ -724,7 +729,7 @@ public class RPCHBaseService implements HBaseService
                           final String columnFamilyName,
                           final String columnQualifier,
                           final Long timestamp,
-                          final String value,
+                          final Object value,
                           final Boolean writeToWAL,
                           final RowLock lock)
     {
@@ -739,12 +744,12 @@ public class RPCHBaseService implements HBaseService
         }
         if (timestamp == null)
         {
-            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), value.getBytes(UTF8));
+            put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), toByteArray(value));
         }
         else
         {
             put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp,
-                value.getBytes(UTF8));
+                toByteArray(value));
         }
         if (writeToWAL != null && writeToWAL)
         {
@@ -845,6 +850,32 @@ public class RPCHBaseService implements HBaseService
         {
             HConnectionManager.deleteConnection(hBaseAdmin.getConfiguration(), true);
         }
+    }
+
+    private byte[] toByteArray(Object o)
+    {
+        if (o instanceof byte[])
+        {
+            return (byte[]) o;
+        }
+        if (o instanceof String)
+        {
+            return ((String) o).getBytes(UTF8);
+        }
+        if (o instanceof Serializable)
+        {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try
+            {
+                new ObjectOutputStream(out).writeObject(o);
+            }
+            catch (IOException e)
+            {
+                throw new UnhandledException(e);
+            }
+            return out.toByteArray();
+        }
+        throw new IllegalArgumentException("Object " + o + " is not serializable");
     }
 
     /** Retain and release the {@link HBaseAdmin} */

@@ -220,7 +220,6 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     // ------------ Row Operations
-    // TODO non string values
 
     /**
      * Answers the values at the given row - (table, row) combination
@@ -249,7 +248,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param columnFamilyName the column family dimension
      * @param columnQualifier the column qualifier dimension
      * @param timestamp the version dimension
-     * @param value
+     * @param value the value to put. It must be either a byte array or a
+     *            serializable object.
      * @param writeToWAL
      * @param lock
      */
@@ -259,7 +259,7 @@ public class HbaseCloudConnector implements Initialisable
                          @Parameter(optional = false) final String columnFamilyName,
                          @Parameter(optional = false) final String columnQualifier,
                          @Parameter(optional = true) final Long timestamp,
-                         @Parameter(optional = false) final String value,
+                         @Parameter(optional = false) final Object value,
                          @Parameter(optional = true) final Boolean writeToWAL,
                          @Parameter(optional = true) final RowLock lock)
     {
@@ -369,11 +369,13 @@ public class HbaseCloudConnector implements Initialisable
      * @param row
      * @param checkColumnFamilyName
      * @param checkColumnQualifier
-     * @param checkValue
+     * @param checkValue the value to check. It must be either a byte array or a
+     *            serializable object.
      * @param putColumnFamilyName
      * @param putColumnQualifier
      * @param putTimestamp
-     * @param putValue
+     * @param value the value to put. It must be either a byte array or a
+     *            serializable object.
      * @param writeToWAL set it to false means that in a fail scenario, you will lose
      *            any increments that have not been flushed.
      * @param lock
@@ -384,16 +386,16 @@ public class HbaseCloudConnector implements Initialisable
                                     @Parameter(optional = false) final String row,
                                     @Parameter(optional = false) final String checkColumnFamilyName,
                                     @Parameter(optional = false) final String checkColumnQualifier,
-                                    @Parameter(optional = false) final String checkValue,
+                                    @Parameter(optional = false) final Object checkValue,
                                     @Parameter(optional = false) final String putColumnFamilyName,
                                     @Parameter(optional = false) final String putColumnQualifier,
                                     @Parameter(optional = true) final Long putTimestamp,
-                                    @Parameter(optional = false) final String putValue,
+                                    @Parameter(optional = false) final Object value,
                                     @Parameter(optional = true) final Boolean putWriteToWAL,
                                     @Parameter(optional = true) final RowLock lock)
     {
         return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, checkValue,
-            putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, lock);
+            putColumnFamilyName, putColumnQualifier, putTimestamp, value, putWriteToWAL, lock);
     }
 
     /**
@@ -404,7 +406,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param row
      * @param checkColumnFamilyName
      * @param checkColumnQualifier
-     * @param checkValue
+     * @param checkValue the value to check. It must be either a byte array or a
+     *            serializable object.
      * @param deleteColumnFamilyName
      * @param deleteColumnQualifier
      * @param deleteTimestamp
@@ -417,7 +420,7 @@ public class HbaseCloudConnector implements Initialisable
                                        @Parameter(optional = false) final String row,
                                        @Parameter(optional = false) final String checkColumnFamilyName,
                                        @Parameter(optional = false) final String checkColumnQualifier,
-                                       @Parameter(optional = false) final String checkValue,
+                                       @Parameter(optional = false) final Object checkValue,
                                        @Parameter(optional = false) final String deleteColumnFamilyName,
                                        @Parameter(optional = false) final String deleteColumnQualifier,
                                        @Parameter(optional = true) final Long deleteTimestamp,

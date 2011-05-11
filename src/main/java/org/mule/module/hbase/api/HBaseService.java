@@ -95,7 +95,7 @@ public interface HBaseService
              String columnFamilyName,
              String columnQualifier,
              Long timestamp,
-             String value,
+             Object value,
              Boolean writeToWAL,
              RowLock lock);
 
@@ -187,11 +187,11 @@ public interface HBaseService
                         String row,
                         String checkColumnFamilyName,
                         String checkColumnQualifier,
-                        String checkValue,
+                        Object checkValue,
                         String putColumnFamilyName,
                         String putColumnQualifier,
                         Long putTimestamp,
-                        String putValue,
+                        Object value,
                         Boolean putWriteToWAL,
                         RowLock putLock);
 
@@ -205,7 +205,7 @@ public interface HBaseService
                            String row,
                            String checkColumnFamilyName,
                            String checkColumnQualifier,
-                           String checkValue,
+                           Object checkValue,
                            String deleteColumnFamilyName,
                            String deleteColumnQualifier,
                            Long deleteTimestamp,

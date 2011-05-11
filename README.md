@@ -54,13 +54,13 @@ Here is detailed list of all the configuration attributes:
 |:-----------|:-----------|:---------|:--------------|
 |name|Give a name to this configuration so it can be later referenced by config-ref.|yes||
 |facade||yes|
-|properties||yes|
+|properties|HBase internal configuration properties. Consult HBase documentation.|yes|
 
 
 
 
-Alive
------
+Is Alive Server
+---------------
 
 Answers if the HBase server is reachable
 
@@ -75,10 +75,13 @@ Returns if the server can be reached and the master node is alive, false otherwi
 Create Table
 ------------
 
+Creates a new table given its name. The descriptor must be unique and not
+reserved.
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name||no||
+|name|the descriptor for the new table.|no||
 
 
 
@@ -99,10 +102,12 @@ Returns only if the table exists, false otherwise
 Delete Table
 ------------
 
+Disables and deletes an existent table TODO if exists?
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name||no||
+|name|name of table to delete|no||
 
 
 
@@ -124,33 +129,40 @@ Returns only if the table was disabled. False otherwise
 Enable Table
 ------------
 
+Enables a table given its name
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name||no||
+|name|name of the table|no||
 
 
 
 Disable Table
 -------------
 
+Disables a table given its name
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name||no||
+|name|the table name|no||
 
 
 
 Add Column
 ----------
 
+Adds a column family to a table given a table and column name. This operation
+gracefully handles necessary table disabling and enabled.
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|tableName||no||
-|columnFamilyName||no||
-|maxVersions||yes||
-|inMemory||yes||
+|tableName|the name of the target table|no||
+|columnFamilyName|the name of the column|no||
+|maxVersions|the optional maximum number of versions the column family supports|yes||
+|inMemory|if all the column values will be stored in the region's cache|yes|false|
 |scope||yes||
 
 
@@ -158,32 +170,37 @@ Add Column
 Exists Column
 -------------
 
+Answers if column family exists.
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|tableName||no||
-|columnFamilyName||no||
+|tableName|the target table name|no||
+|columnFamilyName|the target column family name|no||
+
+Returns if the column exists, false otherwise
 
 
 
 Modify Column
 -------------
 
-Changes a column family in a table
+Changes one or more properties of a column family in a table. This operation
+gracefully handles necessary table disabling and enabled.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|tableName|required|no||
-|columnFamilyName|required|no||
-|maxVersions||yes||
-|blocksize||yes||
-|compressionType||yes||
-|compactionCompressionType||yes||
-|inMemory||yes||
-|timeToLive||yes||
-|blockCacheEnabled||yes||
-|bloomFilterType||yes||
+|tableName|required the target table|no||
+|columnFamilyName|required the target column family|no||
+|maxVersions|the new max amount of versions|yes||
+|blocksize|the the new block size|yes||
+|compressionType|the new compression type|yes||*LZO*, *GZ*, *NONE*, *algorithm*
+|compactionCompressionType|the new compaction compression type|yes||*LZO*, *GZ*, *NONE*, *algorithm*
+|inMemory|new value for if values are stored in Region's cache|yes||
+|timeToLive|new ttl|yes||
+|blockCacheEnabled|new value of enabling block cache|yes||
+|bloomFilterType|new value of bloom filter type|yes||*NONE*, *ROW*, *ROWCOL*, *bloomType*
 |replicationScope||yes||
 |values||yes||
 
@@ -200,8 +217,10 @@ Delete Column
 
 
 
-Get
----
+Get Values
+----------
+
+Answers the values at the given row - (table, row) combination
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -211,31 +230,34 @@ Get
 |maxVersions||yes||
 |timestamp||yes||
 
+Returns result
 
 
-Put
----
 
-Saves the value at the specified cell (row + family:qualifier + timestamp)
+Put Value
+---------
+
+Saves a value at the specified (table, row, familyName, familyQualifier,
+timestamp) combination
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
 |row||no||
-|columnFamilyName||no||
-|columnQualifier||no||
-|timestamp|the version of the cell TODO ??|yes||
-|value||no||
+|columnFamilyName|the column family dimension|no||
+|columnQualifier|the column qualifier dimension|no||
+|timestamp|the version dimension|yes||
+|value|the value to put. It must be either a byte array or a serializable object.|no||
 |writeToWAL||yes||
 |lock||yes||
 
 
 
-Delete
-------
+Delete Values
+-------------
 
-Deletes a row
+Deletes the values at a given row
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -250,10 +272,10 @@ Deletes a row
 
 
 
-Scan
-----
+Scan Table
+----------
 
-Scans across all rows in a table. TODO and then?
+Scans across all rows in a table, returning a scanner over it
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -264,20 +286,23 @@ Scans across all rows in a table. TODO and then?
 |timestamp|limits the scan to a specific timestamp|yes||
 |maxTimestamp|get versions of columns only within the specified timestamp range: [timestamp, maxTimestamp)|yes||
 |caching|the number of rows for caching|yes||
-|batch|the maximum number of values to return for each call to next() in the {@link ResultScanner}|yes||
+|batch|the maximum number of values to return for each call to next() in the ResultScanner|yes||
 |cacheBlocks|the number of rows for caching that will be passed to scanners|yes||
 |maxVersions|limits the number of versions on each column|yes||
 |allVersions|get all available versions on each column|yes||
 |startRow|limits the beginning of the scan to the specified row inclusive|yes||
 |stopRow|limits the end of the scan to the specified row exclusive|yes||
 
+Returns scanner over the table
 
 
-Increment
----------
 
-Atomically increments a column value. If the column value does not yet exist
-it is initialized to amount and written to the specified column.
+Increment Value
+---------------
+
+Atomically increments the value of at a (table, row, familyName,
+familyQualifier) combination. If the cell value does not yet exist it is
+initialized to amount.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -293,11 +318,11 @@ Returns new value, post increment
 
 
 
-Check And Put
--------------
+Check And Put Value
+-------------------
 
-Atomically checks if a row/family/qualifier value matches the expected value.
-If it does, it adds the put.
+Atomically checks if a value at a (table, row,family,qualifier) matches the
+given one. If it does, it performs the put.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -306,11 +331,11 @@ If it does, it adds the put.
 |row||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
-|checkValue||no||
+|checkValue|the value to check. It must be either a byte array or a serializable object.|no||
 |putColumnFamilyName||no||
 |putColumnQualifier||no||
 |putTimestamp||yes||
-|putValue||no||
+|value|the value to put. It must be either a byte array or a serializable object.|no||
 |putWriteToWAL||yes||
 |lock||yes||
 
@@ -318,11 +343,11 @@ Returns if the new put was executed, false otherwise
 
 
 
-Check And Delete
-----------------
+Check And Delete Value
+----------------------
 
-Atomically checks if a row/family/qualifier value matches the expected value. 
-If it does, it adds the delete.
+Atomically checks if a value at a (table, row,family,qualifier) matches the
+given one. If it does, it performs the delete.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -331,7 +356,7 @@ If it does, it adds the delete.
 |row||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
-|checkValue||no||
+|checkValue|the value to check. It must be either a byte array or a serializable object.|no||
 |deleteColumnFamilyName||no||
 |deleteColumnQualifier||no||
 |deleteTimestamp||yes||
