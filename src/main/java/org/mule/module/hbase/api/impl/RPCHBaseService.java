@@ -746,7 +746,7 @@ public class RPCHBaseService implements HBaseService
             put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp,
                 value.getBytes(UTF8));
         }
-        if (writeToWAL != null && Boolean.TRUE.equals(writeToWAL))
+        if (writeToWAL != null && writeToWAL)
         {
             put.setWriteToWAL(writeToWAL);
         }

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 
 /**
@@ -65,8 +66,8 @@ public class HbaseCloudConnector implements Initialisable
      *         otherwise.
      */
     @Operation
-    public boolean alive()
-    { // TODO isReacheable
+    public boolean isAliveServer()
+    {
         return facade.alive();
     }
 
@@ -93,9 +94,10 @@ public class HbaseCloudConnector implements Initialisable
     {
         return facade.existsTable(name);
     }
-    
+
     /**
      * Disables and deletes an existent table TODO if exists?
+     * 
      * @param name name of table to delete
      */
     @Operation
@@ -116,10 +118,10 @@ public class HbaseCloudConnector implements Initialisable
     {
         return facade.isDisabledTable(name);
     }
-    
+
     /**
      * Enables a table given its name
-     *   
+     * 
      * @param name name of the table
      */
     @Operation
@@ -129,7 +131,7 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Disables a table given its name  
+     * Disables a table given its name
      * 
      * @param name the table name
      */
@@ -140,13 +142,13 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Adds a column family to a table given a table and column name.
-     * This operation gracefully handles necessary table
-     * disabling and enabled.
+     * Adds a column family to a table given a table and column name. This operation
+     * gracefully handles necessary table disabling and enabled.
      * 
      * @param tableName the name of the target table
-     * @param columnFamilyName the name of the column  
-     * @param maxVersions the optional maximum number of versions the column family supports
+     * @param columnFamilyName the name of the column
+     * @param maxVersions the optional maximum number of versions the column family
+     *            supports
      * @param inMemory if all the column values will be stored in the region's cache
      * @param scope
      */
@@ -161,7 +163,7 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Answers if column family exists. 
+     * Answers if column family exists.
      * 
      * @param tableName the target table name
      * @param columnFamilyName the target column family name
@@ -175,18 +177,17 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Changes one or more properties of a column family in a table.
-     * This operation gracefully handles necessary table
-     * disabling and enabled.
+     * Changes one or more properties of a column family in a table. This operation
+     * gracefully handles necessary table disabling and enabled.
      * 
-     * @param tableName required the target table 
+     * @param tableName required the target table
      * @param columnFamilyName required the target column family
      * @param maxVersions the new max amount of versions
      * @param blocksize the the new block size
      * @param compressionType the new compression type
-     * @param compactionCompressionType  the new compaction compression type
-     * @param inMemory new value for if values are stored in Region's cache 
-     * @param timeToLive new ttl 
+     * @param compactionCompressionType the new compaction compression type
+     * @param inMemory new value for if values are stored in Region's cache
+     * @param timeToLive new ttl
      * @param blockCacheEnabled new value of enabling block cache
      * @param bloomFilterType new value of bloom filter type
      * @param replicationScope
@@ -219,45 +220,54 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     // ------------ Row Operations
+    // TODO non string values
 
+    /**
+     * Answers the values at the given row - (table, row) combination
+     * 
+     * @param tableName
+     * @param row
+     * @param maxVersions
+     * @param timestamp
+     * @return the result
+     */
     @Operation
-    public Result get(@Parameter(optional = false) final String tableName,
-                      @Parameter(optional = false) final String row,
-                      @Parameter(optional = true) final Integer maxVersions,
-                      @Parameter(optional = true) final Long timestamp)
+    public Result getValues(@Parameter(optional = false) final String tableName,
+                            @Parameter(optional = false) final String row,
+                            @Parameter(optional = true) final Integer maxVersions,
+                            @Parameter(optional = true) final Long timestamp)
     {
         return facade.get(tableName, row, maxVersions, timestamp);
     }
 
     /**
-     * Saves the value at the specified cell (row + family:qualifier + timestamp)
+     * Saves a value at the specified (table, row, familyName, familyQualifier,
+     * timestamp) combination
      * 
      * @param tableName
      * @param row
-     * @param columnFamilyName
-     * @param columnQualifier
-     * @param timestamp the version of the cell TODO ??
+     * @param columnFamilyName the column family dimension
+     * @param columnQualifier the column qualifier dimension
+     * @param timestamp the version dimension
      * @param value
      * @param writeToWAL
      * @param lock
      */
     @Operation
-    public void put(@Parameter(optional = false) final String tableName,
-                    @Parameter(optional = false) final String row,
-                    @Parameter(optional = false) final String columnFamilyName,
-                    @Parameter(optional = false) final String columnQualifier,
-                    @Parameter(optional = true) final Long timestamp,
-                    @Parameter(optional = false) final String value,
-                    @Parameter(optional = true) final Boolean writeToWAL,
-                    @Parameter(optional = true) final RowLock lock)
+    public void putValue(@Parameter(optional = false) final String tableName,
+                         @Parameter(optional = false) final String row,
+                         @Parameter(optional = false) final String columnFamilyName,
+                         @Parameter(optional = false) final String columnQualifier,
+                         @Parameter(optional = true) final Long timestamp,
+                         @Parameter(optional = false) final String value,
+                         @Parameter(optional = true) final Boolean writeToWAL,
+                         @Parameter(optional = true) final RowLock lock)
     {
         facade.put(tableName, row, columnFamilyName, columnQualifier, timestamp, value, writeToWAL, lock);
     }
 
-    // TODO naming in general
-
     /**
-     * Deletes a row
+     * Deletes the values at a given row
      * 
      * @param tableName
      * @param row
@@ -273,19 +283,19 @@ public class HbaseCloudConnector implements Initialisable
      * @param lock
      */
     @Operation
-    public void delete(@Parameter(optional = false) final String tableName,
-                       @Parameter(optional = false) final String row,
-                       @Parameter(optional = true) final String columnFamilyName,
-                       @Parameter(optional = true) final String columnQualifier,
-                       @Parameter(optional = true) final Long timestamp,
-                       @Parameter(optional = true) final Boolean deleteAllVersions,
-                       @Parameter(optional = true) final RowLock lock)
+    public void deleteValues(@Parameter(optional = false) final String tableName,
+                             @Parameter(optional = false) final String row,
+                             @Parameter(optional = true) final String columnFamilyName,
+                             @Parameter(optional = true) final String columnQualifier,
+                             @Parameter(optional = true) final Long timestamp,
+                             @Parameter(optional = true) final Boolean deleteAllVersions,
+                             @Parameter(optional = true) final RowLock lock)
     {
         facade.delete(tableName, row, columnFamilyName, columnQualifier, timestamp, deleteAllVersions, lock);
     }
 
     /**
-     * Scans across all rows in a table. TODO and then?
+     * Scans across all rows in a table, returning a scanner over it
      * 
      * @param tableName limits the scan to a specific table. This is the only
      *            required argument.
@@ -305,28 +315,30 @@ public class HbaseCloudConnector implements Initialisable
      * @param startRow limits the beginning of the scan to the specified row
      *            inclusive
      * @param stopRow limits the end of the scan to the specified row exclusive
+     * @return the scanner over the table
      */
     @Operation
-    public void scan(@Parameter(optional = false) final String tableName,
-                     @Parameter(optional = true) final String columnFamilyName,
-                     @Parameter(optional = true) final String columnQualifier,
-                     @Parameter(optional = true) final Long timestamp,
-                     @Parameter(optional = true) final Long maxTimestamp,
-                     @Parameter(optional = true) final Integer caching,
-                     @Parameter(optional = true) final Integer batch,
-                     @Parameter(optional = true) final Boolean cacheBlocks,
-                     @Parameter(optional = true) final Integer maxVersions,
-                     @Parameter(optional = true) final Boolean allVersions,
-                     @Parameter(optional = true) final String startRow,
-                     @Parameter(optional = true) final String stopRow)
+    public ResultScanner scanTable(@Parameter(optional = false) final String tableName,
+                                   @Parameter(optional = true) final String columnFamilyName,
+                                   @Parameter(optional = true) final String columnQualifier,
+                                   @Parameter(optional = true) final Long timestamp,
+                                   @Parameter(optional = true) final Long maxTimestamp,
+                                   @Parameter(optional = true) final Integer caching,
+                                   @Parameter(optional = true) final Integer batch,
+                                   @Parameter(optional = true) final Boolean cacheBlocks,
+                                   @Parameter(optional = true) final Integer maxVersions,
+                                   @Parameter(optional = true) final Boolean allVersions,
+                                   @Parameter(optional = true) final String startRow,
+                                   @Parameter(optional = true) final String stopRow)
     {
-        facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching, batch,
-            cacheBlocks, maxVersions, allVersions, startRow, stopRow);
+        return facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching,
+            batch, cacheBlocks, maxVersions, allVersions, startRow, stopRow);
     }
 
     /**
-     * Atomically increments a column value. If the column value does not yet exist
-     * it is initialized to amount and written to the specified column.
+     * Atomically increments the value of at a (table, row, familyName,
+     * familyQualifier) combination. If the cell value does not yet exist it is
+     * initialized to amount.
      * 
      * @param tableName
      * @param row
@@ -339,19 +351,19 @@ public class HbaseCloudConnector implements Initialisable
      * @return the new value, post increment
      */
     @Operation
-    public long increment(@Parameter(optional = false) final String tableName,
-                          @Parameter(optional = false) final String row,
-                          @Parameter(optional = false) final String columnFamilyName,
-                          @Parameter(optional = false) final String columnQualifier,
-                          @Parameter(optional = false) final long amount,
-                          @Parameter(optional = false) final boolean writeToWAL)
+    public long incrementValue(@Parameter(optional = false) final String tableName,
+                               @Parameter(optional = false) final String row,
+                               @Parameter(optional = false) final String columnFamilyName,
+                               @Parameter(optional = false) final String columnQualifier,
+                               @Parameter(optional = false) final long amount,
+                               @Parameter(optional = false) final boolean writeToWAL)
     {
         return facade.increment(tableName, row, columnFamilyName, columnQualifier, amount, writeToWAL);
     }
 
     /**
-     * Atomically checks if a row/family/qualifier value matches the expected value.
-     * If it does, it adds the put.
+     * Atomically checks if a value at a (table, row,family,qualifier) matches the
+     * given one. If it does, it performs the put.
      * 
      * @param tableName
      * @param row
@@ -368,25 +380,25 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the new put was executed, false otherwise
      */
     @Operation
-    public boolean checkAndPut(@Parameter(optional = false) final String tableName,
-                               @Parameter(optional = false) final String row,
-                               @Parameter(optional = false) final String checkColumnFamilyName,
-                               @Parameter(optional = false) final String checkColumnQualifier,
-                               @Parameter(optional = false) final String checkValue,
-                               @Parameter(optional = false) final String putColumnFamilyName,
-                               @Parameter(optional = false) final String putColumnQualifier,
-                               @Parameter(optional = true) final Long putTimestamp,
-                               @Parameter(optional = false) final String putValue,
-                               @Parameter(optional = true) final Boolean putWriteToWAL,
-                               @Parameter(optional = true) final RowLock lock)
+    public boolean checkAndPutValue(@Parameter(optional = false) final String tableName,
+                                    @Parameter(optional = false) final String row,
+                                    @Parameter(optional = false) final String checkColumnFamilyName,
+                                    @Parameter(optional = false) final String checkColumnQualifier,
+                                    @Parameter(optional = false) final String checkValue,
+                                    @Parameter(optional = false) final String putColumnFamilyName,
+                                    @Parameter(optional = false) final String putColumnQualifier,
+                                    @Parameter(optional = true) final Long putTimestamp,
+                                    @Parameter(optional = false) final String putValue,
+                                    @Parameter(optional = true) final Boolean putWriteToWAL,
+                                    @Parameter(optional = true) final RowLock lock)
     {
         return facade.checkAndPut(tableName, row, checkColumnFamilyName, checkColumnQualifier, checkValue,
             putColumnFamilyName, putColumnQualifier, putTimestamp, putValue, putWriteToWAL, lock);
     }
 
     /**
-     * Atomically checks if a row/family/qualifier value matches the expected value.
-     * If it does, it adds the delete.
+     * Atomically checks if a value at a (table, row,family,qualifier) matches the
+     * given one. If it does, it performs the delete.
      * 
      * @param tableName
      * @param row
@@ -401,16 +413,16 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the new delete was executed, false otherwise
      */
     @Operation
-    public boolean checkAndDelete(@Parameter(optional = false) final String tableName,
-                                  @Parameter(optional = false) final String row,
-                                  @Parameter(optional = false) final String checkColumnFamilyName,
-                                  @Parameter(optional = false) final String checkColumnQualifier,
-                                  @Parameter(optional = false) final String checkValue,
-                                  @Parameter(optional = false) final String deleteColumnFamilyName,
-                                  @Parameter(optional = false) final String deleteColumnQualifier,
-                                  @Parameter(optional = true) final Long deleteTimestamp,
-                                  @Parameter(optional = true) final Boolean deleteAllVersions,
-                                  @Parameter(optional = true) final RowLock lock)
+    public boolean checkAndDeleteValue(@Parameter(optional = false) final String tableName,
+                                       @Parameter(optional = false) final String row,
+                                       @Parameter(optional = false) final String checkColumnFamilyName,
+                                       @Parameter(optional = false) final String checkColumnQualifier,
+                                       @Parameter(optional = false) final String checkValue,
+                                       @Parameter(optional = false) final String deleteColumnFamilyName,
+                                       @Parameter(optional = false) final String deleteColumnQualifier,
+                                       @Parameter(optional = true) final Long deleteTimestamp,
+                                       @Parameter(optional = true) final Boolean deleteAllVersions,
+                                       @Parameter(optional = true) final RowLock lock)
     {
         return facade.checkAndDelete(tableName, row, checkColumnFamilyName, checkColumnQualifier, checkValue,
             deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, lock);

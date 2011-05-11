@@ -28,11 +28,11 @@
     <hbase:config facade-ref="mockFacade" />
     
     <flow name="flowGet">
-        <hbase:get tableName="t1" row="r1" />
+        <hbase:get-values tableName="t1" row="r1" />
     </flow>
     
     <flow name="flowPut">
-        <hbase:put tableName="t1" row="r1" columnFamilyName="f1" columnQualifier="q1" value="v1" />
+        <hbase:put-value tableName="t1" row="r1" columnFamilyName="f1" columnQualifier="q1" value="v1" />
     </flow>
 
     <spring:bean id="mockFacade" class="org.mule.module.hbase.config.MockHBaseServiceFactoryBean" factory-method="getObject" />
