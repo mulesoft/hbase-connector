@@ -248,7 +248,7 @@ timestamp) combination
 |columnQualifier|the column qualifier dimension|no||
 |timestamp|the version dimension|yes||
 |value|the value to put. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
-|writeToWAL||yes||
+|writeToWAL||yes|true|
 |lock||yes||
 
 
@@ -310,7 +310,7 @@ initialized to amount.
 |columnFamilyName||no||
 |columnQualifier||no||
 |amount||no||
-|writeToWAL|set it to false means that in a fail scenario, you will lose any increments that have not been flushed.|no||
+|writeToWAL|set it to false means that in a fail scenario, you will lose any increments that have not been flushed.|yes|true|
 
 Returns new value, post increment
 
@@ -334,7 +334,7 @@ given one. If it does, it performs the put.
 |putColumnQualifier||no||
 |putTimestamp||yes||
 |value|the value to put. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
-|putWriteToWAL||yes||
+|putWriteToWAL||yes|true|
 |lock||yes||
 
 Returns if the new put was executed, false otherwise

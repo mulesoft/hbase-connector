@@ -443,7 +443,7 @@ public class RPCHBaseService implements HBaseService
                     final String columnQualifier,
                     final Long timestamp,
                     final Object value,
-                    final Boolean writeToWAL,
+                    final boolean writeToWAL,
                     final RowLock lock)
     {
         doWithHTable(tableName, new TableCallback<Void>()
@@ -592,7 +592,7 @@ public class RPCHBaseService implements HBaseService
                                final String putColumnQualifier,
                                final Long putTimestamp,
                                final Object putValue,
-                               final Boolean putWriteToWAL,
+                               final boolean putWriteToWAL,
                                final RowLock putLock)
     {
         return doWithHTable(tableName, new TableCallback<Boolean>()
@@ -713,7 +713,7 @@ public class RPCHBaseService implements HBaseService
                           final String columnQualifier,
                           final Long timestamp,
                           final Object value,
-                          final Boolean writeToWAL,
+                          final boolean writeToWAL,
                           final RowLock lock)
     {
         final Put put;
@@ -734,10 +734,7 @@ public class RPCHBaseService implements HBaseService
             put.add(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8), timestamp,
                 toByteArray(value));
         }
-        if (writeToWAL != null && writeToWAL)
-        {
-            put.setWriteToWAL(writeToWAL);
-        }
+        put.setWriteToWAL(writeToWAL);
         return put;
     }
 

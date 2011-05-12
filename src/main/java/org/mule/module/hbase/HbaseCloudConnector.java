@@ -260,7 +260,7 @@ public class HbaseCloudConnector implements Initialisable
                          @Parameter(optional = false) final String columnQualifier,
                          @Parameter(optional = true) final Long timestamp,
                          @Parameter(optional = false) final Object value,
-                         @Parameter(optional = true) final Boolean writeToWAL,
+                         @Parameter(optional = true, defaultValue = "true") final boolean writeToWAL,
                          @Parameter(optional = true) final RowLock lock)
     {
         facade.put(tableName, rowKey, columnFamilyName, columnQualifier, timestamp, value, writeToWAL, lock);
@@ -350,7 +350,6 @@ public class HbaseCloudConnector implements Initialisable
      * @param amount
      * @param writeToWAL set it to false means that in a fail scenario, you will lose
      *            any increments that have not been flushed.
-     * @param writeToWAL
      * @return the new value, post increment
      */
     @Operation
@@ -359,7 +358,7 @@ public class HbaseCloudConnector implements Initialisable
                                @Parameter(optional = false) final String columnFamilyName,
                                @Parameter(optional = false) final String columnQualifier,
                                @Parameter(optional = false) final long amount,
-                               @Parameter(optional = false) final boolean writeToWAL)
+                               @Parameter(optional = true, defaultValue = "true") final boolean writeToWAL)
     {
         return facade.increment(tableName, rowKey, columnFamilyName, columnQualifier, amount, writeToWAL);
     }
@@ -396,7 +395,7 @@ public class HbaseCloudConnector implements Initialisable
                                     @Parameter(optional = false) final String putColumnQualifier,
                                     @Parameter(optional = true) final Long putTimestamp,
                                     @Parameter(optional = false) final Object value,
-                                    @Parameter(optional = true) final Boolean putWriteToWAL,
+                                    @Parameter(optional = true, defaultValue = "true") final boolean putWriteToWAL,
                                     @Parameter(optional = true) final RowLock lock)
     {
         return facade.checkAndPut(tableName, rowKey, checkColumnFamilyName, checkColumnQualifier, checkValue,

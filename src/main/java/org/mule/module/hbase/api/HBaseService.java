@@ -96,7 +96,7 @@ public interface HBaseService
              String columnQualifier,
              Long timestamp,
              Object value,
-             Boolean writeToWAL,
+             boolean writeToWAL,
              RowLock lock);
 
     /** @return true only if the row exists and is not null */
@@ -190,7 +190,7 @@ public interface HBaseService
                         String putColumnQualifier,
                         Long putTimestamp,
                         Object value,
-                        Boolean putWriteToWAL,
+                        boolean putWriteToWAL,
                         RowLock putLock);
 
     /**
