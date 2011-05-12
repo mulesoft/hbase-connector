@@ -475,7 +475,7 @@ public class RPCHBaseService implements HBaseService
                        final String columnFamilyName,
                        final String columnQualifier,
                        final Long timestamp,
-                       final Boolean deleteAllVersions,
+                       final boolean deleteAllVersions,
                        final RowLock lock)
     {
         doWithHTable(tableName, new TableCallback<Void>()
@@ -745,60 +745,36 @@ public class RPCHBaseService implements HBaseService
                                 final String columnFamilyName,
                                 final String columnQualifier,
                                 final Long timestamp,
-                                final Boolean deleteAllVersions,
+                                final boolean deleteAllVersions,
                                 final RowLock lock)
     {
-        final Delete delete;
-        if (lock == null)
-        {
-            delete = new Delete(row.getBytes(UTF8));
-        }
-        else
-        {
-            delete = new Delete(row.getBytes(UTF8), HConstants.LATEST_TIMESTAMP, lock);
-        }
+        final Delete delete = new Delete(row.getBytes(UTF8), HConstants.LATEST_TIMESTAMP, lock);
         if (columnFamilyName != null)
         {
             if (columnQualifier != null)
             {
-                if (timestamp != null)
+                if (deleteAllVersions)
                 {
-                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions))
-                    {
-                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
-                            timestamp);
-                    }
-                    else
-                    {
-                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
-                            timestamp);
-                    }
+                    delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
+                        coalesceTimestamp(timestamp));
                 }
                 else
                 {
-                    if (deleteAllVersions != null && Boolean.TRUE.equals(deleteAllVersions))
-                    {
-                        delete.deleteColumns(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                    }
-                    else
-                    {
-                        delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
-                    }
+                    delete.deleteColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8),
+                        coalesceTimestamp(timestamp));
                 }
             }
             else
             {
-                if (timestamp != null)
-                {
-                    delete.deleteFamily(columnFamilyName.getBytes(UTF8), timestamp);
-                }
-                else
-                {
-                    delete.deleteFamily(columnFamilyName.getBytes(UTF8));
-                }
+                delete.deleteFamily(columnFamilyName.getBytes(UTF8), coalesceTimestamp(timestamp));
             }
         }
         return delete;
+    }
+    
+    private static long coalesceTimestamp(Long timestamp)
+    {
+        return timestamp != null ? timestamp : HConstants.LATEST_TIMESTAMP;
     }
 
     private HTableInterface createHTable(String tableName)

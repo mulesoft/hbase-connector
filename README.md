@@ -81,7 +81,7 @@ reserved.
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|the descriptor for the new table.|no||
+|tableName|the descriptor for the new table.|no||
 
 
 
@@ -93,7 +93,7 @@ Answers if a given table exists, regardless it is enabled or not
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|the table name|no||
+|tableName|the table name|no||
 
 Returns only if the table exists, false otherwise
 
@@ -107,7 +107,7 @@ Disables and deletes an existent table.
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|name of table to delete|no||
+|tableName|name of table to delete|no||
 
 
 
@@ -119,7 +119,7 @@ Answers if the given existent table is enabled.
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|name of the table to query for its enabling state|no||
+|tableName|name of the table to query for its enabling state|no||
 
 Returns only if the table was disabled. False otherwise
 
@@ -133,7 +133,7 @@ Enables an existent table.
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|name of the table to enable|no||
+|tableName|name of the table to enable|no||
 
 
 
@@ -145,7 +145,7 @@ Disables an existent table
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|the table name to disable|no||
+|tableName|the table name to disable|no||
 
 
 
@@ -225,7 +225,7 @@ Answers the values at the given row - (table, row) combination
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |maxVersions||yes||
 |timestamp||yes||
 
@@ -243,7 +243,7 @@ timestamp) combination
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |columnFamilyName|the column family dimension|no||
 |columnQualifier|the column qualifier dimension|no||
 |timestamp|the version dimension|yes||
@@ -262,11 +262,11 @@ Deletes the values at a given row
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |columnFamilyName|set null to delete all column families in the specified row|yes||
-|columnQualifier|set null to delete all columns in the specified column family|yes||
-|timestamp|set it to delete all versions of the specified column or column family with a timestamp less than or equal to the specified timestamp|yes||
-|deleteAllVersions|set false to delete only the latest version of the specified column|yes||
+|columnQualifier|the qualifier of the column values to delete. If no qualifier is specified, the operation will affect all the qulifiers for the given column family name to delete. Thus it has only sense if deleteColumnFamilyName is specified|yes||
+|timestamp|the timestamp of the values to delete. If no timestamp is specified, the most recent timestamp for the deleted value is used. Only has sense if deleteColumnFamilyName is specified|yes||
+|deleteAllVersions|if all versions should be deleted,or only those more recent than the deleteTimestamp. Only has sense if deleteColumnFamilyName and deleteColumnQualifier are specified|yes|false|
 |lock||yes||
 
 
@@ -286,11 +286,10 @@ Scans across all rows in a table, returning a scanner over it
 |maxTimestamp|get versions of columns only within the specified timestamp range: [timestamp, maxTimestamp)|yes||
 |caching|the number of rows for caching|yes||
 |batch|the maximum number of values to return for each call to next() in the ResultScanner|yes||
-|cacheBlocks|the number of rows for caching that will be passed to scanners|yes||
-|maxVersions|limits the number of versions on each column|yes||
-|allVersions|get all available versions on each column|yes||
-|startRow|limits the beginning of the scan to the specified row inclusive|yes||
-|stopRow|limits the end of the scan to the specified row exclusive|yes||
+|cacheBlocks|the number of rows for caching that will be passed to scanners|yes|true|
+|maxVersions|limits the number of versions on each column|yes|1|
+|startRowKey|limits the beginning of the scan to the specified row inclusive|yes||
+|stopRowKey|limits the end of the scan to the specified row exclusive|yes||
 
 Returns scanner over the table
 
@@ -307,7 +306,7 @@ initialized to amount.
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |columnFamilyName||no||
 |columnQualifier||no||
 |amount||no||
@@ -327,7 +326,7 @@ given one. If it does, it performs the put.
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
 |checkValue|the value to check. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
@@ -352,14 +351,14 @@ given one. If it does, it performs the delete.
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
 |tableName||no||
-|row||no||
+|rowKey||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
 |checkValue|the value to check. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |deleteColumnFamilyName||no||
-|deleteColumnQualifier||no||
-|deleteTimestamp||yes||
-|deleteAllVersions||yes||
+|deleteColumnQualifier|the qualifier of the column values to delete. If no qualifier is specified, the operation will affect all the qulifiers for the given column family name to delete. Thus it has only sense if deleteColumnFamilyName is specified|no||
+|deleteTimestamp|the timestamp of the values to delete. If no timestamp is specified, the most recent timestamp for the deleted value is used. Only has sense if deleteColumnFamilyName is specified|yes||
+|deleteAllVersions|if all versions should be deleted,or only those more recent than the deleteTimestamp. Only has sense if deleteColumnFamilyName and deleteColumnQualifier are specified|yes|false|
 |lock||yes||
 
 Returns if the new delete was executed, false otherwise

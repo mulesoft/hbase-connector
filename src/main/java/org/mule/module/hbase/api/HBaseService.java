@@ -121,7 +121,7 @@ public interface HBaseService
                        String columnFamilyName,
                        String columnQualifier,
                        Long timestamp,
-                       Boolean deleteAllVersions,
+                       boolean deleteAllVersions,
                        RowLock lock);
 
     /**

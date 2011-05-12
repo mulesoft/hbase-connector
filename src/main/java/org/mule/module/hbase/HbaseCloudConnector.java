@@ -273,13 +273,16 @@ public class HbaseCloudConnector implements Initialisable
      * @param rowKey
      * @param columnFamilyName set null to delete all column families in the
      *            specified row
-     * @param columnQualifier set null to delete all columns in the specified column
-     *            family
-     * @param timestamp set it to delete all versions of the specified column or
-     *            column family with a timestamp less than or equal to the specified
-     *            timestamp
-     * @param deleteAllVersions set false to delete only the latest version of the
-     *            specified column
+     * @param columnQualifier the qualifier of the column values to delete. If no
+     *            qualifier is specified, the operation will affect all the qulifiers
+     *            for the given column family name to delete. Thus it has only sense
+     *            if deleteColumnFamilyName is specified
+     * @param timestamp the timestamp of the values to delete. If no timestamp is
+     *            specified, the most recent timestamp for the deleted value is used.
+     *            Only has sense if deleteColumnFamilyName is specified
+     * @param deleteAllVersions if all versions should be deleted,or only those more
+     *            recent than the deleteTimestamp. Only has sense if
+     *            deleteColumnFamilyName and deleteColumnQualifier are specified
      * @param lock
      */
     @Operation
@@ -288,10 +291,11 @@ public class HbaseCloudConnector implements Initialisable
                              @Parameter(optional = true) final String columnFamilyName,
                              @Parameter(optional = true) final String columnQualifier,
                              @Parameter(optional = true) final Long timestamp,
-                             @Parameter(optional = true) final Boolean deleteAllVersions,
+                             @Parameter(optional = true, defaultValue = "false") final boolean deleteAllVersions,
                              @Parameter(optional = true) final RowLock lock)
     {
-        facade.delete(tableName, rowKey, columnFamilyName, columnQualifier, timestamp, deleteAllVersions, lock);
+        facade.delete(tableName, rowKey, columnFamilyName, columnQualifier, timestamp, deleteAllVersions,
+            lock);
     }
 
     /**
@@ -411,9 +415,16 @@ public class HbaseCloudConnector implements Initialisable
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
      * @param deleteColumnFamilyName
-     * @param deleteColumnQualifier
-     * @param deleteTimestamp
-     * @param deleteAllVersions
+     * @param deleteColumnQualifier the qualifier of the column values to delete. If
+     *            no qualifier is specified, the operation will affect all the
+     *            qulifiers for the given column family name to delete. Thus it has
+     *            only sense if deleteColumnFamilyName is specified
+     * @param deleteTimestamp the timestamp of the values to delete. If no timestamp
+     *            is specified, the most recent timestamp for the deleted value is
+     *            used. Only has sense if deleteColumnFamilyName is specified
+     * @param deleteAllVersions if all versions should be deleted,or only those more
+     *            recent than the deleteTimestamp. Only has sense if
+     *            deleteColumnFamilyName and deleteColumnQualifier are specified
      * @param lock
      * @return true if the new delete was executed, false otherwise
      */
@@ -426,11 +437,12 @@ public class HbaseCloudConnector implements Initialisable
                                        @Parameter(optional = false) final String deleteColumnFamilyName,
                                        @Parameter(optional = false) final String deleteColumnQualifier,
                                        @Parameter(optional = true) final Long deleteTimestamp,
-                                       @Parameter(optional = true) final Boolean deleteAllVersions,
+                                       @Parameter(optional = true, defaultValue = "false") final boolean deleteAllVersions,
                                        @Parameter(optional = true) final RowLock lock)
     {
-        return facade.checkAndDelete(tableName, rowKey, checkColumnFamilyName, checkColumnQualifier, checkValue,
-            deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, lock);
+        return facade.checkAndDelete(tableName, rowKey, checkColumnFamilyName, checkColumnQualifier,
+            checkValue, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions,
+            lock);
     }
 
     // ------------ Configuration
