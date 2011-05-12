@@ -421,14 +421,14 @@ public class RPCHBaseService implements HBaseService
 
     // ------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String row, final Integer maxVersions, final Long timestamp)
+    public Result get(String tableName, final String rowKey, final Integer maxVersions, final Long timestamp)
 
     {
         return doWithHTable(tableName, new TableCallback<Result>()
         {
             public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
-                return hTable.get(createGet(row, maxVersions, timestamp));
+                return hTable.get(createGet(rowKey, maxVersions, timestamp));
             }
         });
     }

@@ -83,7 +83,7 @@ public interface HBaseService
     void deleteColumn(String tableName, String columnFamilyName);
 
     // ------------ Row Operations
-    Result get(String tableName, String row, Integer maxVersions, Long timestamp);
+    Result get(String tableName, String rowKey, Integer maxVersions, Long timestamp);
 
     /**
      * Saves the value at the specified cell (row + family:qualifier + timestamp)

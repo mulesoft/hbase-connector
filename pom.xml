@@ -13,7 +13,7 @@
 
     <properties>
         <mule.version>3.1.0</mule.version>
-        <cloud.connector.version>2.0.15-SNAPSHOT</cloud.connector.version>
+        <cloudconnect.version>2.0.15-SNAPSHOT</cloudconnect.version>
         <!-- Tools properties -->
         <eclipsePluginVersion>2.8</eclipsePluginVersion>
         <vmtype>org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType</vmtype>
@@ -64,13 +64,15 @@
                     <jdkName>${jdk.version}</jdkName>
                 </configuration>
             </plugin>
-                        <plugin>
-                <groupId>org.mule.tools</groupId>
-                <artifactId>mule-cloud-connector-maven-plugin</artifactId>
-                <version>${cloud.connector.version}</version>
-                <extensions>true</extensions>
-            </plugin>
-
+			<plugin>
+				<groupId>org.mule.tools</groupId>
+				<artifactId>mule-cloud-connector-maven-plugin</artifactId>
+				<version>${cloudconnect.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<schemaVersion>1.0</schemaVersion>
+				</configuration>
+			</plugin>
             <!-- The release distribution for this project -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -201,14 +203,14 @@
         <dependency>
             <groupId>org.mule.tools</groupId>
             <artifactId>mule-cloud-connector-annotations</artifactId>
-            <version>${cloud.connector.version}</version>
+            <version>${cloudconnect.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase</artifactId>
             <version>${hbase.version}</version>
         </dependency>
-        
+
         <!-- for testing -->
         <dependency>
             <groupId>junit</groupId>
@@ -221,6 +223,12 @@
             <artifactId>mule-tests-functional</artifactId>
             <version>${mule.version}</version>
         </dependency>
+                <dependency>
+			<groupId>org.mule.transports</groupId>
+			<artifactId>mule-transport-vm</artifactId>
+			<version>${mule.version}</version>
+			<scope>test</scope>
+		</dependency>
         <dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
