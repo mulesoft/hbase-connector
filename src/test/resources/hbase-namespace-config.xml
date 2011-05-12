@@ -119,8 +119,7 @@
 		<inbound-endpoint address="vm://scanTable"
 			exchange-pattern="request-response" />
 		<hbase:scan-table tableName="#[map-payload:tableName]"
-			columnFamilyName="#[map-payload:columnFamiliyName]" startRowKey="#[map-payload:firstRowKey]"
-			allVersions="true" />
+			columnFamilyName="#[map-payload:columnFamiliyName]" startRowKey="#[map-payload:firstRowKey]" />
 	</flow>
 
 	<flow name="incrementValue">

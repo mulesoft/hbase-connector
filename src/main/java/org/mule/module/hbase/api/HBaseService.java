@@ -142,7 +142,6 @@ public interface HBaseService
      * @param cacheBlocks the number of rows for caching that will be passed to
      *            scanners
      * @param maxVersions limits the number of versions on each column
-     * @param allVersions get all available versions on each column
      * @param startRow limits the beginning of the scan to the specified row
      *            inclusive
      * @param stopRow limits the end of the scan to the specified row exclusive
@@ -154,9 +153,8 @@ public interface HBaseService
                               Long maxTimestamp,
                               Integer caching,
                               Integer batch,
-                              Boolean cacheBlocks,
-                              Integer maxVersions,
-                              Boolean allVersions,
+                              boolean cacheBlocks,
+                              int maxVersions,
                               String startRow,
                               String stopRow);
 

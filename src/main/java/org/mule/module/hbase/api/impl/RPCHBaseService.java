@@ -492,7 +492,7 @@ public class RPCHBaseService implements HBaseService
 
     /**
      * @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer,
-     *      Boolean, Integer, Boolean, String, String)
+     *      Boolean, Integer, String, String)
      */
     public ResultScanner scan(final String tableName,
                               final String columnFamilyName,
@@ -501,9 +501,8 @@ public class RPCHBaseService implements HBaseService
                               final Long maxTimestamp,
                               final Integer caching,
                               final Integer batch,
-                              final Boolean cacheBlocks,
-                              final Integer maxVersions,
-                              final Boolean allVersions,
+                              final boolean cacheBlocks,
+                              final int maxVersions,
                               final String startRow,
                               final String stopRow)
     {
@@ -542,21 +541,8 @@ public class RPCHBaseService implements HBaseService
                 {
                     scan.setBatch(batch);
                 }
-                if (cacheBlocks != null)
-                {
-                    scan.setCacheBlocks(cacheBlocks);
-                }
-                if (allVersions != null && Boolean.TRUE.equals(allVersions))
-                {
-                    scan.setMaxVersions();
-                }
-                else
-                {
-                    if (maxVersions != null)
-                    {
-                        scan.setMaxVersions(maxVersions);
-                    }
-                }
+                scan.setCacheBlocks(cacheBlocks);
+                scan.setMaxVersions(maxVersions);
                 if (startRow != null)
                 {
                     scan.setStartRow(startRow.getBytes(UTF8));

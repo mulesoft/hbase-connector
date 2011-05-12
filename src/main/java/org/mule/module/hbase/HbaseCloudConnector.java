@@ -325,14 +325,13 @@ public class HbaseCloudConnector implements Initialisable
                                    @Parameter(optional = true) final Long maxTimestamp,
                                    @Parameter(optional = true) final Integer caching,
                                    @Parameter(optional = true) final Integer batch,
-                                   @Parameter(optional = true) final Boolean cacheBlocks, // TODO default
-                                   @Parameter(optional = true) final Integer maxVersions, //TODO relation to all versions
-                                   @Parameter(optional = true) final Boolean allVersions, //TODO default to false
+                                   @Parameter(optional = true, defaultValue = "true") final boolean cacheBlocks,
+                                   @Parameter(optional = true, defaultValue = "1") final int maxVersions,
                                    @Parameter(optional = true) final String startRowKey,
                                    @Parameter(optional = true) final String stopRowKey)
     {
         return facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching,
-            batch, cacheBlocks, maxVersions, allVersions, startRowKey, stopRowKey);
+            batch, cacheBlocks, maxVersions, startRowKey, stopRowKey);
     }
 
     /**
