@@ -96,7 +96,7 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Disables and deletes an existent table TODO if exists?
+     * Disables and deletes an existent table.
      * 
      * @param name name of table to delete
      */
@@ -107,22 +107,21 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Answers if the given table is enable You should check if the table exists
-     * before calling this method. TODO why? Throws an exception?
+     * Answers if the given existent table is enabled.
      * 
-     * @param name
+     * @param name name of the table to query for its enabling state
      * @return true only if the table was disabled. False otherwise
      */
     @Operation
     public boolean isEnabledTable(@Parameter(optional = false) final String name)
     {
-        return facade.isDisabledTable(name);
+        return !facade.isDisabledTable(name);
     }
 
     /**
-     * Enables a table given its name
+     * Enables an existent table.
      * 
-     * @param name name of the table
+     * @param name name of the table to enable
      */
     @Operation
     public void enableTable(@Parameter(optional = false) final String name)
@@ -131,9 +130,9 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Disables a table given its name
+     * Disables an existent table
      * 
-     * @param name the table name
+     * @param name the table name to disable
      */
     @Operation
     public void disableTable(@Parameter(optional = false) final String name)
@@ -249,7 +248,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param columnQualifier the column qualifier dimension
      * @param timestamp the version dimension
      * @param value the value to put. It must be either a byte array or a
-     *            serializable object.
+     *            serializable object. As a special case, strings are saved always in
+     *            standard utf-8 format.
      * @param writeToWAL
      * @param lock
      */
@@ -370,12 +370,14 @@ public class HbaseCloudConnector implements Initialisable
      * @param checkColumnFamilyName
      * @param checkColumnQualifier
      * @param checkValue the value to check. It must be either a byte array or a
-     *            serializable object.
+     *            serializable object. As a special case, strings are saved always in
+     *            standard utf-8 format.
      * @param putColumnFamilyName
      * @param putColumnQualifier
      * @param putTimestamp
      * @param value the value to put. It must be either a byte array or a
-     *            serializable object.
+     *            serializable object. As a special case, strings are saved always in
+     *            standard utf-8 format.
      * @param writeToWAL set it to false means that in a fail scenario, you will lose
      *            any increments that have not been flushed.
      * @param lock
@@ -407,7 +409,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param checkColumnFamilyName
      * @param checkColumnQualifier
      * @param checkValue the value to check. It must be either a byte array or a
-     *            serializable object.
+     *            serializable object. As a special case, strings are saved always in
+     *            standard utf-8 format.
      * @param deleteColumnFamilyName
      * @param deleteColumnQualifier
      * @param deleteTimestamp

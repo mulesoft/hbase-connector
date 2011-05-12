@@ -102,7 +102,7 @@ Returns only if the table exists, false otherwise
 Delete Table
 ------------
 
-Disables and deletes an existent table TODO if exists?
+Disables and deletes an existent table.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
@@ -114,13 +114,12 @@ Disables and deletes an existent table TODO if exists?
 Is Enabled Table
 ----------------
 
-Answers if the given table is enable You should check if the table exists
-before calling this method. TODO why? Throws an exception?
+Answers if the given existent table is enabled.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name||no||
+|name|name of the table to query for its enabling state|no||
 
 Returns only if the table was disabled. False otherwise
 
@@ -129,24 +128,24 @@ Returns only if the table was disabled. False otherwise
 Enable Table
 ------------
 
-Enables a table given its name
+Enables an existent table.
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|name of the table|no||
+|name|name of the table to enable|no||
 
 
 
 Disable Table
 -------------
 
-Disables a table given its name
+Disables an existent table
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|name|the table name|no||
+|name|the table name to disable|no||
 
 
 
@@ -248,7 +247,7 @@ timestamp) combination
 |columnFamilyName|the column family dimension|no||
 |columnQualifier|the column qualifier dimension|no||
 |timestamp|the version dimension|yes||
-|value|the value to put. It must be either a byte array or a serializable object.|no||
+|value|the value to put. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |writeToWAL||yes||
 |lock||yes||
 
@@ -331,11 +330,11 @@ given one. If it does, it performs the put.
 |row||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
-|checkValue|the value to check. It must be either a byte array or a serializable object.|no||
+|checkValue|the value to check. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |putColumnFamilyName||no||
 |putColumnQualifier||no||
 |putTimestamp||yes||
-|value|the value to put. It must be either a byte array or a serializable object.|no||
+|value|the value to put. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |putWriteToWAL||yes||
 |lock||yes||
 
@@ -356,7 +355,7 @@ given one. If it does, it performs the delete.
 |row||no||
 |checkColumnFamilyName||no||
 |checkColumnQualifier||no||
-|checkValue|the value to check. It must be either a byte array or a serializable object.|no||
+|checkValue|the value to check. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |deleteColumnFamilyName||no||
 |deleteColumnQualifier||no||
 |deleteTimestamp||yes||

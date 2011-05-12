@@ -11,20 +11,17 @@
 package org.mule.module.hbase.api.impl;
 
 import org.mule.module.hbase.BloomFilterType;
+import org.mule.module.hbase.api.ByteArrayConverter;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.lang.Validate;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -47,7 +44,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 import org.apache.hadoop.hbase.client.Scan;
-import org.yecht.Data.Str;
 
 /**
  * {@link HBaseService} that uses the official RPC client to connect with the
@@ -69,6 +65,7 @@ public class RPCHBaseService implements HBaseService
 {
 
     private static final Charset UTF8 = Charset.forName("utf-8");
+    private static final ByteArrayConverter BYTE_ARRAY_CONVERTER = new ByteArrayConverter(UTF8);
     private HTableInterfaceFactory hTableInterfaceFactory;
     private Configuration configuration;
 
@@ -851,31 +848,10 @@ public class RPCHBaseService implements HBaseService
             HConnectionManager.deleteConnection(hBaseAdmin.getConfiguration(), true);
         }
     }
-
+    
     private byte[] toByteArray(Object o)
     {
-        if (o instanceof byte[])
-        {
-            return (byte[]) o;
-        }
-        if (o instanceof String)
-        {
-            return ((String) o).getBytes(UTF8);
-        }
-        if (o instanceof Serializable)
-        {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            try
-            {
-                new ObjectOutputStream(out).writeObject(o);
-            }
-            catch (IOException e)
-            {
-                throw new UnhandledException(e);
-            }
-            return out.toByteArray();
-        }
-        throw new IllegalArgumentException("Object " + o + " is not serializable");
+        return BYTE_ARRAY_CONVERTER.toByteArray(o);
     }
 
     /** Retain and release the {@link HBaseAdmin} */
