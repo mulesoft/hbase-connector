@@ -24,7 +24,7 @@ import org.apache.hadoop.hbase.client.RowLock;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.mule.module.hbase.BloomFilterType;
+import org.mule.module.hbase.api.BloomFilterType;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseServiceException;
 

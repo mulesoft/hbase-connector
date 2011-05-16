@@ -9,10 +9,14 @@
  */
 
 
-package org.mule.module.hbase;
+package org.mule.module.hbase.api;
 
 import org.apache.hadoop.hbase.regionserver.StoreFile.BloomType;
 
+/**
+ * Bloom Filter Types used by hbase
+ * @author flbulgarelli
+ */
 public enum BloomFilterType
 {
     NONE(BloomType.NONE), ROW(BloomType.ROW), ROWCOL(BloomType.ROWCOL);

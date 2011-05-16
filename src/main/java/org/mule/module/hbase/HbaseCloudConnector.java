@@ -12,6 +12,7 @@ package org.mule.module.hbase;
 
 import org.mule.api.lifecycle.Initialisable;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.module.hbase.api.BloomFilterType;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.impl.RPCHBaseService;
@@ -152,11 +153,11 @@ public class HbaseCloudConnector implements Initialisable
      * @param scope
      */
     @Operation
-    public void addColumn(@Parameter(optional = false) final String tableName,
-                          @Parameter(optional = false) final String columnFamilyName,
-                          @Parameter(optional = true) final Integer maxVersions,
-                          @Parameter(optional = true, defaultValue = "false") final Boolean inMemory,
-                          @Parameter(optional = true) final Integer scope)
+    public void addColumnFamily(@Parameter(optional = false) final String tableName,
+                                @Parameter(optional = false) final String columnFamilyName,
+                                @Parameter(optional = true) final Integer maxVersions,
+                                @Parameter(optional = true, defaultValue = "false") final Boolean inMemory,
+                                @Parameter(optional = true) final Integer scope)
     {
         facade.addColumn(tableName, columnFamilyName, maxVersions, inMemory, scope);
     }
@@ -169,8 +170,8 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the column exists, false otherwise
      */
     @Operation
-    public boolean existsColumn(@Parameter(optional = false) final String tableName,
-                                @Parameter(optional = false) final String columnFamilyName)
+    public boolean existsColumnFamily(@Parameter(optional = false) final String tableName,
+                                      @Parameter(optional = false) final String columnFamilyName)
     {
         return facade.existsColumn(tableName, columnFamilyName);
     }
@@ -193,18 +194,18 @@ public class HbaseCloudConnector implements Initialisable
      * @param values
      */
     @Operation
-    public void modifyColumn(@Parameter(optional = false) final String tableName,
-                             @Parameter(optional = false) final String columnFamilyName,
-                             @Parameter(optional = true) final Integer maxVersions,
-                             @Parameter(optional = true) final Integer blocksize,
-                             @Parameter(optional = true) final CompressionType compressionType,
-                             @Parameter(optional = true) final CompressionType compactionCompressionType,
-                             @Parameter(optional = true) final Boolean inMemory,
-                             @Parameter(optional = true) final Integer timeToLive,
-                             @Parameter(optional = true) final Boolean blockCacheEnabled,
-                             @Parameter(optional = true) final BloomFilterType bloomFilterType,
-                             @Parameter(optional = true) final Integer replicationScope,
-                             @Parameter(optional = true) final Map<String, String> values)
+    public void modifyColumnFamily(@Parameter(optional = false) final String tableName,
+                                   @Parameter(optional = false) final String columnFamilyName,
+                                   @Parameter(optional = true) final Integer maxVersions,
+                                   @Parameter(optional = true) final Integer blocksize,
+                                   @Parameter(optional = true) final CompressionType compressionType,
+                                   @Parameter(optional = true) final CompressionType compactionCompressionType,
+                                   @Parameter(optional = true) final Boolean inMemory,
+                                   @Parameter(optional = true) final Integer timeToLive,
+                                   @Parameter(optional = true) final Boolean blockCacheEnabled,
+                                   @Parameter(optional = true) final BloomFilterType bloomFilterType,
+                                   @Parameter(optional = true) final Integer replicationScope,
+                                   @Parameter(optional = true) final Map<String, String> values)
     {
         facade.modifyColumn(tableName, columnFamilyName, maxVersions, blocksize, compressionType,
             compactionCompressionType, inMemory, timeToLive, blockCacheEnabled, bloomFilterType,
@@ -212,8 +213,8 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     @Operation
-    public void deleteColumn(@Parameter(optional = false) final String tableName,
-                             @Parameter(optional = false) final String columnFamilyName)
+    public void deleteColumnFamily(@Parameter(optional = false) final String tableName,
+                                   @Parameter(optional = false) final String columnFamilyName)
     {
         facade.deleteColumn(tableName, columnFamilyName);
     }

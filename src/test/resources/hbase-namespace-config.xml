@@ -73,7 +73,7 @@
 	<flow name="addColumn">
 		<inbound-endpoint address="vm://addColumn"
 			exchange-pattern="request-response" />
-		<hbase:add-column tableName="#[header:tableName]"
+		<hbase:add-column-family tableName="#[header:tableName]"
 			columnFamilyName="#[header:columnFamiliyName]" />
 	</flow>
 
@@ -81,14 +81,14 @@
 	<flow name="existsColumn">
 		<inbound-endpoint address="vm://existsColumn"
 			exchange-pattern="request-response" />
-		<hbase:exists-column tableName="#[header:tableName]"
+		<hbase:exists-column-family tableName="#[header:tableName]"
 			columnFamilyName="#[header:columnFamiliyName]" />
 	</flow>
 
 	<flow name="modifyColumn">
 		<inbound-endpoint address="vm://modifyColumn"
 			exchange-pattern="request-response" />
-		<hbase:modify-column tableName="#[header:tableName]"
+		<hbase:modify-column-family tableName="#[header:tableName]"
 			columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
 			compactionCompressionType="LZO" />
 	</flow>

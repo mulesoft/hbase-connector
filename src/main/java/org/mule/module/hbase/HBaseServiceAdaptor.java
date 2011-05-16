@@ -20,6 +20,11 @@ import java.lang.reflect.Proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Proxy factory for creating {@link HBaseService}s that log operations
+ * 
+ * @author flbulgarelli
+ */
 public final class HBaseServiceAdaptor
 {
     private static final Logger logger = LoggerFactory.getLogger(HbaseCloudConnector.class);

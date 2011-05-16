@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.client.RowLock;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.mule.module.hbase.api.BloomFilterType;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 
@@ -80,18 +81,18 @@ public class HbaseTestCase
         connector.disableTable(TABLE_NAME);
         verify(facade).disabeTable(eq(TABLE_NAME));
 
-        connector.addColumn(TABLE_NAME, COLUMN_NAME, 3, true, 7);
+        connector.addColumnFamily(TABLE_NAME, COLUMN_NAME, 3, true, 7);
         verify(facade).addColumn(eq(TABLE_NAME), eq(COLUMN_NAME), eq(3), eq(true), eq(7));
 
-        connector.existsColumn(TABLE_NAME, COLUMN_NAME);
+        connector.existsColumnFamily(TABLE_NAME, COLUMN_NAME);
         verify(facade).existsColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
 
         Map<String, String> map = mock(Map.class);
-        connector.modifyColumn(TABLE_NAME, COLUMN_NAME, 5, 123,  CompressionType.LZO, CompressionType.LZO, false, 0, true, BloomFilterType.NONE, 12, map);
+        connector.modifyColumnFamily(TABLE_NAME, COLUMN_NAME, 5, 123,  CompressionType.LZO, CompressionType.LZO, false, 0, true, BloomFilterType.NONE, 12, map);
         verify(facade).modifyColumn(eq(TABLE_NAME), eq(COLUMN_NAME), eq(5), eq(123), eq(CompressionType.LZO), eq(CompressionType.LZO),
             eq(false), eq(0), eq(true), eq(BloomFilterType.NONE), eq(12), eq(map));
 
-        connector.deleteColumn(TABLE_NAME, COLUMN_NAME);
+        connector.deleteColumnFamily(TABLE_NAME, COLUMN_NAME);
         verify(facade).deleteColumn(eq(TABLE_NAME), eq(COLUMN_NAME));
 
         connector.deleteValues(TABLE_NAME, SOME_ROW_KEY, "family", "qualifier", 123L, false, lock);

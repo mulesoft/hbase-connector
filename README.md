@@ -149,8 +149,8 @@ Disables an existent table
 
 
 
-Add Column
-----------
+Add Column Family
+-----------------
 
 Adds a column family to a table given a table and column name. This operation
 gracefully handles necessary table disabling and enabled.
@@ -166,8 +166,8 @@ gracefully handles necessary table disabling and enabled.
 
 
 
-Exists Column
--------------
+Exists Column Family
+--------------------
 
 Answers if column family exists.
 
@@ -181,8 +181,8 @@ Returns if the column exists, false otherwise
 
 
 
-Modify Column
--------------
+Modify Column Family
+--------------------
 
 Changes one or more properties of a column family in a table. This operation
 gracefully handles necessary table disabling and enabled.
@@ -205,8 +205,8 @@ gracefully handles necessary table disabling and enabled.
 
 
 
-Delete Column
--------------
+Delete Column Family
+--------------------
 
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|

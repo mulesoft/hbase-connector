@@ -10,7 +10,6 @@
 
 package org.mule.module.hbase.api;
 
-import org.mule.module.hbase.BloomFilterType;
 
 import java.util.Map;
 

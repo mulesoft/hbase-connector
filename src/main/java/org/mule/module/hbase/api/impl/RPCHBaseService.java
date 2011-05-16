@@ -10,7 +10,7 @@
 
 package org.mule.module.hbase.api.impl;
 
-import org.mule.module.hbase.BloomFilterType;
+import org.mule.module.hbase.api.BloomFilterType;
 import org.mule.module.hbase.api.ByteArrayConverter;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
