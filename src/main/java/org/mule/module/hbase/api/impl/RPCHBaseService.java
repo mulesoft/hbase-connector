@@ -18,10 +18,13 @@ import org.mule.module.hbase.api.HBaseServiceException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.lang.Validate;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -494,21 +497,21 @@ public class RPCHBaseService implements HBaseService
      * @see HBaseService#scan(String, String, String, Long, Long, Integer, Integer,
      *      Boolean, Integer, String, String)
      */
-    public ResultScanner scan(final String tableName,
+    public Iterable<Result> scan(final String tableName,
                               final String columnFamilyName,
                               final String columnQualifier,
                               final Long timestamp,
                               final Long maxTimestamp,
                               final Integer caching,
-                              final Integer batch,
                               final boolean cacheBlocks,
                               final int maxVersions,
                               final String startRow,
-                              final String stopRow)
+                              final String stopRow,
+                              final int fetchSize)
     {
-        return doWithHTable(tableName, new TableCallback<ResultScanner>()
+        return doWithHTable(tableName, new TableCallback<ResultIterable>()
         {
-            public ResultScanner doWithHBaseAdmin(HTableInterface hTable) throws Exception
+            public ResultIterable doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
                 Scan scan = new Scan();
                 if (columnFamilyName != null)
@@ -537,10 +540,6 @@ public class RPCHBaseService implements HBaseService
                 {
                     scan.setCaching(caching);
                 }
-                if (batch != null)
-                {
-                    scan.setBatch(batch);
-                }
                 scan.setCacheBlocks(cacheBlocks);
                 scan.setMaxVersions(maxVersions);
                 if (startRow != null)
@@ -552,9 +551,58 @@ public class RPCHBaseService implements HBaseService
                     scan.setStopRow(stopRow.getBytes(UTF8));
                 }
 
-                return hTable.getScanner(scan);
+                return new ResultIterable(hTable.getScanner(scan), fetchSize);
             }
         });
+    }
+
+    private static final class ResultIterable extends PaginatedIterable<Result, Result[]>
+    {
+
+        private final ResultScanner scanner;
+        private final int fetchSize;
+
+        private ResultIterable(ResultScanner scanner, int fetchSize)
+        {
+            this.scanner = scanner;
+            this.fetchSize = fetchSize;
+        }
+
+        @Override
+        protected Result[] firstPage()
+        {
+            return getMoreResults();
+        }
+
+        private Result[] getMoreResults()
+        {
+            try
+            {
+                return scanner.next(fetchSize);
+            }
+            catch (IOException e)
+            {
+                throw new UnhandledException(e);
+            }
+        }
+
+        @Override
+        protected boolean hasNextPage(Result[] page)
+        {
+            return page.length == fetchSize;
+        }
+
+        @Override
+        protected Result[] nextPage(Result[] currentPage)
+        {
+            return getMoreResults();
+        }
+
+        @Override
+        protected Iterator<Result> pageIterator(Result[] page)
+        {
+            return Arrays.asList(page).iterator();
+        }
     }
 
     /** @see HBaseService#increment(String, String, String, String, long, boolean) */
@@ -768,7 +816,7 @@ public class RPCHBaseService implements HBaseService
         }
         return delete;
     }
-    
+
     private static long coalesceTimestamp(Long timestamp)
     {
         return timestamp != null ? timestamp : HConstants.LATEST_TIMESTAMP;
@@ -807,7 +855,7 @@ public class RPCHBaseService implements HBaseService
             HConnectionManager.deleteConnection(hBaseAdmin.getConfiguration(), true);
         }
     }
-    
+
     private byte[] toByteArray(Object o)
     {
         return BYTE_ARRAY_CONVERTER.toByteArray(o);

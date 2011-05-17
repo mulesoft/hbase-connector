@@ -320,23 +320,26 @@ public class HbaseCloudConnector implements Initialisable
      * @param startRowKey limits the beginning of the scan to the specified row
      *            inclusive
      * @param stopRowKey limits the end of the scan to the specified row exclusive
-     * @return the scanner over the table
+     * @param fetchSize the number of results internally fetched by request to the
+     *            HBase server. Increase it for improving network efficiency, or decrease it
+     *            for reducing memory usage 
+     * @return an Iterable of Result's. It may be used with a collection splitter.  
      */
     @Operation
-    public ResultScanner scanTable(@Parameter(optional = false) final String tableName,
+    public Iterable<Result> scanTable(@Parameter(optional = false) final String tableName,
                                    @Parameter(optional = true) final String columnFamilyName,
                                    @Parameter(optional = true) final String columnQualifier,
                                    @Parameter(optional = true) final Long timestamp,
                                    @Parameter(optional = true) final Long maxTimestamp,
                                    @Parameter(optional = true) final Integer caching,
-                                   @Parameter(optional = true) final Integer batch,
                                    @Parameter(optional = true, defaultValue = "true") final boolean cacheBlocks,
                                    @Parameter(optional = true, defaultValue = "1") final int maxVersions,
                                    @Parameter(optional = true) final String startRowKey,
-                                   @Parameter(optional = true) final String stopRowKey)
+                                   @Parameter(optional = true) final String stopRowKey, 
+                                   @Parameter(optional = true, defaultValue = "50") int fetchSize)
     {
         return facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching,
-            batch, cacheBlocks, maxVersions, startRowKey, stopRowKey);
+            cacheBlocks, maxVersions, startRowKey, stopRowKey, fetchSize);
     }
 
     /**

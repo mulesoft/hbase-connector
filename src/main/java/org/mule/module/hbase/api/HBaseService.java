@@ -14,7 +14,6 @@ package org.mule.module.hbase.api;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 
 /**
@@ -136,8 +135,6 @@ public interface HBaseService
      * @param maxTimestamp get versions of columns only within the specified
      *            timestamp range: [timestamp, maxTimestamp)
      * @param caching the number of rows for caching
-     * @param batch the maximum number of values to return for each call to next() in
-     *            the {@link ResultScanner}
      * @param cacheBlocks the number of rows for caching that will be passed to
      *            scanners
      * @param maxVersions limits the number of versions on each column
@@ -145,17 +142,17 @@ public interface HBaseService
      *            inclusive
      * @param stopRow limits the end of the scan to the specified row exclusive
      */
-    public ResultScanner scan(String tableName,
+    public Iterable<Result> scan(String tableName,
                               String columnFamilyName,
                               String columnQualifier,
                               Long timestamp,
                               Long maxTimestamp,
                               Integer caching,
-                              Integer batch,
                               boolean cacheBlocks,
                               int maxVersions,
                               String startRow,
-                              String stopRow);
+                              String stopRow,
+                              int fetchSize);
 
     /**
      * Atomically increments a column value. If the column value does not yet exist

@@ -99,9 +99,9 @@ public class HbaseTestCase
         verify(facade).delete(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("family"), eq("qualifier"), eq(123L),
             eq(false), eq(lock));
 
-        connector.scanTable(TABLE_NAME, "family", "qualifier", 123L, 456L, 2, 3, true, 2, "row20", "row30");
-        verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), eq(456L), eq(2), eq(3),
-            eq(true), eq(2), eq("row20"), eq("row30"));
+        connector.scanTable(TABLE_NAME, "family", "qualifier", 123L, 456L, 2, true, 2, "row20", "row30", 50);
+        verify(facade).scan(eq(TABLE_NAME), eq("family"), eq("qualifier"), eq(123L), eq(456L), eq(2), eq(true),
+            eq(2), eq("row20"), eq("row30"), eq(50));
 
         connector.incrementValue(TABLE_NAME, SOME_ROW_KEY, "f1", "q", 3L, true);
         verify(facade).increment(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq("f1"), eq("q"), eq(3L), eq(true));
