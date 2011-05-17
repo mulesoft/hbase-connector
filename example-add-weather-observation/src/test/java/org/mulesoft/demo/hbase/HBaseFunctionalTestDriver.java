@@ -8,9 +8,10 @@
  * LICENSE.txt file.
  */
 
-
 package org.mulesoft.demo.hbase;
 
+import org.mule.api.MuleEvent;
+import org.mule.api.transport.PropertyScope;
 import org.mule.construct.SimpleFlowConstruct;
 import org.mule.tck.FunctionalTestCase;
 
@@ -28,11 +29,12 @@ public class HBaseFunctionalTestDriver extends FunctionalTestCase
     /**
      * Creates the resources necessary for the rest of the tests
      */
-    public void setup() throws Exception
+    public void testAddWeatherObservation() throws Exception
     {
-        lookupFlowConstruct("AddWeatherObservation").process(getTestEvent(""));
+        MuleEvent testEvent = getTestEvent("");
+        testEvent.getMessage().setProperty("cityIcao", "KMCO", PropertyScope.INBOUND);
+        lookupFlowConstruct("AddWeatherObservation").process(testEvent);
     }
-    
 
     private SimpleFlowConstruct lookupFlowConstruct(final String name)
     {

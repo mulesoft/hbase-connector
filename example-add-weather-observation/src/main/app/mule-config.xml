@@ -1,74 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+	<!--
 
-    Mule HBase Cloud Connector
+		Mule HBase Cloud Connector Copyright (c) MuleSoft, Inc. All rights
+		reserved. http://www.mulesoft.com The software in this package is
+		published under the terms of the CPAL v1.0 license, a copy of which
+		has been included with this distribution in the LICENSE.txt file.
+	-->
 
-    Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
-
-    The software in this package is published under the terms of the CPAL v1.0
-    license, a copy of which has been included with this distribution in the
-    LICENSE.txt file.
-
--->
-
-<mule xmlns="http://www.mulesoft.org/schema/mule/core"
-       xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase"
-       xmlns:s3="http://www.mulesoft.org/schema/mule/s3" 
-       xmlns:json="http://www.mulesoft.org/schema/mule/json"
-       xmlns:mongodb="http://www.mulesoft.org/schema/mule/mongodb"
-       xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
-       xmlns:spring="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:http="http://www.mulesoft.org/schema/mule/http"
-    xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0/mule-hbase.xsd
        http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
        http://www.mulesoft.org/schema/mule/json    http://www.mulesoft.org/schema/mule/json/3.1/mule-json.xsd
-       http://www.mulesoft.org/schema/mule/s3      http://www.mulesoft.org/schema/mule/s3/1.0/mule-s3.xsd
        http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.1/mule-scripting.xsd
-       http://www.mulesoft.org/schema/mule/mongodb http://www.mulesoft.org/schema/mule/mongodb/3.1/mule-mongodb.xsd 
        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd">
-	
- 	
- 	<hbase:config name="hbaseTest"  />
- 	
- 	<flow name="CreateWeatherTableIfAbsent">
- 		<description>Creates a table if it does not exist</description>
- 		<hbase:exists-table tableName="WeatherObservations" />
- 		<choice> 
- 			<when evaluator="groovy" expression="!payload">
- 				<hbase:create-table tableName="WeatherObservations" />
- 				<hbase:add-column-family  tableName="WeatherObservations" columnFamilyName="Weather"  />
- 			</when>
- 		</choice>
- 	</flow>     
- 	
- 	<flow name="PopulateWeatherTable">
- 		<description>Given Adds a row to the table, setting the weather description</description>
+
+
+	<hbase:config name="hbaseTest" />
+
+	<flow name="CreateWeatherTableIfAbsent">
+		<description>Creates a table if it does not exist</description>
+		<hbase:exists-table tableName="WeatherObservations" />
+		<choice>
+			<when evaluator="groovy" expression="payload">
+				<logger message="Table already exists" />
+				<expression-transformer>
+					<return-argument expression="" evaluator="payload" />
+				</expression-transformer>
+			</when>
+			<otherwise>
+				<logger message="Table does not exist. Creating it" />
+				<hbase:create-table tableName="WeatherObservations" />
+				<hbase:add-column-family tableName="WeatherObservations"
+					columnFamilyName="Weather" />
+			</otherwise>
+		</choice>
+	</flow>
+
+	<flow name="PopulateWeatherTable">
+		<description>Given Adds a row to the table, setting the weather
+			description</description>
+		<logger
+			message="Populating table with the following weather information: #[payload]" />
 		<hbase:put-value tableName="WeatherObservations"
-			columnFamilyName="Weather"  columnQualifier="Temperature" 
-			rowKey="#[header:cityIcao]" value="#[json:weatherObservation.temperature]" />
+			columnFamilyName="Weather" columnQualifier="Temperature"
+			rowKey="#[header:session:cityIcao]" value="#[json:weatherObservation/temperature]" />
 		<hbase:put-value tableName="WeatherObservations"
-			columnFamilyName="Weather"  columnQualifier="Clouds" 
-			rowKey="#[header:cityIcao]" value="#[json:weatherObservation.clouds]" />
-		<!-- TODO when weatherCondition /= 'N/A', set it -->
- 	</flow>
- 	
- 	<flow name="AddWeatherObservation">
- 		<http:inbound-endpoint host="localhost" port="9090"
+			columnFamilyName="Weather" columnQualifier="Clouds"
+			rowKey="#[header:session:cityIcao]" value="#[json:weatherObservation/clouds]" />
+	</flow>
+
+	<flow name="AddWeatherObservation">
+		<http:inbound-endpoint host="localhost" port="9090"
 			path="hbase-demo-weather-add-weather-data" />
-		<flow-ref name="CreateWeatherTableIfAbsent"/>
- 		<http:outbound-endpoint address="ws.geonames.org/weatherIcaoJSON?ICAO=#[header:cityIcao]"/>
- 		<flow-ref name="PopulateWeatherTable"/>
- 	</flow>
-
- 	<!-- 
- 	
-    {"weatherObservation":
-    	{"clouds":"broken clouds","weatherCondition":"n/a","observation":"KMCO 161953Z 26016G25KT 10SM BKN050 BKN065 BKN110 27/13 A2974 RMK AO2 SLP068 T02670133","windDirection":260,"ICAO":"KMCO","seaLevelPressure":1006.8,"elevation":29,"countryCode":"US","lng":-81.33333333333333,"temperature":"26.7","dewPoint":"13.3","windSpeed":"16",
-    	"humidity":43,"stationName":"Orlando, Orlando International Airport","datetime":"2011-05-16 19:53:00","lat":28.416666666666668}}
- 	
- 	 -->
-
+		<flow-ref name="CreateWeatherTableIfAbsent" />
+		<message-properties-transformer scope="session">
+			<add-message-property key="cityIcao"
+				value="#[header:inbound:cityIcao]" />
+		</message-properties-transformer>
+		<http:outbound-endpoint host="ws.geonames.org"
+			port="80" path="weatherIcaoJSON?ICAO=#[header:session:cityIcao]" />
+		<flow-ref name="PopulateWeatherTable" />
+	</flow>
 </mule>

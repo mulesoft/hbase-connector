@@ -3,16 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mule.demos</groupId>
-	<artifactId>mule-hbase-demo-setup</artifactId>
+	<artifactId>mule-hbase-demo-add-weather-observation</artifactId>
 	<packaging>mule</packaging>
-	<name>Mule HBase Demo Setup</name>
+	<name>Mule HBase Demo Add Weather Observation</name>
 	<version>1.0</version>
 
 	<properties>
 		<muleVersion>3.1.0</muleVersion>
 		<ibeansVersion>1.1</ibeansVersion>
 		<mule.hbase.version>1.0-SNAPSHOT</mule.hbase.version>
-		<mule.s3.version>1.0</mule.s3.version>
+		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
 
 	<description>Example for populating a table with weather observations for different cities</description>
@@ -63,14 +63,6 @@
 							<groupId>org.mule.modules</groupId>
 							<artifactId>mule-module-hbase</artifactId>
 						</inclusion>
-						<inclusion>
-							<groupId>org.mule.modules</groupId>
-							<artifactId>mule-module-s3</artifactId>
-						</inclusion>
-						<inclusion>
-                            <groupId>org.mule.transports</groupId>
-                            <artifactId>mule-transport-mongodb</artifactId>
-                        </inclusion>
 					</inclusions>
 				</configuration>
 			</plugin>
@@ -96,6 +88,22 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+	
 
 	<dependencies>
 		<dependency>
@@ -103,16 +111,6 @@
 			<artifactId>mule-module-hbase</artifactId>
 			<version>${mule.hbase.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-s3</artifactId>
-			<version>${mule.s3.version}</version>
-		</dependency>
-		<dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-mongodb</artifactId>
-            <version>3.1.0.1</version>
-        </dependency>
 		 <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-functional</artifactId>
