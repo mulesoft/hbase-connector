@@ -110,12 +110,12 @@ public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> i
     @Override
     public int size()
     {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String toString()
-    {
-        return "[" + StringUtils.join(iterator(), ", ") + "]";
+        int i = 0;
+        for (@SuppressWarnings("unused")
+        Object o : this)
+        {
+            i++;
+        }
+        return i;
     }
 }

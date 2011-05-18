@@ -498,16 +498,16 @@ public class RPCHBaseService implements HBaseService
      *      Boolean, Integer, String, String)
      */
     public Iterable<Result> scan(final String tableName,
-                              final String columnFamilyName,
-                              final String columnQualifier,
-                              final Long timestamp,
-                              final Long maxTimestamp,
-                              final Integer caching,
-                              final boolean cacheBlocks,
-                              final int maxVersions,
-                              final String startRow,
-                              final String stopRow,
-                              final int fetchSize)
+                                 final String columnFamilyName,
+                                 final String columnQualifier,
+                                 final Long timestamp,
+                                 final Long maxTimestamp,
+                                 final Integer caching,
+                                 final boolean cacheBlocks,
+                                 final int maxVersions,
+                                 final String startRow,
+                                 final String stopRow,
+                                 final int fetchSize)
     {
         return doWithHTable(tableName, new TableCallback<ResultIterable>()
         {
@@ -551,34 +551,65 @@ public class RPCHBaseService implements HBaseService
                     scan.setStopRow(stopRow.getBytes(UTF8));
                 }
 
-                return new ResultIterable(hTable.getScanner(scan), fetchSize);
+                return new ResultIterable(scan, fetchSize, hTable);
             }
         });
     }
 
-    private static final class ResultIterable extends PaginatedIterable<Result, Result[]>
+    private static class ScannerAndResults
     {
+        private ResultScanner scanner;
+        private Result[] results;
 
-        private final ResultScanner scanner;
-        private final int fetchSize;
+        public ScannerAndResults(ResultScanner scanner, int fetchSize) throws IOException
+        {
+            this(scanner, scanner.next(fetchSize));
+        }
 
-        private ResultIterable(ResultScanner scanner, int fetchSize)
+        public ScannerAndResults(ResultScanner scanner, Result[] results)
         {
             this.scanner = scanner;
+            this.results = results;
+        }
+
+        public Result[] getResults()
+        {
+            return results;
+        }
+
+    }
+
+    private static final class ResultIterable extends PaginatedIterable<Result, ScannerAndResults>
+    {
+        private final HTableInterface hTable;
+        private final int fetchSize;
+        private final Scan scan;
+
+        public ResultIterable(Scan scan, int fetchSize, HTableInterface hTable)
+        {
+            this.scan = scan;
             this.fetchSize = fetchSize;
+            this.hTable = hTable;
         }
 
         @Override
-        protected Result[] firstPage()
-        {
-            return getMoreResults();
-        }
-
-        private Result[] getMoreResults()
+        protected ScannerAndResults firstPage()
         {
             try
             {
-                return scanner.next(fetchSize);
+                return getMoreResults(hTable.getScanner(scan));
+            }
+            catch (IOException e)
+            {
+                throw new UnhandledException(e);
+            }
+        }
+
+        private ScannerAndResults getMoreResults(ResultScanner scanner)
+        {
+            try
+            {
+                return new ScannerAndResults(scanner, fetchSize);
             }
             catch (IOException e)
             {
@@ -587,22 +618,23 @@ public class RPCHBaseService implements HBaseService
         }
 
         @Override
-        protected boolean hasNextPage(Result[] page)
+        protected boolean hasNextPage(ScannerAndResults page)
         {
-            return page.length == fetchSize;
+            return page.getResults().length == fetchSize;
         }
 
         @Override
-        protected Result[] nextPage(Result[] currentPage)
+        protected ScannerAndResults nextPage(ScannerAndResults currentPage)
         {
-            return getMoreResults();
+            return getMoreResults(currentPage.scanner);
         }
 
         @Override
-        protected Iterator<Result> pageIterator(Result[] page)
+        protected Iterator<Result> pageIterator(ScannerAndResults page)
         {
-            return Arrays.asList(page).iterator();
+            return Arrays.asList(page.results).iterator();
         }
+
     }
 
     /** @see HBaseService#increment(String, String, String, String, long, boolean) */
