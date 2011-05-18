@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Mule HBase Cloud Connector Copyright (c) MuleSoft, Inc. All rights
+		reserved. http://www.mulesoft.com The software in this package is
+		published under the terms of the CPAL v1.0 license, a copy of which
+		has been included with this distribution in the LICENSE.txt file.
+	-->
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0/mule-hbase.xsd
+       http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+       http://www.mulesoft.org/schema/mule/json    http://www.mulesoft.org/schema/mule/json/3.1/mule-json.xsd
+       http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.1/mule-scripting.xsd
+       http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd">
+
+	<hbase:config name="hbaseTest" />
+	
+	<flow name="EnsureTableExists">
+		<description>Creates a table if it does not exist</description>
+		<hbase:exists-table tableName="WeatherObservations" />
+		<choice>
+			<when evaluator="groovy" expression="payload">
+				<logger message="Table already exists" />
+				<expression-transformer>
+					<return-argument expression="" evaluator="payload" />
+				</expression-transformer>
+			</when>
+			<otherwise>
+				<logger message="Table does not exist, but this demo requires one." />
+				<null-component/>
+			</otherwise>
+		</choice>
+	</flow>
+	
+
+	<flow name="ScanWeatherTable">
+		<description>Given Adds a row to the table, setting the weather
+			description</description>
+		<logger
+			message="Scanning table WeatherObservations with the following weather information: #[payload]" />
+		<hbase:scan-table tableName="WeatherObservations" 
+			columnFamilyName="Weather" maxVersions="100" />
+	</flow>
+
+	<flow name="ScanWeatherObservations">
+		<http:inbound-endpoint host="localhost" port="9091"
+			path="hbase-demo-weather-scan-weather-data" />
+		<flow-ref name="EnsureTableExists" />
+		<flow-ref name="ScanWeatherTable" />
+		<collection-splitter/>
+		<object-to-string-transformer/>
+	</flow>
+</mule>
