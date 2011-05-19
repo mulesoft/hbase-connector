@@ -12,7 +12,6 @@
 		<muleVersion>3.1.0</muleVersion>
 		<ibeansVersion>1.1</ibeansVersion>
 		<mule.hbase.version>1.0-SNAPSHOT</mule.hbase.version>
-		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
 
 	<description>Example for populating a table with weather observations for different cities</description>
@@ -89,22 +88,6 @@
 		</plugins>
 	</build>
 	
-	<dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-	
-
 	<dependencies>
 		<dependency>
 			<groupId>org.mule.modules</groupId>

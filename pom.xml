@@ -209,6 +209,16 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase</artifactId>
             <version>${hbase.version}</version>
+            <exclusions>
+            <exclusion>
+            	<groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+             </exclusion>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+             </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- for testing -->
