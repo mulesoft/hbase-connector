@@ -123,19 +123,26 @@ public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> i
         return i;
     }
     
+    /**
+     * Same impl that those found in Object, in order to avoid eager elements consumption
+     */
     @Override
     public String toString()
     {
-        //Same impl that those found in Object
         return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
 
+    /**
+     * Warns that sending the given message implied processing all the elements, which is not efficient at all, 
+     * and most times is a bad idea, as lazy iterables should be traversed only once and in a lazy manner. 
+     * @param message
+     */
     private static void warnEagerMessage(String message)
     {
         if (logger.isWarnEnabled())
         {
             logger.warn(
-                "Method %s needs to consume all the element. It is inefficient and thus should be used with care",
+                "Method {} needs to consume all the element. It is inefficient and thus should be used with care",
                 message);
         }
     }
