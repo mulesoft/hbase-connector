@@ -15,8 +15,6 @@ import org.mule.api.transport.PropertyScope;
 import org.mule.construct.SimpleFlowConstruct;
 import org.mule.tck.FunctionalTestCase;
 
-import java.util.Collections;
-
 public class HBaseFunctionalTestDriver extends FunctionalTestCase
 {
 

@@ -14,7 +14,8 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Warning: this class is not a proper collection, just it implements it in order to
@@ -24,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> implements Iterable<T>
 {
+    private static Logger logger = LoggerFactory.getLogger(PaginatedIterable.class);
 
     @Override
     public Iterator<T> iterator()
@@ -99,6 +101,7 @@ public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> i
     @Override
     public Object[] toArray()
     {
+        warnEagerMessage("toArray");
         LinkedList<Object> l = new LinkedList<Object>();
         for (Object o : this)
         {
@@ -110,6 +113,7 @@ public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> i
     @Override
     public int size()
     {
+        warnEagerMessage("size");
         int i = 0;
         for (@SuppressWarnings("unused")
         Object o : this)
@@ -117,5 +121,22 @@ public abstract class PaginatedIterable<T, Page> extends AbstractCollection<T> i
             i++;
         }
         return i;
+    }
+    
+    @Override
+    public String toString()
+    {
+        //Same impl that those found in Object
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }
+
+    private static void warnEagerMessage(String message)
+    {
+        if (logger.isWarnEnabled())
+        {
+            logger.warn(
+                "Method %s needs to consume all the element. It is inefficient and thus should be used with care",
+                message);
+        }
     }
 }

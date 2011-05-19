@@ -285,13 +285,13 @@ Scans across all rows in a table, returning a scanner over it
 |timestamp|limits the scan to a specific timestamp|yes||
 |maxTimestamp|get versions of columns only within the specified timestamp range: [timestamp, maxTimestamp)|yes||
 |caching|the number of rows for caching|yes||
-|batch|the maximum number of values to return for each call to next() in the ResultScanner|yes||
 |cacheBlocks|the number of rows for caching that will be passed to scanners|yes|true|
 |maxVersions|limits the number of versions on each column|yes|1|
 |startRowKey|limits the beginning of the scan to the specified row inclusive|yes||
 |stopRowKey|limits the end of the scan to the specified row exclusive|yes||
+|fetchSize|the number of results internally fetched by request to the HBase server. Increase it for improving network efficiency, or decrease it for reducing memory usage|yes|50|
 
-Returns scanner over the table
+Returns Iterable of Result's. It may be used with a collection splitter.
 
 
 

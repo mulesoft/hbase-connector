@@ -1,34 +1,20 @@
-HBase Add Weather Observation demo
+HBase Scan Weather Observations demo
 ==================================
 
 INTRODUCTION
-  This is minimalistic demo that shows how a data can be added to an HBase Table. It populates hbase rows with current weather information for airports.
+  This is minimalistic demo that shows how an HBase table can be scanned. This demo must be run after the HBase Add Weather Observation demo, which creates and 
+  adds data to the table.  
 
 HOW TO DEMO:
-  1. Set the following system properties:
-    
-
-  2. Run the "AddWeatherObservation" flow from HBaseFunctionalTestDriver, or deploy the example in a mule Container and hit  
-  		http://localhost:9090/hbase-demo-weather-add-weather-data?cityIcao=<AN ICAO Code>
-    This will process a USD 50 payment, capture the transaction and send a confirmation email.
-    To simplify usage of the demo, the only parameter expected is the payment ammount. The rest of the payment information has been hard-coded into the payload.
+  1. Although under normal circumstances an HBase client needs many properties to be set, in order to keep things simple, 
+  this demo uses default HBase client configuration, which assumes an HBase server locally started using default ports, as described in the HBase
+  quick tutorial: http://hbase.apache.org/book/quickstart.html.
+  2. Run the "ScanWeatherObservation" flow from HBaseFunctionalTestDriver, or deploy the example in a mule Container and hit  
+  		http://localhost:9091/hbase-demo-weather-scan-weather-data
+  3. Check that the values were added from the HBase Shell. For example: 		
+	You should get an org.apache.hadoop.hbase.client.Result for each value stored. This object lets you access the row information.  
 
 HOW IT WORKS:
-   - "doDirectPayment" API method is called with specified amount and fake payer and credit card information
-   - "capturePayment" API method is called, with the transaction ID and amount received from the payment operation
-   - Summary email is sent to the specified address.
-
-   
-
-hbase(main):022:0> scan 'WeatherObservations'
-ROW                                                COLUMN+CELL                                                                                                                                        
- KBCT                                              column=Weather:Clouds, timestamp=1305654707566, value=scattered clouds                                                                             
- KBCT                                              column=Weather:Temperature, timestamp=1305654707563, value=31                                                                                      
- KMCO                                              column=Weather:Clouds, timestamp=1305654575007, value=scattered clouds                                                                             
- KMCO                                              column=Weather:Temperature, timestamp=1305654575003, value=25                                                                                      
- SABE                                              column=Weather:Clouds, timestamp=1305654803070, value=few clouds                                                                                   
- SABE                                              column=Weather:Temperature, timestamp=1305654803067, value=18                                                                                      
-3 row(s) in 0.0330 seconds
-
-hbase(main):023:0> 
-   
+   - If checks if WeatherObservations table exists. If not, it fails. 
+   - It scans up to 40 versions for each row of the WeatherObservations table.
+   - It converts each of the answered Result objects into string using a collection splitter

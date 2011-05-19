@@ -45,7 +45,7 @@
 		<logger
 			message="Scanning table WeatherObservations with the following weather information: #[payload]" />
 		<hbase:scan-table tableName="WeatherObservations" 
-			columnFamilyName="Weather" maxVersions="100" />
+			columnFamilyName="Weather" maxVersions="40" />
 	</flow>
 
 	<flow name="ScanWeatherObservations">
