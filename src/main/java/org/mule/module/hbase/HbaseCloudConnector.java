@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowLock;
 
 /**
@@ -63,6 +62,8 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers if the HBase server is reachable
      * 
+     * {@code <hbase:is-alive-server />}
+     * 
      * @return true if the server can be reached and the master node is alive, false
      *         otherwise.
      */
@@ -76,6 +77,8 @@ public class HbaseCloudConnector implements Initialisable
      * Creates a new table given its name. The descriptor must be unique and not
      * reserved.
      * 
+     * {@code <hbase:create-table tableName="#[head:name]" />}
+     * 
      * @param tableName the descriptor for the new table.
      */
     @Operation
@@ -86,6 +89,8 @@ public class HbaseCloudConnector implements Initialisable
 
     /**
      * Answers if a given table exists, regardless it is enabled or not
+     * 
+     * {@code <hbase:exists-table tableName="#[header:tableName]" />}
      * 
      * @param tableName the table name
      * @return true only if the table exists, false otherwise
@@ -99,6 +104,8 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Disables and deletes an existent table.
      * 
+     * {@code <hbase:delete-table tableName="#[header:tableName]" />}
+     * 
      * @param tableName name of table to delete
      */
     @Operation
@@ -109,6 +116,8 @@ public class HbaseCloudConnector implements Initialisable
 
     /**
      * Answers if the given existent table is enabled.
+     * 
+     * {@code <hbase:is-enabled-table tableName="#[header:tableName]" />}
      * 
      * @param tableName name of the table to query for its enabling state
      * @return true only if the table was disabled. False otherwise
@@ -122,6 +131,8 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Enables an existent table.
      * 
+     * {@code <hbase:enable-table tableName="#[header:tableName]" />}
+     * 
      * @param tableName name of the table to enable
      */
     @Operation
@@ -132,6 +143,8 @@ public class HbaseCloudConnector implements Initialisable
 
     /**
      * Disables an existent table
+     * 
+     * {@code <hbase:disable-table tableName="#[header:tableName]" />}
      * 
      * @param tableName the table name to disable
      */
@@ -145,12 +158,14 @@ public class HbaseCloudConnector implements Initialisable
      * Adds a column family to a table given a table and column name. This operation
      * gracefully handles necessary table disabling and enabled.
      * 
+     * {@code <hbase:add-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />}
+     * 
      * @param tableName the name of the target table
      * @param columnFamilyName the name of the column
      * @param maxVersions the optional maximum number of versions the column family
      *            supports
      * @param inMemory if all the column values will be stored in the region's cache
-     * @param scope
+     * @param scope replication scope: 0 for locally scoped data (data for this column family will not be replicated) and 1 for globally scoped data (data will be replicated to all peers.)) 
      */
     @Operation
     public void addColumnFamily(@Parameter(optional = false) final String tableName,
@@ -164,6 +179,8 @@ public class HbaseCloudConnector implements Initialisable
 
     /**
      * Answers if column family exists.
+     * 
+     * {@code <hbase:exists-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />}
      * 
      * @param tableName the target table name
      * @param columnFamilyName the target column family name
@@ -180,6 +197,10 @@ public class HbaseCloudConnector implements Initialisable
      * Changes one or more properties of a column family in a table. This operation
      * gracefully handles necessary table disabling and enabled.
      * 
+     * {@code <hbase:modify-column-family tableName="#[header:tableName]"
+     *       columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
+     *       compactionCompressionType="LZO" />}
+     *       
      * @param tableName required the target table
      * @param columnFamilyName required the target column family
      * @param maxVersions the new max amount of versions
@@ -190,8 +211,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param timeToLive new ttl
      * @param blockCacheEnabled new value of enabling block cache
      * @param bloomFilterType new value of bloom filter type
-     * @param replicationScope
-     * @param values
+     * @param replicationScope new value for replication scope
+     * @param values other custom parameters values
      */
     @Operation
     public void modifyColumnFamily(@Parameter(optional = false) final String tableName,
@@ -212,6 +233,16 @@ public class HbaseCloudConnector implements Initialisable
             replicationScope, values);
     }
 
+    /**
+     * Delete a column family
+     * 
+     *  {@code <hbase:delete-column-family tableName="#[header:tableName]"
+     *       columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
+     *       compactionCompressionType="LZO" />}
+     *       
+     * @param tableName required the target table
+     * @param columnFamilyName required the target column family
+     */
     @Operation
     public void deleteColumnFamily(@Parameter(optional = false) final String tableName,
                                    @Parameter(optional = false) final String columnFamilyName)
@@ -224,8 +255,10 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers the values at the given row - (table, row) combination
      * 
-     * @param tableName
-     * @param rowKey
+     * {@code <hbase:get-values tableName="#[header:tableName]" rowKey="#[header:rowKey]" />}
+     * 
+     * @param tableName required the target table
+     * @param rowKey    
      * @param maxVersions
      * @param timestamp
      * @return the result
@@ -243,7 +276,10 @@ public class HbaseCloudConnector implements Initialisable
      * Saves a value at the specified (table, row, familyName, familyQualifier,
      * timestamp) combination
      * 
-     * @param tableName
+     * {@code <hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1" 
+     *                         columnQualifier="q1" value="v1" />}
+     *           
+     * @param tableName required the target table
      * @param rowKey
      * @param columnFamilyName the column family dimension
      * @param columnQualifier the column qualifier dimension
@@ -270,6 +306,8 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Deletes the values at a given row
      * 
+     * {@code <hbase:delete-values tableName="#[variable:tableName]" rowKey="[variable:rowKey]" />}
+     *            
      * @param tableName
      * @param rowKey
      * @param columnFamilyName set null to delete all column families in the
@@ -301,6 +339,10 @@ public class HbaseCloudConnector implements Initialisable
 
     /**
      * Scans across all rows in a table, returning a scanner over it
+     *
+     * {@code <hbase:scan-table tableName="#[map-payload:tableName]"
+     *                          columnFamilyName="#[map-payload:columnFamiliyName]" 
+     *                          startRowKey="#[map-payload:firstRowKey]" />}
      * 
      * @param tableName limits the scan to a specific table. This is the only
      *            required argument.
@@ -346,12 +388,21 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically increments the value of at a (table, row, familyName,
      * familyQualifier) combination. If the cell value does not yet exist it is
      * initialized to amount.
+     *
+     * {@code <hbase:increment-value tableName="#[map-payload:tableName]"
+     *      columnFamilyName="#[map-payload:columnFamiliyName]"
+     *      columnQualifier="#[map-payload:columQualifier]" 
+     *      rowKey="#[map-payload:rowKey]"
+     *      amount="10"
+     *      writeToWAL="false"/> 
+     * }
      * 
-     * @param tableName
-     * @param rowKey
-     * @param columnFamilyName
-     * @param columnQualifier
-     * @param amount
+     * @param tableName the name of the table that contains the cell to increment.  
+     * @param rowKey the row key that contains the cell to increment.
+     * @param columnFamilyName the column family of the cell to increment.
+     * @param columnQualifier the column qualifier of the cell to increment.
+     * @param amount the amount to increment the cell with (or decrement, if the
+     * amount is negative).
      * @param writeToWAL set it to false means that in a fail scenario, you will lose
      *            any increments that have not been flushed.
      * @return the new value, post increment
@@ -371,16 +422,16 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the put.
      * 
-     * @param tableName
-     * @param rowKey
-     * @param checkColumnFamilyName
-     * @param checkColumnQualifier
+     * @param tableName the name of the table that contains the cell to check. 
+     * @param rowKey the row key that contains the cell to check.
+     * @param checkColumnFamilyName the column family of the cell to check.
+     * @param checkColumnQualifier the column qualifier of the cell to check.
      * @param checkValue the value to check. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
-     * @param putColumnFamilyName
-     * @param putColumnQualifier
-     * @param putTimestamp
+     * @param putColumnFamilyName the column family of the cell to put.
+     * @param putColumnQualifier the column qualifier of the cell to put.
+     * @param putTimestamp the version dimension to put.
      * @param value the value to put. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
@@ -410,10 +461,9 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the delete.
      * 
-     * @param tableName
-     * @param rowKey
-     * @param checkColumnFamilyName
-     * @param checkColumnQualifier
+     * @param tableName the name of the table that contains the cell to check. 
+     * @param rowKey the row key that contains the cell to check.
+     * @param checkColumnFamilyName the column family of the cell to check.
      * @param checkValue the value to check. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
