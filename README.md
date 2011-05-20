@@ -401,6 +401,13 @@ Check And Put Value
 Atomically checks if a value at a (table, row,family,qualifier) matches the
 given one. If it does, it performs the put.
 
+
+
+     <hbase:check-and-put-value tableName="table-name"
+    rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+    checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
+    putTimestamp="putTimestamp" value="new putvalue" />
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
@@ -426,12 +433,21 @@ Check And Delete Value
 Atomically checks if a value at a (table, row,family,qualifier) matches the
 given one. If it does, it performs the delete.
 
+
+
+    
+    <hbase:check-and-delete-value tableName="table-name"
+    rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+    checkValue="somevalue" deleteColumnFamilyName="f2"
+    deleteColumnQualifier="q2" deleteTimestamp="putTimestamp" /> 
+    
+
 | attribute | description | optional | default value | possible values |
 |:-----------|:-----------|:---------|:--------------|:----------------|
 |config-ref|Specify which configuration to use for this invocation|yes||
-|tableName||no||
-|rowKey||no||
-|checkColumnFamilyName||no||
+|tableName|the name of the table that contains the cell to check.|no||
+|rowKey|the row key that contains the cell to check.|no||
+|checkColumnFamilyName|the column family of the cell to check.|no||
 |checkColumnQualifier||no||
 |checkValue|the value to check. It must be either a byte array or a serializable object. As a special case, strings are saved always in standard utf-8 format.|no||
 |deleteColumnFamilyName||no||

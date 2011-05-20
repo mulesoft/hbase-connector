@@ -422,6 +422,11 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the put.
      * 
+     * {@code <hbase:check-and-put-value tableName="table-name"
+     * rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+     * checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
+     * putTimestamp="putTimestamp" value="new putvalue" />}
+     * 
      * @param tableName the name of the table that contains the cell to check. 
      * @param rowKey the row key that contains the cell to check.
      * @param checkColumnFamilyName the column family of the cell to check.
@@ -461,6 +466,12 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the delete.
      * 
+     * {@code
+     * <hbase:check-and-delete-value tableName="table-name"
+     * rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+     * checkValue="somevalue" deleteColumnFamilyName="f2"
+     * deleteColumnQualifier="q2" deleteTimestamp="putTimestamp" /> 
+     * }
      * @param tableName the name of the table that contains the cell to check. 
      * @param rowKey the row key that contains the cell to check.
      * @param checkColumnFamilyName the column family of the cell to check.
