@@ -14,15 +14,22 @@
 
 package org.mule.module.hbase.config;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mule.api.MuleEvent;
+import org.mule.api.processor.MessageProcessor;
+import org.mule.module.hbase.api.HBaseService;
+import org.mule.tck.FunctionalTestCase;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.RowLock;
-import org.mule.api.MuleEvent;
-import org.mule.construct.SimpleFlowConstruct;
-import org.mule.module.hbase.api.HBaseService;
-import org.mule.tck.FunctionalTestCase;
 
 public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
 {
@@ -46,7 +53,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
         final Result mockResult = new Result();
         when(mockService.get(eq("t1"), eq("r1"), anyInt(), anyLong())).thenReturn(mockResult);
 
-        final SimpleFlowConstruct flow = lookupFlowConstruct("flowGet");
+        final MessageProcessor flow = lookupFlowConstruct("flowGet");
         final MuleEvent event = getTestEvent(null);
         final MuleEvent responseEvent = flow.process(event);
 
@@ -57,7 +64,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
 
     public void testFlowPut() throws Exception
     {
-        final SimpleFlowConstruct flow = lookupFlowConstruct("flowPut");
+        final MessageProcessor flow = lookupFlowConstruct("flowPut");
         final MuleEvent event = getTestEvent(null);
         flow.process(event);
 
@@ -65,8 +72,8 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
             any(RowLock.class));
     }
 
-    private SimpleFlowConstruct lookupFlowConstruct(String name)
+    private MessageProcessor lookupFlowConstruct(String name)
     {
-        return (SimpleFlowConstruct) muleContext.getRegistry().lookupFlowConstruct(name);
+        return (MessageProcessor) muleContext.getRegistry().lookupFlowConstruct(name);
     }
 }

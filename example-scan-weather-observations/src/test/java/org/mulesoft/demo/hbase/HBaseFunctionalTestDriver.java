@@ -12,7 +12,7 @@ package org.mulesoft.demo.hbase;
 
 import org.mule.api.MuleEvent;
 import org.mule.api.transport.PropertyScope;
-import org.mule.construct.SimpleFlowConstruct;
+import org.mule.construct.MessageProcessor;
 import org.mule.tck.FunctionalTestCase;
 
 import java.util.Collections;
@@ -34,8 +34,8 @@ public class HBaseFunctionalTestDriver extends FunctionalTestCase
       System.out.println("Return is " + lookupFlowConstruct("ScanWeatherObservations").process(getTestEvent("")));
     }
 
-    private SimpleFlowConstruct lookupFlowConstruct(final String name)
+    private MessageProcessor lookupFlowConstruct(final String name)
     {
-        return (SimpleFlowConstruct) muleContext.getRegistry().lookupFlowConstruct(name);
+        return (MessageProcessor) muleContext.getRegistry().lookupFlowConstruct(name);
     }
 }

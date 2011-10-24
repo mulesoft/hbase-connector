@@ -6,12 +6,12 @@
 	<artifactId>mule-hbase-demo-add-weather-observation</artifactId>
 	<packaging>mule</packaging>
 	<name>Mule HBase Demo Add Weather Observation</name>
-	<version>1.0</version>
+	<version>2.0-SNAPSHOT</version>
 
 	<properties>
-		<muleVersion>3.1.0</muleVersion>
+		<muleVersion>3.2.0</muleVersion>
 		<ibeansVersion>1.1</ibeansVersion>
-		<mule.hbase.version>1.0</mule.hbase.version>
+		<mule.hbase.version>2.0-SNAPSHOT</mule.hbase.version>
 	</properties>
 
 	<description>Example for populating a table with weather observations for different cities</description>

@@ -10,7 +10,9 @@
 
 package org.mule.module.hbase.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

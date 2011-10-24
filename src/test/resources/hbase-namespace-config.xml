@@ -14,10 +14,10 @@
 	-->
 
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:hbase="http://www.mulesoft.org/schemas/mule/hbase"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                           http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
-                          http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0/mule-hbase.xsd">
+                          http://www.mulesoft.org/schemas/mule/hbase http://www.mulesoft.org/schemas/mule/hbase/1.0/mule-hbase.xsd">
 
 	<spring:bean id="mockFacade"
 		class="org.mule.module.hbase.config.MockHBaseServiceFactoryBean"

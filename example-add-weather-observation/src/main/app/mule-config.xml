@@ -7,13 +7,13 @@
 		has been included with this distribution in the LICENSE.txt file.
 	-->
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase"
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:hbase="http://www.mulesoft.org/schemas/mule/hbase"
 	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/1.0/mule-hbase.xsd
+       http://www.mulesoft.org/schemas/mule/hbase http://www.mulesoft.org/schemas/mule/hbase/1.0/mule-hbase.xsd
        http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
        http://www.mulesoft.org/schema/mule/json    http://www.mulesoft.org/schema/mule/json/3.1/mule-json.xsd
        http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.1/mule-scripting.xsd

@@ -14,9 +14,19 @@
 
 package org.mule.module.hbase;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.mule.module.hbase.api.BloomFilterType;
+import org.mule.module.hbase.api.CompressionType;
+import org.mule.module.hbase.api.HBaseService;
 
 import java.util.Map;
 
@@ -24,10 +34,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.RowLock;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.mule.module.hbase.api.BloomFilterType;
-import org.mule.module.hbase.api.CompressionType;
-import org.mule.module.hbase.api.HBaseService;
 
 public class HbaseTestCase
 {
