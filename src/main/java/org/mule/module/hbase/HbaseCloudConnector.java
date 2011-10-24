@@ -86,7 +86,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param tableName the descriptor for the new table.
      */
     @Processor
-    public void createTable( final String tableName)
+    public void createTable(final String tableName)
     {
         facade.createTable(tableName);
     }
@@ -100,7 +100,7 @@ public class HbaseCloudConnector implements Initialisable
      * @return true only if the table exists, false otherwise
      */
     @Processor
-    public boolean existsTable( final String tableName)
+    public boolean existsTable(final String tableName)
     {
         return facade.existsTable(tableName);
     }
@@ -113,9 +113,9 @@ public class HbaseCloudConnector implements Initialisable
      * @param tableName name of table to delete
      */
     @Processor
-    public void deleteTable( final String tableName)
+    public void deleteTable(final String tableName)
     {
-        facade.deleteTable(tableName);
+      facade.deleteTable(tableName);
     }
 
     /**
@@ -127,7 +127,7 @@ public class HbaseCloudConnector implements Initialisable
      * @return true only if the table was disabled. False otherwise
      */
     @Processor
-    public boolean isEnabledTable( final String tableName)
+    public boolean isEnabledTable(final String tableName)
     {
         return !facade.isDisabledTable(tableName);
     }
@@ -140,7 +140,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param tableName name of the table to enable
      */
     @Processor
-    public void enableTable( final String tableName)
+    public void enableTable(final String tableName)
     {
         facade.enableTable(tableName);
     }
@@ -153,7 +153,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param tableName the table name to disable
      */
     @Processor
-    public void disableTable( final String tableName)
+    public void disableTable(final String tableName)
     {
         facade.disabeTable(tableName);
     }
@@ -172,10 +172,10 @@ public class HbaseCloudConnector implements Initialisable
      * @param scope replication scope: 0 for locally scoped data (data for this column family will not be replicated) and 1 for globally scoped data (data will be replicated to all peers.)) 
      */
     @Processor
-    public void addColumnFamily( final String tableName,
-                                 final String columnFamilyName,
+    public void addColumnFamily(final String tableName,
+                                final String columnFamilyName,
                                 @Optional final Integer maxVersions,
-                                 @Optional @Default("false") final Boolean inMemory,
+                                @Optional @Default("false") final Boolean inMemory,
                                 @Optional final Integer scope)
     {
         facade.addColumn(tableName, columnFamilyName, maxVersions, inMemory, scope);
@@ -191,8 +191,7 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the column exists, false otherwise
      */
     @Processor
-    public boolean existsColumnFamily( final String tableName,
-                                       final String columnFamilyName)
+    public boolean existsColumnFamily(final String tableName, final String columnFamilyName)
     {
         return facade.existsColumn(tableName, columnFamilyName);
     }
@@ -217,8 +216,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param values other custom parameters values
      */
     @Processor
-    public void modifyColumnFamily( final String tableName,
-                                    final String columnFamilyName,
+    public void modifyColumnFamily(final String tableName,
+                                   final String columnFamilyName,
                                    @Optional final Integer maxVersions,
                                    @Optional final Integer blocksize,
                                    @Optional final CompressionType compressionType,
@@ -244,8 +243,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param columnFamilyName required the target column family
      */
     @Processor
-    public void deleteColumnFamily( final String tableName,
-                                    final String columnFamilyName)
+    public void deleteColumnFamily(final String tableName, final String columnFamilyName)
     {
         facade.deleteColumn(tableName, columnFamilyName);
     }
@@ -264,8 +262,8 @@ public class HbaseCloudConnector implements Initialisable
      * @return the {@link Result}
      */
     @Processor
-    public Result getValues( final String tableName,
-                             final String rowKey,
+    public Result getValues(final String tableName,
+                            final String rowKey,
                             @Optional final Integer maxVersions,
                             @Optional final Long timestamp)
     {
@@ -291,12 +289,12 @@ public class HbaseCloudConnector implements Initialisable
      * @param lock a optional {@link RowLock}
      */
     @Processor
-    public void putValue( final String tableName,
-                          final String rowKey,
-                          final String columnFamilyName,
-                          final String columnQualifier,
+    public void putValue(final String tableName,
+                         final String rowKey,
+                         final String columnFamilyName,
+                         final String columnQualifier,
                          @Optional final Long timestamp,
-                          final Object value,
+                         final Object value,
                          @Optional @Default("true") final boolean writeToWAL,
                          @Optional final RowLock lock)
     {
@@ -304,10 +302,9 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Deletes the values at a given row
+     * Deletes the values at a given row {@sample.xml
+     * ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
      * 
-     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
-     *            
      * @param tableName the name of the target table
      * @param rowKey the key of the row to delete
      * @param columnFamilyName set null to delete all column families in the
@@ -325,8 +322,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param lock an optional {@link RowLock}
      */
     @Processor
-    public void deleteValues( final String tableName,
-                              final String rowKey,
+    public void deleteValues(final String tableName,
+                             final String rowKey,
                              @Optional final String columnFamilyName,
                              @Optional final String columnQualifier,
                              @Optional final Long timestamp,
@@ -366,17 +363,17 @@ public class HbaseCloudConnector implements Initialisable
      * @return an Iterable of Result's. It may be used with a collection splitter.  
      */
     @Processor
-    public Iterable<Result> scanTable( final String tableName,
-                                   @Optional final String columnFamilyName,
-                                   @Optional final String columnQualifier,
-                                   @Optional final Long timestamp,
-                                   @Optional final Long maxTimestamp,
-                                   @Optional final Integer caching,
-                                   @Optional @Default("true") final boolean cacheBlocks,
-                                   @Optional @Default("1") final int maxVersions,
-                                   @Optional final String startRowKey,
-                                   @Optional final String stopRowKey, 
-                                   @Optional @Default("50") int fetchSize)
+    public Iterable<Result> scanTable(final String tableName,
+                                      @Optional final String columnFamilyName,
+                                      @Optional final String columnQualifier,
+                                      @Optional final Long timestamp,
+                                      @Optional final Long maxTimestamp,
+                                      @Optional final Integer caching,
+                                      @Optional @Default("true") final boolean cacheBlocks,
+                                      @Optional @Default("1") final int maxVersions,
+                                      @Optional final String startRowKey,
+                                      @Optional final String stopRowKey,
+                                      @Optional @Default("50") int fetchSize)
     {
         return facade.scan(tableName, columnFamilyName, columnQualifier, timestamp, maxTimestamp, caching,
             cacheBlocks, maxVersions, startRowKey, stopRowKey, fetchSize);
@@ -400,14 +397,14 @@ public class HbaseCloudConnector implements Initialisable
      * @return the new value, post increment
      */
     @Processor
-    public long incrementValue( final String tableName,
-                                final String rowKey,
-                                final String columnFamilyName,
-                                final String columnQualifier,
-                                final long amount,
-                                @Optional @Default("true") final boolean writeToWAL)
+    public long incrementValue(final String tableName,
+                               final String rowKey,
+                               final String columnFamilyName,
+                               final String columnQualifier,
+                               final long amount,
+                               @Optional @Default("true") final boolean writeToWAL)
     {
-        return facade.increment(tableName, rowKey, columnFamilyName, columnQualifier, amount, writeToWAL);
+ return facade.increment(tableName, rowKey, columnFamilyName, columnQualifier, amount, writeToWAL);
     }
 
     /**
@@ -434,15 +431,15 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the new put was executed, false otherwise
      */
     @Processor
-    public boolean checkAndPutValue( final String tableName,
-                                     final String rowKey,
-                                     final String checkColumnFamilyName,
-                                     final String checkColumnQualifier,
-                                     final Object checkValue,
-                                     final String putColumnFamilyName,
-                                     final String putColumnQualifier,
+    public boolean checkAndPutValue(final String tableName,
+                                    final String rowKey,
+                                    final String checkColumnFamilyName,
+                                    final String checkColumnQualifier,
+                                    final Object checkValue,
+                                    final String putColumnFamilyName,
+                                    final String putColumnQualifier,
                                     @Optional final Long putTimestamp,
-                                     final Object value,
+                                    final Object value,
                                     @Optional @Default("true") final boolean writeToWAL,
                                     @Optional final RowLock lock)
     {
@@ -477,15 +474,15 @@ public class HbaseCloudConnector implements Initialisable
      * @return true if the new delete was executed, false otherwise
      */
     @Processor
-    public boolean checkAndDeleteValue( final String tableName,
-                                        final String rowKey,
-                                        final String checkColumnFamilyName,
-                                        final String checkColumnQualifier,
-                                        final Object checkValue,
-                                        final String deleteColumnFamilyName,
-                                        final String deleteColumnQualifier,
+    public boolean checkAndDeleteValue(final String tableName,
+                                       final String rowKey,
+                                       final String checkColumnFamilyName,
+                                       final String checkColumnQualifier,
+                                       final Object checkValue,
+                                       final String deleteColumnFamilyName,
+                                       final String deleteColumnQualifier,
                                        @Optional final Long deleteTimestamp,
-                                       @Optional @Default( "false") final boolean deleteAllVersions,
+                                       @Optional @Default("false") final boolean deleteAllVersions,
                                        @Optional final RowLock lock)
     {
         return facade.checkAndDelete(tableName, rowKey, checkColumnFamilyName, checkColumnQualifier,
