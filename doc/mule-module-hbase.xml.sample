@@ -1,0 +1,89 @@
+<!-- BEGIN_INCLUDE(hbase:is-alive-server) -->
+<hbase:is-alive-server />
+<!-- END_INCLUDE(hbase:is-alive-server) -->
+
+<!-- BEGIN_INCLUDE(hbase:create-table) -->
+<hbase:create-table tableName="#[head:name]" />
+<!-- END_INCLUDE(hbase:create-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:exists-table) -->
+<hbase:exists-table tableName="#[header:tableName]" />
+<!-- END_INCLUDE(hbase:exists-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:delete-table) -->
+<hbase:delete-table tableName="#[header:tableName]" />
+<!-- END_INCLUDE(hbase:delete-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:is-enabled-table) -->
+<hbase:is-enabled-table tableName="#[header:tableName]" />
+<!-- END_INCLUDE(hbase:is-enabled-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:enable-table) -->
+<hbase:enable-table tableName="#[header:tableName]" />
+<!-- END_INCLUDE(hbase:enable-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:disable-table) -->
+<hbase:disable-table tableName="#[header:tableName]" />
+<!-- END_INCLUDE(hbase:disable-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:add-column-family) -->
+<hbase:add-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />
+<!-- END_INCLUDE(hbase:add-column-family) -->
+
+<!-- BEGIN_INCLUDE(hbase:exists-column-family) -->
+<hbase:exists-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />
+<!-- END_INCLUDE(hbase:exists-column-family) -->
+
+<!-- BEGIN_INCLUDE(hbase:modify-column-family) -->
+<hbase:modify-column-family tableName="#[header:tableName]"
+            columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
+            compactionCompressionType="LZO" />
+<!-- END_INCLUDE(hbase:modify-column-family) -->
+
+<!-- BEGIN_INCLUDE(hbase:delete-column-family) -->
+<hbase:delete-column-family tableName="#[header:tableName]"
+            columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
+            compactionCompressionType="LZO" />
+<!-- END_INCLUDE(hbase:delete-column-family) -->
+
+<!-- BEGIN_INCLUDE(hbase:get-values) -->
+<hbase:get-values tableName="#[header:tableName]" rowKey="#[header:rowKey]" />
+<!-- END_INCLUDE(hbase:get-values) -->
+
+<!-- BEGIN_INCLUDE(hbase:put-value) -->
+<hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1" 
+                              columnQualifier="q1" value="v1" />
+<!-- END_INCLUDE(hbase:put-value) -->
+
+<!-- BEGIN_INCLUDE(hbase:delete-values) -->
+<hbase:delete-values tableName="#[variable:tableName]" rowKey="[variable:rowKey]" />
+<!-- END_INCLUDE(hbase:delete-values) -->
+
+<!-- BEGIN_INCLUDE(hbase:scan-table) -->
+<hbase:scan-table tableName="#[map-payload:tableName]"
+                               columnFamilyName="#[map-payload:columnFamiliyName]" 
+                               startRowKey="#[map-payload:firstRowKey]" />
+<!-- END_INCLUDE(hbase:scan-table) -->
+
+<!-- BEGIN_INCLUDE(hbase:increment-value) -->
+<hbase:increment-value tableName="#[map-payload:tableName]"
+           columnFamilyName="#[map-payload:columnFamiliyName]"
+           columnQualifier="#[map-payload:columQualifier]" 
+           rowKey="#[map-payload:rowKey]"
+           amount="10"
+           writeToWAL="false"/>
+<!-- END_INCLUDE(hbase:increment-value) -->
+
+<!-- BEGIN_INCLUDE(hbase:check-and-put-value) -->
+<hbase:check-and-put-value tableName="table-name"
+      rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+      checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
+      putTimestamp="putTimestamp" value="new putvalue" />
+<!-- END_INCLUDE(hbase:check-and-put-value) -->
+
+<!-- BEGIN_INCLUDE(hbase:check-and-delete-value) -->
+<hbase:check-and-delete-value tableName="table-name"
+      rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
+      checkValue="somevalue" deleteColumnFamilyName="f2"
+      deleteColumnQualifier="q2" deleteTimestamp="putTimestamp" />
+<!-- END_INCLUDE(hbase:check-and-delete-value) -->

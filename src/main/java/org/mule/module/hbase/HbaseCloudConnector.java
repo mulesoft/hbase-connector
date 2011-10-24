@@ -66,7 +66,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers if the HBase server is reachable
      * 
-     * {@code <hbase:is-alive-server />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:is-alive-server}
      * 
      * @return true if the server can be reached and the master node is alive, false
      *         otherwise.
@@ -81,7 +81,7 @@ public class HbaseCloudConnector implements Initialisable
      * Creates a new table given its name. The descriptor must be unique and not
      * reserved.
      * 
-     * {@code <hbase:create-table tableName="#[head:name]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:create-table}
      * 
      * @param tableName the descriptor for the new table.
      */
@@ -94,7 +94,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers if a given table exists, regardless it is enabled or not
      * 
-     * {@code <hbase:exists-table tableName="#[header:tableName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:exists-table}
      * 
      * @param tableName the table name
      * @return true only if the table exists, false otherwise
@@ -108,7 +108,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Disables and deletes an existent table.
      * 
-     * {@code <hbase:delete-table tableName="#[header:tableName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-table}
      * 
      * @param tableName name of table to delete
      */
@@ -121,7 +121,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers if the given existent table is enabled.
      * 
-     * {@code <hbase:is-enabled-table tableName="#[header:tableName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:is-enabled-table}
      * 
      * @param tableName name of the table to query for its enabling state
      * @return true only if the table was disabled. False otherwise
@@ -135,7 +135,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Enables an existent table.
      * 
-     * {@code <hbase:enable-table tableName="#[header:tableName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:enable-table}
      * 
      * @param tableName name of the table to enable
      */
@@ -148,7 +148,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Disables an existent table
      * 
-     * {@code <hbase:disable-table tableName="#[header:tableName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:disable-table}
      * 
      * @param tableName the table name to disable
      */
@@ -162,7 +162,7 @@ public class HbaseCloudConnector implements Initialisable
      * Adds a column family to a table given a table and column name. This Processor
      * gracefully handles necessary table disabling and enabled.
      * 
-     * {@code <hbase:add-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:add-column-family}
      * 
      * @param tableName the name of the target table
      * @param columnFamilyName the name of the column
@@ -184,7 +184,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers if column family exists.
      * 
-     * {@code <hbase:exists-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:exists-column-family}
      * 
      * @param tableName the target table name
      * @param columnFamilyName the target column family name
@@ -201,9 +201,7 @@ public class HbaseCloudConnector implements Initialisable
      * Changes one or more properties of a column family in a table. This Processor
      * gracefully handles necessary table disabling and enabled.
      * 
-     * {@code <hbase:modify-column-family tableName="#[header:tableName]"
-     *       columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
-     *       compactionCompressionType="LZO" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:modify-column-family}
      *       
      * @param tableName required the target table
      * @param columnFamilyName required the target column family
@@ -240,9 +238,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Delete a column family
      * 
-     *  {@code <hbase:delete-column-family tableName="#[header:tableName]"
-     *       columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
-     *       compactionCompressionType="LZO" />}
+     *  {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-column-family}
      *       
      * @param tableName required the target table
      * @param columnFamilyName required the target column family
@@ -259,13 +255,13 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Answers the values at the given row - (table, row) combination
      * 
-     * {@code <hbase:get-values tableName="#[header:tableName]" rowKey="#[header:rowKey]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:get-values}
      * 
      * @param tableName required the target table
-     * @param rowKey    
-     * @param maxVersions
-     * @param timestamp
-     * @return the result
+     * @param rowKey    the key of the row to update
+     * @param maxVersions the maximum number of versions to retrieved
+     * @param timestamp   the timestamp
+     * @return the {@link Result}
      */
     @Processor
     public Result getValues( final String tableName,
@@ -280,19 +276,19 @@ public class HbaseCloudConnector implements Initialisable
      * Saves a value at the specified (table, row, familyName, familyQualifier,
      * timestamp) combination
      * 
-     * {@code <hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1" 
-     *                         columnQualifier="q1" value="v1" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:put-value}
      *           
      * @param tableName required the target table
-     * @param rowKey
+     * @param rowKey the key of the row to update
      * @param columnFamilyName the column family dimension
      * @param columnQualifier the column qualifier dimension
      * @param timestamp the version dimension
      * @param value the value to put. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
-     * @param writeToWAL
-     * @param lock
+     * @param writeToWAL set it to false means that in a fail scenario, you will lose
+     *            any increments that have not been flushed.
+     * @param lock a optional {@link RowLock}
      */
     @Processor
     public void putValue( final String tableName,
@@ -310,10 +306,10 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Deletes the values at a given row
      * 
-     * {@code <hbase:delete-values tableName="#[variable:tableName]" rowKey="[variable:rowKey]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
      *            
-     * @param tableName
-     * @param rowKey
+     * @param tableName the name of the target table
+     * @param rowKey the key of the row to delete
      * @param columnFamilyName set null to delete all column families in the
      *            specified row
      * @param columnQualifier the qualifier of the column values to delete. If no
@@ -326,7 +322,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param deleteAllVersions if all versions should be deleted,or only those more
      *            recent than the deleteTimestamp. Only has sense if
      *            deleteColumnFamilyName and deleteColumnQualifier are specified
-     * @param lock
+     * @param lock an optional {@link RowLock}
      */
     @Processor
     public void deleteValues( final String tableName,
@@ -344,9 +340,7 @@ public class HbaseCloudConnector implements Initialisable
     /**
      * Scans across all rows in a table, returning a scanner over it
      *
-     * {@code <hbase:scan-table tableName="#[map-payload:tableName]"
-     *                          columnFamilyName="#[map-payload:columnFamiliyName]" 
-     *                          startRowKey="#[map-payload:firstRowKey]" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:scan-table}
      * 
      * @param tableName limits the scan to a specific table. This is the only
      *            required argument.
@@ -393,13 +387,7 @@ public class HbaseCloudConnector implements Initialisable
      * familyQualifier) combination. If the cell value does not yet exist it is
      * initialized to amount.
      *
-     * {@code <hbase:increment-value tableName="#[map-payload:tableName]"
-     *      columnFamilyName="#[map-payload:columnFamiliyName]"
-     *      columnQualifier="#[map-payload:columQualifier]" 
-     *      rowKey="#[map-payload:rowKey]"
-     *      amount="10"
-     *      writeToWAL="false"/> 
-     * }
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:increment-value}
      * 
      * @param tableName the name of the table that contains the cell to increment.  
      * @param rowKey the row key that contains the cell to increment.
@@ -426,10 +414,7 @@ public class HbaseCloudConnector implements Initialisable
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the put.
      * 
-     * {@code <hbase:check-and-put-value tableName="table-name"
-     * rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
-     * checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
-     * putTimestamp="putTimestamp" value="new putvalue" />}
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:check-and-put-value}
      * 
      * @param tableName the name of the table that contains the cell to check. 
      * @param rowKey the row key that contains the cell to check.
@@ -444,9 +429,8 @@ public class HbaseCloudConnector implements Initialisable
      * @param value the value to put. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
-     * @param writeToWAL set it to false means that in a fail scenario, you will lose
-     *            any increments that have not been flushed.
-     * @param lock
+     * @param writeToWAL set it to false means that in a fail scenario, you will lose any increments that have not been flushed.
+     * @param lock and optional {@link RowLock}
      * @return true if the new put was executed, false otherwise
      */
     @Processor
@@ -459,30 +443,26 @@ public class HbaseCloudConnector implements Initialisable
                                      final String putColumnQualifier,
                                     @Optional final Long putTimestamp,
                                      final Object value,
-                                    @Optional @Default("true") final boolean putWriteToWAL,
+                                    @Optional @Default("true") final boolean writeToWAL,
                                     @Optional final RowLock lock)
     {
         return facade.checkAndPut(tableName, rowKey, checkColumnFamilyName, checkColumnQualifier, checkValue,
-            putColumnFamilyName, putColumnQualifier, putTimestamp, value, putWriteToWAL, lock);
+            putColumnFamilyName, putColumnQualifier, putTimestamp, value, writeToWAL, lock);
     }
 
     /**
      * Atomically checks if a value at a (table, row,family,qualifier) matches the
      * given one. If it does, it performs the delete.
      * 
-     * {@code
-     * <hbase:check-and-delete-value tableName="table-name"
-     * rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
-     * checkValue="somevalue" deleteColumnFamilyName="f2"
-     * deleteColumnQualifier="q2" deleteTimestamp="putTimestamp" /> 
-     * }
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:check-and-delete-value}
      * @param tableName the name of the table that contains the cell to check. 
      * @param rowKey the row key that contains the cell to check.
      * @param checkColumnFamilyName the column family of the cell to check.
      * @param checkValue the value to check. It must be either a byte array or a
      *            serializable object. As a special case, strings are saved always in
      *            standard utf-8 format.
-     * @param deleteColumnFamilyName
+     * @param deleteColumnFamilyName the name of the column family to delete
+     * @param checkColumnQualifier the qualifier of the column to check
      * @param deleteColumnQualifier the qualifier of the column values to delete. If
      *            no qualifier is specified, the Processor will affect all the
      *            qulifiers for the given column family name to delete. Thus it has
@@ -493,7 +473,7 @@ public class HbaseCloudConnector implements Initialisable
      * @param deleteAllVersions if all versions should be deleted,or only those more
      *            recent than the deleteTimestamp. Only has sense if
      *            deleteColumnFamilyName and deleteColumnQualifier are specified
-     * @param lock
+     * @param lock an optional {@link RowLock}
      * @return true if the new delete was executed, false otherwise
      */
     @Processor
