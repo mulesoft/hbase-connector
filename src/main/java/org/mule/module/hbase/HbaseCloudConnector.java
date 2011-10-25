@@ -302,8 +302,9 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /**
-     * Deletes the values at a given row {@sample.xml
-     * ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
+     * Deletes the values at a given row 
+     * 
+     * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
      * 
      * @param tableName the name of the target table
      * @param rowKey the key of the row to delete
@@ -404,7 +405,7 @@ public class HbaseCloudConnector implements Initialisable
                                final long amount,
                                @Optional @Default("true") final boolean writeToWAL)
     {
- return facade.increment(tableName, rowKey, columnFamilyName, columnQualifier, amount, writeToWAL);
+        return facade.increment(tableName, rowKey, columnFamilyName, columnQualifier, amount, writeToWAL);
     }
 
     /**
