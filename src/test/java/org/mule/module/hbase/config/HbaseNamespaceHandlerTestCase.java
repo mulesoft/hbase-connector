@@ -25,8 +25,11 @@ import static org.mockito.Mockito.when;
 
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.api.transport.PropertyScope;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.tck.FunctionalTestCase;
+
+import java.util.HashMap;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.RowLock;
@@ -65,7 +68,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
     public void testFlowPut() throws Exception
     {
         final MessageProcessor flow = lookupFlowConstruct("flowPut");
-        final MuleEvent event = getTestEvent(null);
+        final MuleEvent event = getTestEvent(new Exception());
         flow.process(event);
 
         verify(mockService).put(eq("t1"), eq("r1"), eq("f1"), eq("q1"), anyLong(), eq("v1"), anyBoolean(),

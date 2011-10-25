@@ -30,7 +30,7 @@
 
 	<flow name="flowPut">
 		<hbase:put-value tableName="t1" rowKey="r1"
-			columnFamilyName="f1" columnQualifier="q1" value="v1" />
+			columnFamilyName="f1" columnQualifier="q1" value-ref="#[payload]" />
 	</flow>
 
 	<flow name="createTable">
@@ -105,7 +105,7 @@
 			exchange-pattern="request-response" />
 		<hbase:put-value tableName="#[variable:tableName]"
 			columnFamilyName="#[variable:columnFamiliyName]" columnQualifier="#[variable:columQualifier]"
-			rowKey="#[variable:rowKey]" value="#[variable:value]" />
+			rowKey="#[variable:rowKey]" value-ref="#[variable:value]" />
 	</flow>
 
 	<flow name="deleteValues">

@@ -52,7 +52,7 @@
 
 <!-- BEGIN_INCLUDE(hbase:put-value) -->
 <hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1" 
-                              columnQualifier="q1" value="v1" />
+                              columnQualifier="q1" value-ref="v1" />
 <!-- END_INCLUDE(hbase:put-value) -->
 
 <!-- BEGIN_INCLUDE(hbase:delete-values) -->
@@ -78,7 +78,7 @@
 <hbase:check-and-put-value tableName="table-name"
       rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
       checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
-      putTimestamp="putTimestamp" value="new putvalue" />
+      putTimestamp="putTimestamp" value-ref="new putvalue" />
 <!-- END_INCLUDE(hbase:check-and-put-value) -->
 
 <!-- BEGIN_INCLUDE(hbase:check-and-delete-value) -->
