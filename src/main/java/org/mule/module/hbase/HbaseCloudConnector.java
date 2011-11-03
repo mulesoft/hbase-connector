@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.RowLock;
 
@@ -42,7 +44,7 @@ import org.apache.hadoop.hbase.client.RowLock;
  * @since Apr 18, 2011
  */
 @Module(name = "hbase", schemaVersion = "2.0")
-public class HbaseCloudConnector implements Initialisable
+public class HbaseCloudConnector 
 {
     /**The HBaseService You may change it for mocking purposes*/
     @Configurable
@@ -514,6 +516,7 @@ public class HbaseCloudConnector implements Initialisable
     }
 
     /** @see org.mule.api.lifecycle.Initialisable#initialise() */
+    @PostConstruct
     public void initialise() throws InitialisationException
     {
         if (facade == null)
