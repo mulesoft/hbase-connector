@@ -13,7 +13,7 @@
   <properties>
     <mule.version>3.2.0</mule.version>
     <hbase.version>0.90.3</hbase.version>
-    <mule.devkit.version>3.0-SNAPSHOT</mule.devkit.version>
+    <mule.devkit.version>3.0.1-SNAPSHOT</mule.devkit.version>
     <mule.dsl.version>0.7</mule.dsl.version>
     <junit.version>4.8.2</junit.version>
     <mockito.version>1.8.2</mockito.version>

@@ -29,8 +29,9 @@
 	</flow>
 
 	<flow name="flowPut">
+        
 		<hbase:put-value tableName="t1" rowKey="r1"
-			columnFamilyName="f1" columnQualifier="q1" value-ref="#[payload]" />
+			columnFamilyName="f1" columnQualifier="q1" value-ref="#[groovy:'hello']" />
 	</flow>
 
 	<flow name="createTable">
