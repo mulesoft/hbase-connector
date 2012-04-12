@@ -6,7 +6,7 @@ The HBase Connector allows to connect to a Hadoop Database.
 Installation and Usage
 ----------------------
 
-For information about usage and installation you can check our documentation at http://mulesoft.github.com/hbase-connector.
+For information about usage and installation you can check our documentation at http://www.mulesoft.org/muleforge/hbase-connector.
 
 Reporting Issues
 ----------------
