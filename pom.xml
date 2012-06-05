@@ -18,7 +18,7 @@
   <parent>
     <groupId>org.mule.tools.devkit</groupId>
     <artifactId>mule-devkit-parent</artifactId>
-    <version>3.2</version>
+    <version>3.3.0-EA</version>
   </parent>
 
   <dependencies>
@@ -59,8 +59,16 @@
       <version>${mule.version}</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
+
+    <repositories>
+        <repository>
+            <id>mulesoft-releases</id>
+            <name>Mulesoft Releases Repository</name>
+            <url>http://repository.mulesoft.org/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
   <scm>
     <connection>scm:git:git://github.com:mulesoft/hbase-connector.git</connection>
