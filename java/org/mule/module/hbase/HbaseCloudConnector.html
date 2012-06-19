@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Documentation for Mule Hbase Cloud Connector." />
+
+<link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.ico" />
+<title>
+
+  HbaseCloudConnector
+
+
+| Mule Hbase Cloud Connector
+
+</title>
+<link href="../../../../../assets/mule-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../assets/mule-developer-prettify.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+<script src="../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
+<script src="../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
+<script src="../../../../../assets/jquery-toc.js" type="text/javascript"></script>
+<script src="../../../../../assets/mule-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../assets/prettify.js" type="text/javascript"></script>
+<script type="text/javascript">
+  setToRoot("../../../../../", "../../../../../assets/");
+</script>
+<script src="../../../../../assets/mule-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../assets/navtree_data.js" type="text/javascript"></script>
+<script src="../../../../../assets/customizations.js" type="text/javascript"></script>
+<noscript>
+  <style type="text/css">
+    html,body{overflow:auto;}
+    #body-content{position:relative; top:0;}
+    #doc-content{overflow:visible;border-left:3px solid #666;}
+    #side-nav{padding:0;}
+    #side-nav .toggle-list ul {display:block;}
+    #resize-packages-nav{border-bottom:3px solid #666;}
+  </style>
+</noscript>
+<script type="text/javascript" charset="utf-8">
+  var is_ssl = ("https:" == document.location.protocol);
+  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  var feedback_widget_options = {};
+
+  feedback_widget_options.display = "overlay";
+  feedback_widget_options.company = "mulesoft";
+  feedback_widget_options.placement = "right";
+  feedback_widget_options.color = "#2F74AE";
+  feedback_widget_options.style = "question";
+
+  feedback_widget_options.tag = "Mule Hbase Cloud Connector";
+
+  feedback_widget_options.limit = "3";
+
+  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+</script>
+</head>
+
+<body class="">
+
+<div id="header">
+    <div id="headerLeft">
+    
+      <span id="masthead-title">Mule Hbase Cloud Connector</span>
+    
+    <ul id="header-tabs" class="">
+    
+    	<li id="guide"><a href="../../../../../guide/install.html">
+	    	<span class="en">Install Guide</span>
+    	</a></li>
+    
+    	<li id="java"><a href="../../../../../java/packages.html">
+	    	<span class="en">Java API Reference</span>
+    	</a></li>
+    
+    	<li id="mule"><a href="../../../../../mule/modules.html">
+	    	<span class="en">Mule API Reference</span>
+    	</a></li>
+    
+    </ul>
+    </div>
+    <div id="headerRight">
+      <a href="http://www.mulesoft.com" tabindex="-1">
+      <img src="../../../../../assets//images/mulesoft-logo-final.gif" alt="MuleSoft" border="0" id="mulesoftlogo"></a><br/>
+      
+  <div id="search" >
+      <div id="searchForm">
+          <form accept-charset="utf-8" class="gsc-search-box" 
+                onsubmit="return submit_search()">
+            <table class="gsc-search-box" cellpadding="0" cellspacing="0"><tbody>
+                <tr>
+                  <td class="gsc-input">
+                    <input id="search_autocomplete" class="gsc-input" type="text" size="33" autocomplete="off"
+                      title="search developer docs" name="q"
+                      value="search developer docs"
+                      onFocus="search_focus_changed(this, true)"
+                      onBlur="search_focus_changed(this, false)"
+                      onkeydown="return search_changed(event, true, '../../../../../')"
+                      onkeyup="return search_changed(event, false, '../../../../../')" />
+                  <div id="search_filtered_div" class="no-display">
+                      <table id="search_filtered" cellspacing=0>
+                      </table>
+                  </div>
+                  </td>
+                  <td class="gsc-search-button">
+                    <input type="submit" value="Search" title="search" id="search-button" class="gsc-search-button" />
+                  </td>
+                  <td class="gsc-clear-button">
+                    <div title="clear results" class="gsc-clear-button">&nbsp;</div>
+                  </td>
+                </tr></tbody>
+              </table>
+          </form>
+      </div><!-- searchForm -->
+  </div><!-- search -->
+      
+    </div>
+</div><!-- header -->
+
+
+  <div class="g-section g-tpl-240" id="body-content">
+    <div class="g-unit g-first side-nav-resizable" id="side-nav">
+      <div id="swapper">
+        <div id="nav-panels">
+          <div id="resize-packages-nav">
+            <div id="packages-nav">
+              <div id="index-links">
+                <a href="../../../../../java/packages.html"  >Package Index</a> |
+                <a href="../../../../../java/classes.html" >Class Index</a>
+              </div>
+              <ul>
+                
+    <li class="selected api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/package-summary.html">org.mule.module.hbase</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/adapters/package-summary.html">org.mule.module.hbase.adapters</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/api/package-summary.html">org.mule.module.hbase.api</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/api/impl/package-summary.html">org.mule.module.hbase.api.impl</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/config/package-summary.html">org.mule.module.hbase.config</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/processors/package-summary.html">org.mule.module.hbase.processors</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/transformers/package-summary.html">org.mule.module.hbase.transformers</a></li>
+              </ul><br/>
+            </div> <!-- end packages -->
+          </div> <!-- end resize-packages -->
+          <div id="classes-nav">
+            <ul>
+              
+              
+    <li><h2>Classes</h2>
+      <ul>
+          <li class="selected api apilevel-"><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></li>
+          <li class="api apilevel-"><a href="../../../../../java/org/mule/module/hbase/HBaseServiceAdaptor.html">HBaseServiceAdaptor</a></li>
+      </ul>
+    </li>
+              
+              
+              
+              
+            </ul><br/>
+          </div><!-- end classes -->
+        </div><!-- end nav-panels -->
+        <div id="nav-tree" style="display:none">
+          <div id="index-links">
+            <a href="../../../../../packages.html"  >Package Index</a> | 
+            <a href="../../../../../classes.html" >Class Index</a>
+          </div>
+        </div><!-- end nav-tree -->
+      </div><!-- end swapper -->
+    </div> <!-- end side-nav -->
+    <script>
+      if (!isMobile) {
+        $("<a href='#' id='nav-swap' onclick='swapNav();return false;' style='font-size:10px;line-height:9px;margin-left:1em;text-decoration:none;'><span id='tree-link'>Use Tree Navigation</span><span id='panel-link' style='display:none'>Use Panel Navigation</span></a>").appendTo("#side-nav");
+        chooseDefaultNav();
+        if ($("#nav-tree").is(':visible')) {
+          init_default_navtree("../../../../../");
+        } else {
+          addLoadEvent(function() {
+            scrollIntoView("packages-nav");
+            scrollIntoView("classes-nav");
+          });
+        }
+        $("#swapper").css({borderBottom:"2px solid #aaa"});
+      } else {
+        swapNav(); // tree view should be used on mobile
+      }
+    </script>
+
+
+
+<div class="g-unit" id="doc-content">
+
+<div id="api-info-block">
+
+
+
+  
+   
+  
+  
+  
+  
+
+
+<div class="sum-details-links">
+
+
+Summary:
+
+
+
+
+
+
+
+  <a href="#lfields">Fields</a>
+  
+
+
+
+  &#124; <a href="#pubctors">Ctors</a>
+  
+
+
+
+  &#124; <a href="#pubmethods">Methods</a>
+  
+
+
+
+  &#124; <a href="#inhmethods">Inherited Methods</a>
+
+&#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
+
+</div><!-- end sum-details-links -->
+<div class="api-level">
+  
+
+
+  
+  
+
+</div>
+</div><!-- end api-info-block -->
+
+
+<!-- ======== START OF CLASS DATA ======== -->
+
+<div id="jd-header">
+    public
+     
+     
+    
+    class
+<h1>HbaseCloudConnector</h1>
+
+
+
+  
+    extends Object<br/>
+  
+  
+  
+
+  
+  
+  
+
+
+</div><!-- end header -->
+
+<div id="naMessage"></div>
+
+<div id="jd-content" class="api apilevel-">
+<table class="jd-inheritance-table">
+
+
+    <tr>
+        
+        <td colspan="2" class="jd-inheritance-class-cell">java.lang.Object</td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+        
+        <td colspan="1" class="jd-inheritance-class-cell">org.mule.module.hbase.HbaseCloudConnector</td>
+    </tr>
+    
+
+</table>
+
+
+
+
+<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-direct" class="jd-expando-trigger closed"
+          ><img id="subclasses-direct-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>Known Direct Subclasses
+
+  <div id="subclasses-direct">
+      <div id="subclasses-direct-list"
+              class="jd-inheritedlinks"
+              
+              >
+          
+            
+              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorCapabilitiesAdapter.html">HbaseCloudConnectorCapabilitiesAdapter</a>
+            
+          
+      </div>
+      <div id="subclasses-direct-summary"
+              style="display: none;"
+              >
+  <table class="jd-sumtable-expando">
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorCapabilitiesAdapter.html">HbaseCloudConnectorCapabilitiesAdapter</a></td>
+              <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorCapabilitiesAdapter</code> is a wrapper around <code><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that implements org.mule.api.Capabilities interface.&nbsp;</td>
+          </tr>
+  </table>
+      </div>
+  </div>
+</td></tr></table>
+
+
+
+<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
+          ><img id="subclasses-indirect-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
+
+  <div id="subclasses-indirect">
+      <div id="subclasses-indirect-list"
+              class="jd-inheritedlinks"
+              
+              >
+          
+            
+              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorLifecycleAdapter.html">HbaseCloudConnectorLifecycleAdapter</a>
+            
+          
+      </div>
+      <div id="subclasses-indirect-summary"
+              style="display: none;"
+              >
+  <table class="jd-sumtable-expando">
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorLifecycleAdapter.html">HbaseCloudConnectorLifecycleAdapter</a></td>
+              <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorLifecycleAdapter</code> is a wrapper around <code><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that adds lifecycle methods to the pojo.&nbsp;</td>
+          </tr>
+  </table>
+      </div>
+  </div>
+</td></tr></table>
+
+
+<div class="jd-descr">
+
+
+<h2>Class Overview</h2>
+<p><p>
+ HBase connector
+ </p>
+ <p>
+ It delegates each Processor on a <code><a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></code> and it accepts custom
+ configuration in a Key-Value fashion
+ </p></p>
+
+
+
+
+
+</div><!-- jd-descr -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="jd-descr">
+
+
+<h2>Summary</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="lfields" class="jd-sumtable"><tr><th colspan="12">Fields</th></tr>
+
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          private
+          
+          
+          <a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#facade">facade</a></td>
+          <td class="jd-descrcol" width="100%">The HBaseService You may change it for mocking purposes</td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          private
+          
+          
+          Map&lt;String,&nbsp;String&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#properties">properties</a></td>
+          <td class="jd-descrcol" width="100%">HBase internal configuration properties.</td>
+      </tr>
+      
+    
+
+</table>
+
+
+
+
+
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<table id="pubctors" class="jd-sumtable"><tr><th colspan="12">Public Constructors</th></tr>
+
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#HbaseCloudConnector()">HbaseCloudConnector</a></span>()</nobr>
+        
+  </td></tr>
+
+
+
+</table>
+
+
+
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
+
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#addColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer)">addColumnFamily</a></span>(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope)</nobr>
+        
+        <div class="jd-descrdiv">Adds a column family to a table given a table and column name.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#checkAndDeleteValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)">checkAndDeleteValue</a></span>(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String deleteColumnFamilyName, String deleteColumnQualifier, Long deleteTimestamp, boolean deleteAllVersions, RowLock lock)</nobr>
+        
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
+ given one.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#checkAndPutValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)">checkAndPutValue</a></span>(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String putColumnFamilyName, String putColumnQualifier, Long putTimestamp, Object value, boolean writeToWAL, RowLock lock)</nobr>
+        
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
+ given one.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#createTable(java.lang.String)">createTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Creates a new table given its name.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#deleteColumnFamily(java.lang.String, java.lang.String)">deleteColumnFamily</a></span>(String tableName, String columnFamilyName)</nobr>
+        
+        <div class="jd-descrdiv">Delete a column family
+ 
+  </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#deleteTable(java.lang.String)">deleteTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Disables and deletes an existent table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#deleteValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)">deleteValues</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Long timestamp, boolean deleteAllVersions, RowLock lock)</nobr>
+        
+        <div class="jd-descrdiv">Deletes the values at a given row 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#disableTable(java.lang.String)">disableTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Disables an existent table
+ 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#enableTable(java.lang.String)">enableTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Enables an existent table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#existsColumnFamily(java.lang.String, java.lang.String)">existsColumnFamily</a></span>(String tableName, String columnFamilyName)</nobr>
+        
+        <div class="jd-descrdiv">Answers if column family exists.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#existsTable(java.lang.String)">existsTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Answers if a given table exists, regardless it is enabled or not
+ 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#getFacade()">getFacade</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Map&lt;String,&nbsp;String&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#getProperties()">getProperties</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Result</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#getValues(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)">getValues</a></span>(String tableName, String rowKey, Integer maxVersions, Long timestamp)</nobr>
+        
+        <div class="jd-descrdiv">Answers the values at the given row - (table, row) combination
+ 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#incrementValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, long, boolean)">incrementValue</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, long amount, boolean writeToWAL)</nobr>
+        
+        <div class="jd-descrdiv">Atomically increments the value of at a (table, row, familyName,
+ familyQualifier) combination.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#initialise()">initialise</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#isAliveServer()">isAliveServer</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Answers if the HBase server is reachable
+ 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#isEnabledTable(java.lang.String)">isEnabledTable</a></span>(String tableName)</nobr>
+        
+        <div class="jd-descrdiv">Answers if the given existent table is enabled.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#modifyColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, org.mule.module.hbase.api.CompressionType, org.mule.module.hbase.api.CompressionType, java.lang.Boolean, java.lang.Integer, java.lang.Boolean, org.mule.module.hbase.api.BloomFilterType, java.lang.Integer, java.util.Map<java.lang.String, java.lang.String>)">modifyColumnFamily</a></span>(String tableName, String columnFamilyName, Integer maxVersions, Integer blocksize, <a href="../../../../../java/org/mule/module/hbase/api/CompressionType.html">CompressionType</a> compressionType, <a href="../../../../../java/org/mule/module/hbase/api/CompressionType.html">CompressionType</a> compactionCompressionType, Boolean inMemory, Integer timeToLive, Boolean blockCacheEnabled, <a href="../../../../../java/org/mule/module/hbase/api/BloomFilterType.html">BloomFilterType</a> bloomFilterType, Integer replicationScope, Map&lt;String,&nbsp;String&gt; values)</nobr>
+        
+        <div class="jd-descrdiv">Changes one or more properties of a column family in a table.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#putValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)">putValue</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Long timestamp, Object value, boolean writeToWAL, RowLock lock)</nobr>
+        
+        <div class="jd-descrdiv">Saves a value at the specified (table, row, familyName, familyQualifier,
+ timestamp) combination
+ 
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Iterable&lt;Result&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#scanTable(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.Integer, boolean, int, java.lang.String, java.lang.String, int)">scanTable</a></span>(String tableName, String columnFamilyName, String columnQualifier, Long timestamp, Long maxTimestamp, Integer caching, boolean cacheBlocks, int maxVersions, String startRowKey, String stopRowKey, int fetchSize)</nobr>
+        
+        <div class="jd-descrdiv">Scans across all rows in a table, returning a scanner over it
+
+ </div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#setFacade(org.mule.module.hbase.api.HBaseService)">setFacade</a></span>(<a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a> facade)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#setProperties(java.util.Map<java.lang.String, java.lang.String>)">setProperties</a></span>(Map&lt;String,&nbsp;String&gt; properties)</nobr>
+        
+  </td></tr>
+
+
+
+</table>
+
+
+
+
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="inhmethods" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Object" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-java.lang.Object-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  java.lang.Object
+
+<div id="inherited-methods-java.lang.Object">
+  <div id="inherited-methods-java.lang.Object-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-java.lang.Object-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Object</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">clone</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(Object arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">finalize</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            Class&lt;?&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getClass</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notify</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notifyAll</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+</table>
+
+
+</div><!-- jd-descr (summary) -->
+
+<!-- Details -->
+
+
+
+
+
+
+
+
+<!-- XML Attributes -->
+
+
+<!-- Enum Values -->
+
+
+<!-- Constants -->
+
+
+<!-- Fields -->
+
+
+<!-- ========= FIELD DETAIL ======== -->
+<h2>Fields</h2>
+
+
+
+
+<A NAME="facade"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        private 
+         
+         
+        <a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a>
+      </span>
+        facade
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>The HBaseService You may change it for mocking purposes</p></div>
+
+    
+    </div>
+</div>
+
+
+
+<A NAME="properties"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        private 
+         
+         
+        Map&lt;String,&nbsp;String&gt;
+      </span>
+        properties
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>HBase internal configuration properties. Consult HBase documentation.
+</p></div>
+
+    
+    </div>
+</div>
+
+
+
+
+<!-- Public ctors -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<h2>Public Constructors</h2>
+
+
+
+<A NAME="HbaseCloudConnector()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">HbaseCloudConnector</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<!-- Protected ctors -->
+
+
+
+<!-- ========= METHOD DETAIL ======== -->
+<!-- Public methdos -->
+
+<h2>Public Methods</h2>
+
+
+
+<A NAME="addColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">addColumnFamily</span>
+      <span class="normal">(String tableName, String columnFamilyName, Integer maxVersions, Boolean inMemory, Integer scope)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Adds a column family to a table given a table and column name. This Processor
+ gracefully handles necessary table disabling and enabled.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The name of the target table</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>The name of the column</td>
+        </tr>
+        <tr>
+          <th>maxVersions</td>
+          <td>The optional maximum number of versions the column family
+            supports</td>
+        </tr>
+        <tr>
+          <th>inMemory</td>
+          <td>If all the column values will be stored in the region's cache</td>
+        </tr>
+        <tr>
+          <th>scope</td>
+          <td>Replication scope: 0 for locally scoped data (data for this column family will not be replicated) and 1 for globally scoped data (data will be replicated to all peers.)) 
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="checkAndDeleteValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">checkAndDeleteValue</span>
+      <span class="normal">(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String deleteColumnFamilyName, String deleteColumnQualifier, Long deleteTimestamp, boolean deleteAllVersions, RowLock lock)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
+ given one. If it does, it performs the delete.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The name of the table that contains the cell to check. </td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The row key that contains the cell to check.</td>
+        </tr>
+        <tr>
+          <th>checkColumnFamilyName</td>
+          <td>The column family of the cell to check.</td>
+        </tr>
+        <tr>
+          <th>checkColumnQualifier</td>
+          <td>The qualifier of the column to check</td>
+        </tr>
+        <tr>
+          <th>checkValue</td>
+          <td>The value to check. It must be either a byte array or a
+            serializable object. As a special case, strings are saved always in
+            standard utf-8 format.</td>
+        </tr>
+        <tr>
+          <th>deleteColumnFamilyName</td>
+          <td>The name of the column family to delete</td>
+        </tr>
+        <tr>
+          <th>deleteColumnQualifier</td>
+          <td>The qualifier of the column values to delete. If
+            no qualifier is specified, the Processor will affect all the
+            qulifiers for the given column family name to delete. Thus it has
+            only sense if deleteColumnFamilyName is specified</td>
+        </tr>
+        <tr>
+          <th>deleteTimestamp</td>
+          <td>The timestamp of the values to delete. If no timestamp
+            is specified, the most recent timestamp for the deleted value is
+            used. Only has sense if deleteColumnFamilyName is specified</td>
+        </tr>
+        <tr>
+          <th>deleteAllVersions</td>
+          <td>If all versions should be deleted,or only those more
+            recent than the deleteTimestamp. Only has sense if
+            deleteColumnFamilyName and deleteColumnQualifier are specified</td>
+        </tr>
+        <tr>
+          <th>lock</td>
+          <td>An optional RowLock</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the new delete was executed, false otherwise
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="checkAndPutValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">checkAndPutValue</span>
+      <span class="normal">(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String putColumnFamilyName, String putColumnQualifier, Long putTimestamp, Object value, boolean writeToWAL, RowLock lock)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
+ given one. If it does, it performs the put.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The name of the table that contains the cell to check. </td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The row key that contains the cell to check.</td>
+        </tr>
+        <tr>
+          <th>checkColumnFamilyName</td>
+          <td>The column family of the cell to check.</td>
+        </tr>
+        <tr>
+          <th>checkColumnQualifier</td>
+          <td>The column qualifier of the cell to check.</td>
+        </tr>
+        <tr>
+          <th>checkValue</td>
+          <td>The value to check. It must be either a byte array or a
+            serializable object. As a special case, strings are saved always in
+            standard utf-8 format.</td>
+        </tr>
+        <tr>
+          <th>putColumnFamilyName</td>
+          <td>The column family of the cell to put.</td>
+        </tr>
+        <tr>
+          <th>putColumnQualifier</td>
+          <td>The column qualifier of the cell to put.</td>
+        </tr>
+        <tr>
+          <th>putTimestamp</td>
+          <td>The version dimension to put.</td>
+        </tr>
+        <tr>
+          <th>value</td>
+          <td>The value to put. It must be either a byte array or a
+            serializable object. As a special case, strings are saved always in
+            standard utf-8 format.</td>
+        </tr>
+        <tr>
+          <th>writeToWAL</td>
+          <td>Set it to false means that in a fail scenario, you will lose any increments that have not been flushed.</td>
+        </tr>
+        <tr>
+          <th>lock</td>
+          <td>And optional RowLock</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the new put was executed, false otherwise
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="createTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">createTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Creates a new table given its name. The descriptor must be unique and not
+ reserved.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The descriptor for the new table.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="deleteColumnFamily(java.lang.String, java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">deleteColumnFamily</span>
+      <span class="normal">(String tableName, String columnFamilyName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Delete a column family
+ 
+  </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Required the target table</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>Required the target column family
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="deleteTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">deleteTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Disables and deletes an existent table.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Name of table to delete
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="deleteValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">deleteValues</span>
+      <span class="normal">(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Long timestamp, boolean deleteAllVersions, RowLock lock)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Deletes the values at a given row 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The name of the target table</td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The key of the row to delete</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>Set null to delete all column families in the
+            specified row</td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
+          <td>The qualifier of the column values to delete. If no
+            qualifier is specified, the Processor will affect all the qulifiers
+            for the given column family name to delete. Thus it has only sense
+            if deleteColumnFamilyName is specified</td>
+        </tr>
+        <tr>
+          <th>timestamp</td>
+          <td>The timestamp of the values to delete. If no timestamp is
+            specified, the most recent timestamp for the deleted value is used.
+            Only has sense if deleteColumnFamilyName is specified</td>
+        </tr>
+        <tr>
+          <th>deleteAllVersions</td>
+          <td>If all versions should be deleted,or only those more
+            recent than the deleteTimestamp. Only has sense if
+            deleteColumnFamilyName and deleteColumnQualifier are specified</td>
+        </tr>
+        <tr>
+          <th>lock</td>
+          <td>An optional RowLock
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="disableTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">disableTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Disables an existent table
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The table name to disable
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="enableTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">enableTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Enables an existent table.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Name of the table to enable
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="existsColumnFamily(java.lang.String, java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">existsColumnFamily</span>
+      <span class="normal">(String tableName, String columnFamilyName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Answers if column family exists.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The target table name</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>The target column family name</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the column exists, false otherwise
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="existsTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">existsTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Answers if a given table exists, regardless it is enabled or not
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The table name</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true only if the table exists, false otherwise
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="getFacade()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        <a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a>
+      </span>
+      <span class="sympad">getFacade</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="getProperties()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        Map&lt;String,&nbsp;String&gt;
+      </span>
+      <span class="sympad">getProperties</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="getValues(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        Result
+      </span>
+      <span class="sympad">getValues</span>
+      <span class="normal">(String tableName, String rowKey, Integer maxVersions, Long timestamp)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Answers the values at the given row - (table, row) combination
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Required the target table</td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The key of the row to update</td>
+        </tr>
+        <tr>
+          <th>maxVersions</td>
+          <td>The maximum number of versions to retrieved</td>
+        </tr>
+        <tr>
+          <th>timestamp</td>
+          <td>The timestamp</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the Result
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="incrementValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, long, boolean)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        long
+      </span>
+      <span class="sympad">incrementValue</span>
+      <span class="normal">(String tableName, String rowKey, String columnFamilyName, String columnQualifier, long amount, boolean writeToWAL)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically increments the value of at a (table, row, familyName,
+ familyQualifier) combination. If the cell value does not yet exist it is
+ initialized to amount.
+
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>The name of the table that contains the cell to increment.  </td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The row key that contains the cell to increment.</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>The column family of the cell to increment.</td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
+          <td>The column qualifier of the cell to increment.</td>
+        </tr>
+        <tr>
+          <th>amount</td>
+          <td>The amount to increment the cell with (or decrement, if the
+ amount is negative).</td>
+        </tr>
+        <tr>
+          <th>writeToWAL</td>
+          <td>Set it to false means that in a fail scenario, you will lose
+            any increments that have not been flushed.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>the new value, post increment
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="initialise()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">initialise</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Throws</h5>
+      <table class="jd-tagtable">  
+        <tr>
+            <th>InitialisationException</td>
+            <td></td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li><code><a href="../../../../../null#initialise()">initialise()</a></code></li>
+      </ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="isAliveServer()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isAliveServer</span>
+      <span class="normal">()</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Answers if the HBase server is reachable
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the server can be reached and the master node is alive, false
+         otherwise.
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="isEnabledTable(java.lang.String)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        boolean
+      </span>
+      <span class="sympad">isEnabledTable</span>
+      <span class="normal">(String tableName)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Answers if the given existent table is enabled.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Name of the table to query for its enabling state</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true only if the table was disabled. False otherwise
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="modifyColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer, org.mule.module.hbase.api.CompressionType, org.mule.module.hbase.api.CompressionType, java.lang.Boolean, java.lang.Integer, java.lang.Boolean, org.mule.module.hbase.api.BloomFilterType, java.lang.Integer, java.util.Map<java.lang.String, java.lang.String>)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">modifyColumnFamily</span>
+      <span class="normal">(String tableName, String columnFamilyName, Integer maxVersions, Integer blocksize, <a href="../../../../../java/org/mule/module/hbase/api/CompressionType.html">CompressionType</a> compressionType, <a href="../../../../../java/org/mule/module/hbase/api/CompressionType.html">CompressionType</a> compactionCompressionType, Boolean inMemory, Integer timeToLive, Boolean blockCacheEnabled, <a href="../../../../../java/org/mule/module/hbase/api/BloomFilterType.html">BloomFilterType</a> bloomFilterType, Integer replicationScope, Map&lt;String,&nbsp;String&gt; values)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Changes one or more properties of a column family in a table. This Processor
+ gracefully handles necessary table disabling and enabled.
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Required the target table</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>Required the target column family</td>
+        </tr>
+        <tr>
+          <th>maxVersions</td>
+          <td>The new max amount of versions</td>
+        </tr>
+        <tr>
+          <th>blocksize</td>
+          <td>The the new block size</td>
+        </tr>
+        <tr>
+          <th>compressionType</td>
+          <td>The new compression type</td>
+        </tr>
+        <tr>
+          <th>compactionCompressionType</td>
+          <td>The new compaction compression type</td>
+        </tr>
+        <tr>
+          <th>inMemory</td>
+          <td>New value for if values are stored in Region's cache</td>
+        </tr>
+        <tr>
+          <th>timeToLive</td>
+          <td>New ttl</td>
+        </tr>
+        <tr>
+          <th>blockCacheEnabled</td>
+          <td>New value of enabling block cache</td>
+        </tr>
+        <tr>
+          <th>bloomFilterType</td>
+          <td>New value of bloom filter type</td>
+        </tr>
+        <tr>
+          <th>replicationScope</td>
+          <td>New value for replication scope</td>
+        </tr>
+        <tr>
+          <th>values</td>
+          <td>Other custom parameters values
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="putValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">putValue</span>
+      <span class="normal">(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Long timestamp, Object value, boolean writeToWAL, RowLock lock)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Saves a value at the specified (table, row, familyName, familyQualifier,
+ timestamp) combination
+ 
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Required the target table</td>
+        </tr>
+        <tr>
+          <th>rowKey</td>
+          <td>The key of the row to update</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>The column family dimension</td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
+          <td>The column qualifier dimension</td>
+        </tr>
+        <tr>
+          <th>timestamp</td>
+          <td>The version dimension</td>
+        </tr>
+        <tr>
+          <th>value</td>
+          <td>The value to put. It must be either a byte array or a
+            serializable object. As a special case, strings are saved always in
+            standard utf-8 format.</td>
+        </tr>
+        <tr>
+          <th>writeToWAL</td>
+          <td>Set it to false means that in a fail scenario, you will lose
+            any increments that have not been flushed.</td>
+        </tr>
+        <tr>
+          <th>lock</td>
+          <td>A optional RowLock
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="scanTable(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.Integer, boolean, int, java.lang.String, java.lang.String, int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        Iterable&lt;Result&gt;
+      </span>
+      <span class="sympad">scanTable</span>
+      <span class="normal">(String tableName, String columnFamilyName, String columnQualifier, Long timestamp, Long maxTimestamp, Integer caching, boolean cacheBlocks, int maxVersions, String startRowKey, String stopRowKey, int fetchSize)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Scans across all rows in a table, returning a scanner over it
+
+ </p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>tableName</td>
+          <td>Limits the scan to a specific table. This is the only
+            required argument.</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>Limits the scan to a specific column family or null</td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
+          <td>Limits the scan to a specific column or null. Requires
+            a columnFamilyName to be defined.</td>
+        </tr>
+        <tr>
+          <th>timestamp</td>
+          <td>Limits the scan to a specific timestamp</td>
+        </tr>
+        <tr>
+          <th>maxTimestamp</td>
+          <td>Get versions of columns only within the specified
+            timestamp range: [timestamp, maxTimestamp)</td>
+        </tr>
+        <tr>
+          <th>caching</td>
+          <td>The number of rows for caching</td>
+        </tr>
+        <tr>
+          <th>cacheBlocks</td>
+          <td>The number of rows for caching that will be passed to
+            scanners</td>
+        </tr>
+        <tr>
+          <th>maxVersions</td>
+          <td>Limits the number of versions on each column</td>
+        </tr>
+        <tr>
+          <th>startRowKey</td>
+          <td>Limits the beginning of the scan to the specified row
+            inclusive</td>
+        </tr>
+        <tr>
+          <th>stopRowKey</td>
+          <td>Limits the end of the scan to the specified row exclusive</td>
+        </tr>
+        <tr>
+          <th>fetchSize</td>
+          <td>The number of results internally fetched by request to the
+            HBase server. Increase it for improving network efficiency, or decrease it
+            for reducing memory usage </td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>an Iterable of Result's. It may be used with a collection splitter.  
+</li></ul>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setFacade(org.mule.module.hbase.api.HBaseService)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setFacade</span>
+      <span class="normal">(<a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a> facade)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>facade</td>
+          <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setProperties(java.util.Map<java.lang.String, java.lang.String>)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setProperties</span>
+      <span class="normal">(Map&lt;String,&nbsp;String&gt; properties)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>properties</td>
+          <td></td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- ========= METHOD DETAIL ======== -->
+
+
+
+<!-- ========= END OF CLASS DATA ========= -->
+<A NAME="navbar_top"></A>
+
+<div id="footer">
+Generated by <a href="http://www.mulesoft.com/devkit">Mule DevKit</a>. Document generation technology based on <a href="http://code.google.com/p/doclava/">Google's Doclava</a>.
+</div> <!-- end footer -->
+
+</div> <!-- jd-content -->
+
+</div><!-- end doc-content -->
+
+</div> <!-- end body-content --> 
+
+<script type="text/javascript">
+init(); /* initialize mule-developer-docs.js */
+</script>
+
+</body>
+</html>

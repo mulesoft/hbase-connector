@@ -1,0 +1,8 @@
+org.mule.module.hbase
+org.mule.module.hbase.adapters
+org.mule.module.hbase.api
+org.mule.module.hbase.api.impl
+org.mule.module.hbase.config
+org.mule.module.hbase.processors
+org.mule.module.hbase.transformers
+
