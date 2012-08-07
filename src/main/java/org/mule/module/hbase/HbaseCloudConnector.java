@@ -330,6 +330,8 @@ public class HbaseCloudConnector {
 	 * Deletes the values at a given row {@sample.xml
 	 * ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
 	 * 
+	 * {@sample.xml ../../../doc/mule-module-hbase.xml.sample hbase:delete-values}
+	 * 
 	 * @param tableName
 	 *            the name of the target table
 	 * @param rowKey
