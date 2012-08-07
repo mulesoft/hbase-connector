@@ -51,9 +51,9 @@ public class HbaseCloudConnector {
 	private HBaseService facade;
 
 	/**
-	 * HBase internal configuration properties. Be sure to add the following
+	 * HBase internal configuration properties, be sure to add the following
 	 * properties to ensure a connection against your hBase instance:
-	 * hbase.zookeeper.quorum, hbase.zookeeper.property.clientPort
+	 * "hbase.zookeeper.quorum", "hbase.zookeeper.property.clientPort"
 	 * 
 	 * For more information please consult HBase documentation.
 	 */
