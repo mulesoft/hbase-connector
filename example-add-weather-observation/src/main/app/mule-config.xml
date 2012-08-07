@@ -1,69 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!--
+<!--
 
 		Mule HBase Cloud Connector Copyright (c) MuleSoft, Inc. All rights
 		reserved. http://www.mulesoft.com The software in this package is
 		published under the terms of the CPAL v1.0 license, a copy of which
 		has been included with this distribution in the LICENSE.txt file.
-	-->
+-->
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:hbase="http://www.mulesoft.org/schemas/mule/hbase"
-	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
-	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.mulesoft.org/schemas/mule/hbase http://www.mulesoft.org/schema/mule/hbase/2.0/mule-hbase.xsd
-       http://www.mulesoft.org/schema/mule/core    http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
-       http://www.mulesoft.org/schema/mule/json    http://www.mulesoft.org/schema/mule/json/3.1/mule-json.xsd
-       http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/3.1/mule-scripting.xsd
-       http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd">
-
-
-	<hbase:config name="hbaseTest" />
-
-	<flow name="CreateWeatherTableIfAbsent">
-		<description>Creates a table if it does not exist</description>
-		<hbase:exists-table tableName="WeatherObservations" />
-		<choice>
-			<when evaluator="groovy" expression="payload">
-				<logger message="Table already exists" />
-				<expression-transformer>
-					<return-argument expression="" evaluator="payload" />
-				</expression-transformer>
-			</when>
-			<otherwise>
-				<logger message="Table does not exist. Creating it" />
-				<hbase:create-table tableName="WeatherObservations" />
-				<hbase:add-column-family tableName="WeatherObservations"
-					columnFamilyName="Weather" />
-			</otherwise>
-		</choice>
-	</flow>
-
-	<flow name="PopulateWeatherTable">
-		<description>Given Adds a row to the table, setting the weather
-			description</description>
-		<logger
-			message="Populating table with the following weather information: #[payload]" />
-		<hbase:put-value tableName="WeatherObservations"
-			columnFamilyName="Weather" columnQualifier="Temperature"
-			rowKey="#[header:session:cityIcao]" value="#[json:weatherObservation/temperature]" />
-		<hbase:put-value tableName="WeatherObservations"
-			columnFamilyName="Weather" columnQualifier="Clouds"
-			rowKey="#[header:session:cityIcao]" value="#[json:weatherObservation/clouds]" />
-	</flow>
-
-	<flow name="AddWeatherObservation">
-		<http:inbound-endpoint host="localhost" port="9090"
-			path="hbase-demo-weather-add-weather-data" />
-		<flow-ref name="CreateWeatherTableIfAbsent" />
-		<message-properties-transformer scope="session">
-			<add-message-property key="cityIcao"
-				value="#[header:inbound:cityIcao]" />
-		</message-properties-transformer>
-		<http:outbound-endpoint host="ws.geonames.org"
-			port="80" path="weatherIcaoJSON?ICAO=#[header:session:cityIcao]" />
-		<flow-ref name="PopulateWeatherTable" />
-	</flow>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" 
+xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+xmlns:hbase="http://www.mulesoft.org/schema/mule/hbase" 
+xmlns:spring="http://www.springframework.org/schema/beans" 
+xmlns:core="http://www.mulesoft.org/schema/mule/core" 
+xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0"
+xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+					http://www.mulesoft.org/schema/mule/hbase http://www.mulesoft.org/schema/mule/hbase/2.0/mule-hbase.xsd 
+					http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
+					http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+					http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd ">
+					
+    <hbase:config name="hbaseTest" doc:name="Hbase">
+        <hbase:properties>
+        	<!-- Please be sure to add this properties as they are the minimal configuration needed to make hBase CloudConnector work -->
+            <hbase:property key="hbase.zookeeper.quorum">172.16.20.35</hbase:property>
+            <hbase:property key="hbase.zookeeper.property.clientPort">2181</hbase:property>
+        </hbase:properties>
+    </hbase:config>
+	
+	<flow name="AddWeatherObservation" doc:name="AddWeatherObservation">
+        <http:inbound-endpoint host="localhost" port="9090" path="hbase-demo-weather-add-weather-data" doc:name="HTTP"/>
+        <flow-ref name="CreateWeatherTableIfAbsent" doc:name="Flow Reference"/>
+        <message-properties-transformer scope="session" doc:name="Message Properties">
+            <add-message-property key="cityIcao" value="#[header:inbound:cityIcao]"/>
+        </message-properties-transformer>
+        <http:outbound-endpoint host="ws.geonames.org" port="80" path="weatherIcaoJSON?ICAO=#[header:session:cityIcao]" doc:name="HTTP"/>
+        <flow-ref name="PopulateWeatherTable" doc:name="Flow Reference"/>
+    </flow>    
+    <flow name="CreateWeatherTableIfAbsent" doc:name="CreateWeatherTableIfAbsent" doc:description="Creates a table if it does not exist">
+        <hbase:exists-table config-ref="hbaseTest" tableName="WeatherObservations" doc:name="Hbase"/>
+        <choice doc:name="Choice">
+            <when expression="payload">
+                <processor-chain>
+                    <logger message="Table already exists" level="INFO" doc:name="Logger"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain>
+                    <logger message="Table does not exist. Creating it" level="INFO" doc:name="Logger"/>
+                    <hbase:create-table config-ref="hbaseTest" tableName="WeatherObservations" doc:name="Hbase"/>
+                    <hbase:add-column-family config-ref="hbaseTest" columnFamilyName="Weather" tableName="WeatherObservations" doc:name="Hbase"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="PopulateWeatherTable" doc:name="PopulateWeatherTable" doc:description="Given Adds a row to the table, setting the weather                         description">
+        <logger message="Populating table with the following weather information: #[payload]" level="INFO" doc:name="Logger"/>
+        <hbase:put-value config-ref="hbaseTest" columnFamilyName="Weather" columnQualifier="Temperature" rowKey="#[header:session:cityIcao]" tableName="WeatherObservations" value-ref="#[json:weatherObservation/temperature]" doc:name="Hbase"/>
+        <hbase:put-value config-ref="hbaseTest" columnFamilyName="Weather" columnQualifier="Clouds" rowKey="#[header:session:cityIcao]" tableName="WeatherObservations" value-ref="#[json:weatherObservation/clouds]" doc:name="Hbase"/>
+    </flow>
 </mule>
