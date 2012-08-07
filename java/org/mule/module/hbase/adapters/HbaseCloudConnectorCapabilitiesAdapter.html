@@ -534,7 +534,11 @@ Summary:
           
           Map&lt;String,&nbsp;String&gt;</nobr></td>
           <td class="jd-linkcol"><a href="../../../../../../org/mule/module/hbase/HbaseCloudConnector.html#properties">properties</a></td>
-          <td class="jd-descrcol" width="100%">HBase internal configuration properties.</td>
+          <td class="jd-descrcol" width="100%">HBase internal configuration properties, be sure to add the following
+ properties to ensure a connection against your hBase instance:
+ "hbase.zookeeper.quorum", "hbase.zookeeper.property.clientPort"
+ 
+ For more information please consult HBase documentation.</td>
       </tr>
       
     

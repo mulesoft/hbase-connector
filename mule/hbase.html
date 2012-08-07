@@ -558,7 +558,11 @@ specify which configuration to use.</p>
           </nobr></td>
           <td class="jd-linkcol"><nobr>properties</nobr></td>
           <td class="jd-descrcol"></td>
-          <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>HBase internal configuration properties.</td>
+          <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>HBase internal configuration properties, be sure to add the following
+ properties to ensure a connection against your hBase instance:
+ "hbase.zookeeper.quorum", "hbase.zookeeper.property.clientPort"
+ 
+ For more information please consult HBase documentation.</td>
       </tr>
       
     
