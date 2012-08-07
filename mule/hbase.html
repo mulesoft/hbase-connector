@@ -312,8 +312,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../mule/hbase.html#check-and-delete-value">&lt;hbase:check-and-delete-value&gt;</a></nobr>
         
-        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one.</div>
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one.</div>
         
   </td></tr>
 
@@ -323,8 +323,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../mule/hbase.html#check-and-put-value">&lt;hbase:check-and-put-value&gt;</a></nobr>
         
-        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one.</div>
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one.</div>
         
   </td></tr>
 
@@ -346,7 +346,7 @@ Summary:
         
         <div class="jd-descrdiv">Delete a column family
  
-  </div>
+ </div>
         
   </td></tr>
 
@@ -367,6 +367,7 @@ Summary:
         <span class="sympad"><a href="../mule/hbase.html#delete-values">&lt;hbase:delete-values&gt;</a></nobr>
         
         <div class="jd-descrdiv">Deletes the values at a given row 
+ 
  </div>
         
   </td></tr>
@@ -490,7 +491,7 @@ Summary:
         <span class="sympad"><a href="../mule/hbase.html#scan-table">&lt;hbase:scan-table&gt;</a></nobr>
         
         <div class="jd-descrdiv">Scans across all rows in a table, returning a scanner over it
-
+ 
  </div>
         
   </td></tr>
@@ -548,7 +549,7 @@ specify which configuration to use.</p>
           </nobr></td>
           <td class="jd-linkcol"><nobr>facade</nobr></td>
           <td class="jd-descrcol"></td>
-          <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The HBaseService You may change it for mocking purposes</td>
+          <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The HBaseService You may change it for mocking purposes </td>
       </tr>
       
     
@@ -592,8 +593,8 @@ specify which configuration to use.</p>
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Adds a column family to a table given a table and column name. This Processor
- gracefully handles necessary table disabling and enabled.
+  <div class="jd-tagdata jd-tagdescr"><p>Adds a column family to a table given a table and column name. This
+ Processor gracefully handles necessary table disabling and enabled.
  
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:add-column-family tableName="#[header:tableName]" columnFamilyName="#[header:columnFamiliyName]" /&gt;</pre></div></p></div>
   <div class="jd-tagdata">
@@ -648,7 +649,9 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>scope</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Replication scope: 0 for locally scoped data (data for this column family will not be replicated) and 1 for globally scoped data (data will be replicated to all peers.)) 
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Replication scope: 0 for locally scoped data (data for this
+            column family will not be replicated) and 1 for globally
+            scoped data (data will be replicated to all peers.))
 </td>
                 </tr>
                 
@@ -696,8 +699,8 @@ specify which configuration to use.</p>
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one. If it does, it performs the delete.
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one. If it does, it performs the delete.
  
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:check-and-delete-value tableName="table-name"
       rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
@@ -718,7 +721,7 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>tableName</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to check. </td>
+                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to check.</td>
                 </tr>
                 
                 
@@ -755,8 +758,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>checkValue</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%">The value to check. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
                 </tr>
                 
                 
@@ -774,10 +777,10 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>deleteColumnQualifier</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%">The qualifier of the column values to delete. If
-            no qualifier is specified, the Processor will affect all the
-            qulifiers for the given column family name to delete. Thus it has
-            only sense if deleteColumnFamilyName is specified</td>
+                    <td class="jd-descrcol" width="100%">The qualifier of the column values to delete. If no qualifier
+            is specified, the Processor will affect all the qulifiers for
+            the given column family name to delete. Thus it has only sense
+            if deleteColumnFamilyName is specified</td>
                 </tr>
                 
                 
@@ -786,8 +789,8 @@ specify which configuration to use.</p>
                 <tr class="alt-color api apilevel-" >
                     <td class="jd-linkcol"><nobr>deleteTimestamp</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The timestamp of the values to delete. If no timestamp
-            is specified, the most recent timestamp for the deleted value is
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The timestamp of the values to delete. If no timestamp is
+            specified, the most recent timestamp for the deleted value is
             used. Only has sense if deleteColumnFamilyName is specified</td>
                 </tr>
                 
@@ -797,8 +800,8 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>deleteAllVersions</nobr></td>
                     <td class="jd-descrcol">false</td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>If all versions should be deleted,or only those more
-            recent than the deleteTimestamp. Only has sense if
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>If all versions should be deleted,or only those more recent
+            than the deleteTimestamp. Only has sense if
             deleteColumnFamilyName and deleteColumnQualifier are specified</td>
                 </tr>
                 
@@ -870,8 +873,8 @@ specify which configuration to use.</p>
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one. If it does, it performs the put.
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one. If it does, it performs the put.
  
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:check-and-put-value tableName="table-name"
       rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
@@ -892,7 +895,7 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>tableName</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to check. </td>
+                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to check.</td>
                 </tr>
                 
                 
@@ -929,8 +932,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>checkValue</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%">The value to check. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
                 </tr>
                 
                 
@@ -967,8 +970,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>value</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%">The value to put. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
                 </tr>
                 
                 
@@ -977,7 +980,8 @@ specify which configuration to use.</p>
                 <tr class="alt-color api apilevel-" >
                     <td class="jd-linkcol"><nobr>writeToWAL</nobr></td>
                     <td class="jd-descrcol">true</td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Set it to false means that in a fail scenario, you will lose any increments that have not been flushed.</td>
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Set it to false means that in a fail scenario, you will lose
+            any increments that have not been flushed.</td>
                 </tr>
                 
                 
@@ -1111,7 +1115,7 @@ specify which configuration to use.</p>
       
   <div class="jd-tagdata jd-tagdescr"><p>Delete a column family
  
-  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:delete-column-family tableName="#[header:tableName]"
+ <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:delete-column-family tableName="#[header:tableName]"
             columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
             compactionCompressionType="LZO" /&gt;</pre></div></p></div>
   <div class="jd-tagdata">
@@ -1238,7 +1242,8 @@ specify which configuration to use.</p>
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Deletes the values at a given row 
+  <div class="jd-tagdata jd-tagdescr"><p>Deletes the values at a given row <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:delete-values tableName="#[variable:tableName]" rowKey="[variable:rowKey]" /&gt;</pre></div>
+ 
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:delete-values tableName="#[variable:tableName]" rowKey="[variable:rowKey]" /&gt;</pre></div></p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Attributes</h5>
@@ -1273,8 +1278,7 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>columnFamilyName</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Set null to delete all column families in the
-            specified row</td>
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Set null to delete all column families in the specified row</td>
                 </tr>
                 
                 
@@ -1283,9 +1287,9 @@ specify which configuration to use.</p>
                 <tr class="alt-color api apilevel-" >
                     <td class="jd-linkcol"><nobr>columnQualifier</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The qualifier of the column values to delete. If no
-            qualifier is specified, the Processor will affect all the qulifiers
-            for the given column family name to delete. Thus it has only sense
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The qualifier of the column values to delete. If no qualifier
+            is specified, the Processor will affect all the qulifiers for
+            the given column family name to delete. Thus it has only sense
             if deleteColumnFamilyName is specified</td>
                 </tr>
                 
@@ -1296,8 +1300,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>timestamp</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The timestamp of the values to delete. If no timestamp is
-            specified, the most recent timestamp for the deleted value is used.
-            Only has sense if deleteColumnFamilyName is specified</td>
+            specified, the most recent timestamp for the deleted value is
+            used. Only has sense if deleteColumnFamilyName is specified</td>
                 </tr>
                 
                 
@@ -1306,8 +1310,8 @@ specify which configuration to use.</p>
                 <tr class="alt-color api apilevel-" >
                     <td class="jd-linkcol"><nobr>deleteAllVersions</nobr></td>
                     <td class="jd-descrcol">false</td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>If all versions should be deleted,or only those more
-            recent than the deleteTimestamp. Only has sense if
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>If all versions should be deleted,or only those more recent
+            than the deleteTimestamp. Only has sense if
             deleteColumnFamilyName and deleteColumnQualifier are specified</td>
                 </tr>
                 
@@ -1718,7 +1722,7 @@ specify which configuration to use.</p>
   <div class="jd-tagdata jd-tagdescr"><p>Atomically increments the value of at a (table, row, familyName,
  familyQualifier) combination. If the cell value does not yet exist it is
  initialized to amount.
-
+ 
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:increment-value tableName="#[map-payload:tableName]"
            columnFamilyName="#[map-payload:columnFamiliyName]"
            columnQualifier="#[map-payload:columQualifier]" 
@@ -1740,7 +1744,7 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>tableName</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to increment.  </td>
+                    <td class="jd-descrcol" width="100%">The name of the table that contains the cell to increment.</td>
                 </tr>
                 
                 
@@ -1777,7 +1781,7 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>amount</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%">The amount to increment the cell with (or decrement, if the
- amount is negative).</td>
+            amount is negative).</td>
                 </tr>
                 
                 
@@ -1869,8 +1873,8 @@ specify which configuration to use.</p>
   
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Return Payload</h5>
-      <ul class="nolist"><li>true if the server can be reached and the master node is alive, false
-         otherwise.
+      <ul class="nolist"><li>true if the server can be reached and the master node is alive,
+         false otherwise.
 </li></ul>
   </div>
     
@@ -1955,8 +1959,8 @@ specify which configuration to use.</p>
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Changes one or more properties of a column family in a table. This Processor
- gracefully handles necessary table disabling and enabled.
+  <div class="jd-tagdata jd-tagdescr"><p>Changes one or more properties of a column family in a table. This
+ Processor gracefully handles necessary table disabling and enabled.
  
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:modify-column-family tableName="#[header:tableName]"
             columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
@@ -2199,8 +2203,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>value</nobr></td>
                     <td class="jd-descrcol"></td>
                     <td class="jd-descrcol" width="100%">The value to put. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
                 </tr>
                 
                 
@@ -2274,7 +2278,7 @@ specify which configuration to use.</p>
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p>Scans across all rows in a table, returning a scanner over it
-
+ 
  <div class="jd-tagdata"><h5 class="jd-tagtitle">XML Sample</h5><pre>&lt;hbase:scan-table tableName="#[map-payload:tableName]"
                                columnFamilyName="#[map-payload:columnFamiliyName]" 
                                startRowKey="#[map-payload:firstRowKey]" /&gt;</pre></div></p></div>
@@ -2293,8 +2297,8 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>tableName</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%">Limits the scan to a specific table. This is the only
-            required argument.</td>
+                    <td class="jd-descrcol" width="100%">Limits the scan to a specific table. This is the only required
+            argument.</td>
                 </tr>
                 
                 
@@ -2312,8 +2316,8 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>columnQualifier</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Limits the scan to a specific column or null. Requires
-            a columnFamilyName to be defined.</td>
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Limits the scan to a specific column or null. Requires a
+            columnFamilyName to be defined.</td>
                 </tr>
                 
                 
@@ -2331,8 +2335,8 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>maxTimestamp</nobr></td>
                     <td class="jd-descrcol"></td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Get versions of columns only within the specified
-            timestamp range: [timestamp, maxTimestamp)</td>
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>Get versions of columns only within the specified timestamp
+            range: [timestamp, maxTimestamp)</td>
                 </tr>
                 
                 
@@ -2350,8 +2354,7 @@ specify which configuration to use.</p>
                 <tr class=" api apilevel-" >
                     <td class="jd-linkcol"><nobr>cacheBlocks</nobr></td>
                     <td class="jd-descrcol">true</td>
-                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The number of rows for caching that will be passed to
-            scanners</td>
+                    <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The number of rows for caching that will be passed to scanners</td>
                 </tr>
                 
                 
@@ -2389,8 +2392,8 @@ specify which configuration to use.</p>
                     <td class="jd-linkcol"><nobr>fetchSize</nobr></td>
                     <td class="jd-descrcol">50</td>
                     <td class="jd-descrcol" width="100%"><i>Optional.&nbsp;</i>The number of results internally fetched by request to the
-            HBase server. Increase it for improving network efficiency, or decrease it
-            for reducing memory usage </td>
+            HBase server. Increase it for improving network efficiency, or
+            decrease it for reducing memory usage</td>
                 </tr>
                 
                 
@@ -2431,7 +2434,8 @@ specify which configuration to use.</p>
   
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Return Payload</h5>
-      <ul class="nolist"><li>an Iterable of Result's. It may be used with a collection splitter.  
+      <ul class="nolist"><li>an Iterable of Result's. It may be used with a collection
+         splitter.
 </li></ul>
   </div>
     

@@ -502,7 +502,7 @@ Summary:
           
           <a href="../../../../../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></nobr></td>
           <td class="jd-linkcol"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#facade">facade</a></td>
-          <td class="jd-descrcol" width="100%">The HBaseService You may change it for mocking purposes</td>
+          <td class="jd-descrcol" width="100%">The HBaseService You may change it for mocking purposes </td>
       </tr>
       
     
@@ -591,8 +591,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#checkAndDeleteValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)">checkAndDeleteValue</a></span>(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String deleteColumnFamilyName, String deleteColumnQualifier, Long deleteTimestamp, boolean deleteAllVersions, RowLock lock)</nobr>
         
-        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one.</div>
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one.</div>
   
   </td></tr>
 
@@ -610,8 +610,8 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#checkAndPutValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)">checkAndPutValue</a></span>(String tableName, String rowKey, String checkColumnFamilyName, String checkColumnQualifier, Object checkValue, String putColumnFamilyName, String putColumnQualifier, Long putTimestamp, Object value, boolean writeToWAL, RowLock lock)</nobr>
         
-        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one.</div>
+        <div class="jd-descrdiv">Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one.</div>
   
   </td></tr>
 
@@ -649,7 +649,7 @@ Summary:
         
         <div class="jd-descrdiv">Delete a column family
  
-  </div>
+ </div>
   
   </td></tr>
 
@@ -686,6 +686,7 @@ Summary:
         <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#deleteValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)">deleteValues</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Long timestamp, boolean deleteAllVersions, RowLock lock)</nobr>
         
         <div class="jd-descrdiv">Deletes the values at a given row 
+ 
  </div>
   
   </td></tr>
@@ -945,7 +946,7 @@ Summary:
         <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#scanTable(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.Integer, boolean, int, java.lang.String, java.lang.String, int)">scanTable</a></span>(String tableName, String columnFamilyName, String columnQualifier, Long timestamp, Long maxTimestamp, Integer caching, boolean cacheBlocks, int maxVersions, String startRowKey, String stopRowKey, int fetchSize)</nobr>
         
         <div class="jd-descrdiv">Scans across all rows in a table, returning a scanner over it
-
+ 
  </div>
   
   </td></tr>
@@ -1253,7 +1254,7 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>The HBaseService You may change it for mocking purposes</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>The HBaseService You may change it for mocking purposes </p></div>
 
     
     </div>
@@ -1283,7 +1284,11 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>HBase internal configuration properties. Consult HBase documentation.
+  <div class="jd-tagdata jd-tagdescr"><p>HBase internal configuration properties. Be sure to add the following
+ properties to ensure a connection against your hBase instance:
+ hbase.zookeeper.quorum, hbase.zookeeper.property.clientPort
+ 
+ For more information please consult HBase documentation.
 </p></div>
 
     
@@ -1372,8 +1377,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Adds a column family to a table given a table and column name. This Processor
- gracefully handles necessary table disabling and enabled.
+  <div class="jd-tagdata jd-tagdescr"><p>Adds a column family to a table given a table and column name. This
+ Processor gracefully handles necessary table disabling and enabled.
  
  </p></div>
   <div class="jd-tagdata">
@@ -1398,7 +1403,9 @@ From class
         </tr>
         <tr>
           <th>scope</td>
-          <td>Replication scope: 0 for locally scoped data (data for this column family will not be replicated) and 1 for globally scoped data (data will be replicated to all peers.)) 
+          <td>Replication scope: 0 for locally scoped data (data for this
+            column family will not be replicated) and 1 for globally
+            scoped data (data will be replicated to all peers.))
 </td>
         </tr>
       </table>
@@ -1433,8 +1440,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one. If it does, it performs the delete.
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one. If it does, it performs the delete.
  
  </p></div>
   <div class="jd-tagdata">
@@ -1442,7 +1449,7 @@ From class
       <table class="jd-tagtable">
         <tr>
           <th>tableName</td>
-          <td>The name of the table that contains the cell to check. </td>
+          <td>The name of the table that contains the cell to check.</td>
         </tr>
         <tr>
           <th>rowKey</td>
@@ -1459,8 +1466,8 @@ From class
         <tr>
           <th>checkValue</td>
           <td>The value to check. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
         </tr>
         <tr>
           <th>deleteColumnFamilyName</td>
@@ -1468,21 +1475,21 @@ From class
         </tr>
         <tr>
           <th>deleteColumnQualifier</td>
-          <td>The qualifier of the column values to delete. If
-            no qualifier is specified, the Processor will affect all the
-            qulifiers for the given column family name to delete. Thus it has
-            only sense if deleteColumnFamilyName is specified</td>
+          <td>The qualifier of the column values to delete. If no qualifier
+            is specified, the Processor will affect all the qulifiers for
+            the given column family name to delete. Thus it has only sense
+            if deleteColumnFamilyName is specified</td>
         </tr>
         <tr>
           <th>deleteTimestamp</td>
-          <td>The timestamp of the values to delete. If no timestamp
-            is specified, the most recent timestamp for the deleted value is
+          <td>The timestamp of the values to delete. If no timestamp is
+            specified, the most recent timestamp for the deleted value is
             used. Only has sense if deleteColumnFamilyName is specified</td>
         </tr>
         <tr>
           <th>deleteAllVersions</td>
-          <td>If all versions should be deleted,or only those more
-            recent than the deleteTimestamp. Only has sense if
+          <td>If all versions should be deleted,or only those more recent
+            than the deleteTimestamp. Only has sense if
             deleteColumnFamilyName and deleteColumnQualifier are specified</td>
         </tr>
         <tr>
@@ -1526,8 +1533,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches the
- given one. If it does, it performs the put.
+  <div class="jd-tagdata jd-tagdescr"><p>Atomically checks if a value at a (table, row,family,qualifier) matches
+ the given one. If it does, it performs the put.
  
  </p></div>
   <div class="jd-tagdata">
@@ -1535,7 +1542,7 @@ From class
       <table class="jd-tagtable">
         <tr>
           <th>tableName</td>
-          <td>The name of the table that contains the cell to check. </td>
+          <td>The name of the table that contains the cell to check.</td>
         </tr>
         <tr>
           <th>rowKey</td>
@@ -1552,8 +1559,8 @@ From class
         <tr>
           <th>checkValue</td>
           <td>The value to check. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
         </tr>
         <tr>
           <th>putColumnFamilyName</td>
@@ -1570,12 +1577,13 @@ From class
         <tr>
           <th>value</td>
           <td>The value to put. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
         </tr>
         <tr>
           <th>writeToWAL</td>
-          <td>Set it to false means that in a fail scenario, you will lose any increments that have not been flushed.</td>
+          <td>Set it to false means that in a fail scenario, you will lose
+            any increments that have not been flushed.</td>
         </tr>
         <tr>
           <th>lock</td>
@@ -1664,7 +1672,7 @@ From class
       
   <div class="jd-tagdata jd-tagdescr"><p>Delete a column family
  
-  </p></div>
+ </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
@@ -1753,6 +1761,7 @@ From class
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p>Deletes the values at a given row 
+ 
  </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
@@ -1767,26 +1776,25 @@ From class
         </tr>
         <tr>
           <th>columnFamilyName</td>
-          <td>Set null to delete all column families in the
-            specified row</td>
+          <td>Set null to delete all column families in the specified row</td>
         </tr>
         <tr>
           <th>columnQualifier</td>
-          <td>The qualifier of the column values to delete. If no
-            qualifier is specified, the Processor will affect all the qulifiers
-            for the given column family name to delete. Thus it has only sense
+          <td>The qualifier of the column values to delete. If no qualifier
+            is specified, the Processor will affect all the qulifiers for
+            the given column family name to delete. Thus it has only sense
             if deleteColumnFamilyName is specified</td>
         </tr>
         <tr>
           <th>timestamp</td>
           <td>The timestamp of the values to delete. If no timestamp is
-            specified, the most recent timestamp for the deleted value is used.
-            Only has sense if deleteColumnFamilyName is specified</td>
+            specified, the most recent timestamp for the deleted value is
+            used. Only has sense if deleteColumnFamilyName is specified</td>
         </tr>
         <tr>
           <th>deleteAllVersions</td>
-          <td>If all versions should be deleted,or only those more
-            recent than the deleteTimestamp. Only has sense if
+          <td>If all versions should be deleted,or only those more recent
+            than the deleteTimestamp. Only has sense if
             deleteColumnFamilyName and deleteColumnQualifier are specified</td>
         </tr>
         <tr>
@@ -2134,14 +2142,14 @@ From class
   <div class="jd-tagdata jd-tagdescr"><p>Atomically increments the value of at a (table, row, familyName,
  familyQualifier) combination. If the cell value does not yet exist it is
  initialized to amount.
-
+ 
  </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
           <th>tableName</td>
-          <td>The name of the table that contains the cell to increment.  </td>
+          <td>The name of the table that contains the cell to increment.</td>
         </tr>
         <tr>
           <th>rowKey</td>
@@ -2158,7 +2166,7 @@ From class
         <tr>
           <th>amount</td>
           <td>The amount to increment the cell with (or decrement, if the
- amount is negative).</td>
+            amount is negative).</td>
         </tr>
         <tr>
           <th>writeToWAL</td>
@@ -2252,8 +2260,8 @@ From class
  </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>true if the server can be reached and the master node is alive, false
-         otherwise.
+      <ul class="nolist"><li>true if the server can be reached and the master node is alive,
+         false otherwise.
 </li></ul>
   </div>
 
@@ -2333,8 +2341,8 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Changes one or more properties of a column family in a table. This Processor
- gracefully handles necessary table disabling and enabled.
+  <div class="jd-tagdata jd-tagdescr"><p>Changes one or more properties of a column family in a table. This
+ Processor gracefully handles necessary table disabling and enabled.
  
  </p></div>
   <div class="jd-tagdata">
@@ -2451,8 +2459,8 @@ From class
         <tr>
           <th>value</td>
           <td>The value to put. It must be either a byte array or a
-            serializable object. As a special case, strings are saved always in
-            standard utf-8 format.</td>
+            serializable object. As a special case, strings are saved
+            always in standard utf-8 format.</td>
         </tr>
         <tr>
           <th>writeToWAL</td>
@@ -2497,15 +2505,15 @@ From class
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p>Scans across all rows in a table, returning a scanner over it
-
+ 
  </p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
           <th>tableName</td>
-          <td>Limits the scan to a specific table. This is the only
-            required argument.</td>
+          <td>Limits the scan to a specific table. This is the only required
+            argument.</td>
         </tr>
         <tr>
           <th>columnFamilyName</td>
@@ -2513,8 +2521,8 @@ From class
         </tr>
         <tr>
           <th>columnQualifier</td>
-          <td>Limits the scan to a specific column or null. Requires
-            a columnFamilyName to be defined.</td>
+          <td>Limits the scan to a specific column or null. Requires a
+            columnFamilyName to be defined.</td>
         </tr>
         <tr>
           <th>timestamp</td>
@@ -2522,8 +2530,8 @@ From class
         </tr>
         <tr>
           <th>maxTimestamp</td>
-          <td>Get versions of columns only within the specified
-            timestamp range: [timestamp, maxTimestamp)</td>
+          <td>Get versions of columns only within the specified timestamp
+            range: [timestamp, maxTimestamp)</td>
         </tr>
         <tr>
           <th>caching</td>
@@ -2531,8 +2539,7 @@ From class
         </tr>
         <tr>
           <th>cacheBlocks</td>
-          <td>The number of rows for caching that will be passed to
-            scanners</td>
+          <td>The number of rows for caching that will be passed to scanners</td>
         </tr>
         <tr>
           <th>maxVersions</td>
@@ -2550,14 +2557,15 @@ From class
         <tr>
           <th>fetchSize</td>
           <td>The number of results internally fetched by request to the
-            HBase server. Increase it for improving network efficiency, or decrease it
-            for reducing memory usage </td>
+            HBase server. Increase it for improving network efficiency, or
+            decrease it for reducing memory usage</td>
         </tr>
       </table>
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Returns</h5>
-      <ul class="nolist"><li>an Iterable of Result's. It may be used with a collection splitter.  
+      <ul class="nolist"><li>an Iterable of Result's. It may be used with a collection
+         splitter.
 </li></ul>
   </div>
 
