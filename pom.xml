@@ -15,6 +15,9 @@
     <slf4j.version>1.6.1</slf4j.version>
     <spring.version>3.1.1.RELEASE</spring.version>
     <hadoop.version>0.20.2</hadoop.version>
+    <category>Community</category>
+    <licensePath>LICENSE.md</licensePath>
+    <devkit.studio.package.skip>false</devkit.studio.package.skip>
   </properties>
 
   <parent>
