@@ -562,7 +562,7 @@ public class HbaseCloudConnector {
 
 	/** @see org.mule.api.lifecycle.Initialisable#initialise() */
 	@PostConstruct
-	public void initialise() throws InitialisationException {
+	public void initialiseConnector() throws InitialisationException {
 		if (facade == null) {
 			setFacade(new RPCHBaseService());
 			facade.addProperties(properties);

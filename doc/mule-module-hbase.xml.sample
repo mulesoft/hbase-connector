@@ -42,8 +42,7 @@
 
 <!-- BEGIN_INCLUDE(hbase:delete-column-family) -->
 <hbase:delete-column-family tableName="#[header:tableName]"
-            columnFamilyName="#[header:columnFamiliyName]" blocksize="#[header:blockSize]"
-            compactionCompressionType="LZO" />
+            columnFamilyName="#[header:columnFamiliyName]" />
 <!-- END_INCLUDE(hbase:delete-column-family) -->
 
 <!-- BEGIN_INCLUDE(hbase:get-values) -->
@@ -77,13 +76,13 @@
 <!-- BEGIN_INCLUDE(hbase:check-and-put-value) -->
 <hbase:check-and-put-value tableName="table-name"
       rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
-      checkValue="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
-      putTimestamp="putTimestamp" value-ref="new putvalue" />
+      checkValue-ref="somevalue" putColumnFamilyName="f2" putColumnQualifier="q2"
+      putTimestamp="123456" value-ref="new putvalue" />
 <!-- END_INCLUDE(hbase:check-and-put-value) -->
 
 <!-- BEGIN_INCLUDE(hbase:check-and-delete-value) -->
 <hbase:check-and-delete-value tableName="table-name"
       rowKey="row-key" checkColumnFamilyName="f1" checkColumnQualifier="q1"
-      checkValue="somevalue" deleteColumnFamilyName="f2"
-      deleteColumnQualifier="q2" deleteTimestamp="putTimestamp" />
+      checkValue-ref="somevalue" deleteColumnFamilyName="f2"
+      deleteColumnQualifier="q2" deleteTimestamp="1233444" />
 <!-- END_INCLUDE(hbase:check-and-delete-value) -->
