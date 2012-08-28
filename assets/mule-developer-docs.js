@@ -19,7 +19,7 @@ function addLoadEvent(newfun) {
     if (typeof window.onload != 'function') {
         window.onload = newfun;
     } else {
-        window.onload = function() {
+        window.onload = function () {
             current();
             newfun();
         }
@@ -29,19 +29,19 @@ function addLoadEvent(newfun) {
 var agent = navigator['userAgent'].toLowerCase();
 // If a mobile phone, set flag and do mobile setup
 if ((agent.indexOf("mobile") != -1) || // android, iphone, ipod
-        (agent.indexOf("blackberry") != -1) ||
-        (agent.indexOf("webos") != -1) ||
-        (agent.indexOf("mini") != -1)) {        // opera mini browsers
+    (agent.indexOf("blackberry") != -1) ||
+    (agent.indexOf("webos") != -1) ||
+    (agent.indexOf("mini") != -1)) {        // opera mini browsers
     isMobile = true;
     addLoadEvent(mobileSetup);
 // If not a mobile browser, set the onresize event for IE6, and others
 } else if (agent.indexOf("msie 6") != -1) {
     isIE6 = true;
-    addLoadEvent(function() {
+    addLoadEvent(function () {
         window.onresize = resizeAll;
     });
 } else {
-    addLoadEvent(function() {
+    addLoadEvent(function () {
         window.onresize = resizeHeight;
     });
 }
@@ -52,19 +52,19 @@ function mobileSetup() {
     $("#body-content").css({'position':'relative', 'top':'0'});
     $("#doc-content").css({'overflow':'visible', 'border-left':'3px solid #DDD'});
     $("#side-nav").css({'padding':'0'});
-    $("#nav-tree").css({'overflow-y': 'auto'});
+    $("#nav-tree").css({'overflow-y':'auto'});
 }
 
 /* loads the lists.js file to the page.
  Loading this in the head was slowing page load time */
-addLoadEvent(function() {
+addLoadEvent(function () {
     var lists = document.createElement("script");
     lists.setAttribute("type", "text/javascript");
     lists.setAttribute("src", toRoot + "java/lists.js");
     document.getElementsByTagName("head")[0].appendChild(lists);
 });
 
-addLoadEvent(function() {
+addLoadEvent(function () {
     $("pre:not(.no-pretty-print)").addClass("prettyprint");
     prettyPrint();
 });
@@ -144,7 +144,7 @@ function getSection() {
 
 function init() {
     HEADER_HEIGHT = $("#header").height() + 3;
-    $("#side-nav").css({position:"absolute",left:0});
+    $("#side-nav").css({position:"absolute", left:0});
     content = $("#doc-content");
     resizePackagesNav = $("#resize-packages-nav");
     classesNav = $("#classes-nav");
@@ -154,10 +154,10 @@ function init() {
     var cookiePath = getSection() + "_";
 
     if (!isMobile) {
-        $("#resize-packages-nav").resizable({handles: "s", resize: function(e, ui) {
+        $("#resize-packages-nav").resizable({handles:"s", resize:function (e, ui) {
             resizePackagesHeight();
         } });
-        $(".side-nav-resizable").resizable({handles: "e", resize: function(e, ui) {
+        $(".side-nav-resizable").resizable({handles:"e", resize:function (e, ui) {
             resizeWidth();
         } });
         var cookieWidth = readCookie(cookiePath + 'width');
@@ -356,7 +356,7 @@ function loadLast(cookiePath) {
     return true;
 }
 
-$(window).unload(function() {
+$(window).unload(function () {
     var path = getBaseUri(location.pathname);
     if (path.indexOf("/reference/") != -1) {
         writeCookie("lastpage", path, "reference", null);
@@ -389,10 +389,10 @@ function toggle(obj, slide) {
 
 function buildToggleLists() {
     $(".toggle-list").each(
-            function(i) {
-                $("div:first", this).append("<a class='toggle-img' href='#' title='show pages' onClick='toggle(this.parentNode.parentNode, true); return false;'></a>");
-                $(this).addClass("closed");
-            });
+        function (i) {
+            $("div:first", this).append("<a class='toggle-img' href='#' title='show pages' onClick='toggle(this.parentNode.parentNode, true); return false;'></a>");
+            $(this).addClass("closed");
+        });
 }
 
 function getNavPref() {

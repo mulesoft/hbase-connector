@@ -65,10 +65,10 @@ function changeApiLevel() {
 function showApiWarning(thing, selectedLevelIndex, minLevelIndex) {
     if (selectedLevelIndex < minLevelIndex) {
         $("#naMessage").show().html("<div><p><strong>This " + thing
-                + " is not available with API version "
-                + SINCE_LABELS[selectedLevelIndex] + ".</strong></p>"
-                + "<p>To reveal this "
-                + "document, change the value in the API filter above.</p>");
+            + " is not available with API version "
+            + SINCE_LABELS[selectedLevelIndex] + ".</strong></p>"
+            + "<p>To reveal this "
+            + "document, change the value in the API filter above.</p>");
     } else {
         $("#naMessage").hide();
     }
@@ -76,7 +76,7 @@ function showApiWarning(thing, selectedLevelIndex, minLevelIndex) {
 
 function toggleVisisbleApis(selectedLevelIndex, context) {
     var apis = $(".api", context);
-    apis.each(function(i) {
+    apis.each(function (i) {
         var obj = $(this);
         var className = obj.attr("class");
         var apiLevelPos = className.lastIndexOf("-") + 1;
@@ -132,7 +132,7 @@ function new_node(me, mom, text, link, children_data, api_level) {
         node.label_div.style.paddingLeft = 10 * node.depth + "px";
         node.expand_toggle = document.createElement("a");
         node.expand_toggle.href = "javascript:void(0)";
-        node.expand_toggle.onclick = function() {
+        node.expand_toggle.onclick = function () {
             if (node.expanded) {
                 $(node.get_children_ul()).slideUp("fast");
                 node.plus_img.src = toAssets + "images/triangle-closed-small.png";
@@ -170,7 +170,7 @@ function new_node(me, mom, text, link, children_data, api_level) {
 
 
     node.children_ul = null;
-    node.get_children_ul = function() {
+    node.get_children_ul = function () {
         if (!node.children_ul) {
             node.children_ul = document.createElement("ul");
             node.children_ul.className = "children_ul";
@@ -206,7 +206,7 @@ function get_node(me, mom) {
     for (var i in mom.children_data) {
         var node_data = mom.children_data[i];
         mom.children[i] = new_node(me, mom, node_data[0], node_data[1],
-                node_data[2], node_data[3]);
+            node_data[2], node_data[3]);
     }
 }
 
@@ -278,7 +278,7 @@ function init_navtree(navtree_id, toroot, root_nodes) {
     me.node.children_data = root_nodes;
     me.node.children = new Array();
     me.node.children_ul = document.createElement("ul");
-    me.node.get_children_ul = function() {
+    me.node.get_children_ul = function () {
         return me.node.children_ul;
     };
     //me.node.children_ul.className = "children_ul";
@@ -297,7 +297,7 @@ function init_navtree(navtree_id, toroot, root_nodes) {
             expand_node(me, mom);
         }
         mom.label_div.className = mom.label_div.className + " selected";
-        addLoadEvent(function() {
+        addLoadEvent(function () {
             scrollIntoView("nav-tree");
         });
     }
@@ -342,12 +342,12 @@ function toggleAllInherited(linkObj, expand) {
     var table = $(a.parent().parent().parent()); // ugly way to get table/tbody
     var expandos = $(".jd-expando-trigger", table);
     if ((expand == null && a.text() == "[Expand]") || expand) {
-        expandos.each(function(i) {
+        expandos.each(function (i) {
             toggleInherited(this, true);
         });
         a.text("[Collapse]");
     } else if ((expand == null && a.text() == "[Collapse]") || (expand == false)) {
-        expandos.each(function(i) {
+        expandos.each(function (i) {
             toggleInherited(this, false);
         });
         a.text("[Expand]");
@@ -361,12 +361,12 @@ function toggleAllClassInherited() {
     var a = $("#toggleAllClassInherited"); // get toggle link from class title
     var toggles = $(".toggle-all", $("#doc-content"));
     if (a.text() == "[Expand All]") {
-        toggles.each(function(i) {
+        toggles.each(function (i) {
             toggleAllInherited(this, true);
         });
         a.text("[Collapse All]");
     } else {
-        toggles.each(function(i) {
+        toggles.each(function (i) {
             toggleAllInherited(this, false);
         });
         a.text("[Expand All]");
@@ -377,7 +377,7 @@ function toggleAllClassInherited() {
 /* Expand all inherited members in the class. Used when initiating page search */
 function ensureAllInheritedExpanded() {
     var toggles = $(".toggle-all", $("#doc-content"));
-    toggles.each(function(i) {
+    toggles.each(function (i) {
         toggleAllInherited(this, true);
     });
     $("#toggleAllClassInherited").text("[Collapse All]");
@@ -390,7 +390,7 @@ function ensureAllInheritedExpanded() {
 var agent = navigator['userAgent'].toLowerCase();
 var mac = agent.indexOf("macintosh") != -1;
 
-$(document).keydown(function(e) {
+$(document).keydown(function (e) {
     var control = mac ? e.metaKey && !e.ctrlKey : e.ctrlKey; // get ctrl key
     if (control && e.which == 70) {  // 70 is "F"
         ensureAllInheritedExpanded();

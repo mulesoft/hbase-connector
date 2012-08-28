@@ -32,7 +32,7 @@ function sync_selection_table(toroot) {
     var i; //TR iterator
     gSelectedID = -1;
 
-    filtered.onmouseover = function() {
+    filtered.onmouseover = function () {
         if (gSelectedIndex >= 0) {
             set_row_selected(this.rows[gSelectedIndex], false);
             gSelectedIndex = -1;
@@ -48,13 +48,13 @@ function sync_selection_table(toroot) {
             c1.className = "jd-autocomplete";
             //   c2.className = "jd-autocomplete jd-linktype";
             var link = document.createElement("a");
-            c1.onmousedown = function() {
+            c1.onmousedown = function () {
                 window.location = this.firstChild.getAttribute("href");
             }
-            c1.onmouseover = function() {
+            c1.onmouseover = function () {
                 this.className = this.className + " jd-selected";
             }
-            c1.onmouseout = function() {
+            c1.onmouseout = function () {
                 this.className = "jd-autocomplete";
             }
             c1.appendChild(link);
@@ -129,7 +129,7 @@ function search_changed(e, kd, toroot) {
     // 40 -- arrow down
     else if (kd && (e.keyCode == 40)) {
         if (gSelectedIndex < gMatches.length - 1
-                && gSelectedIndex < ROW_COUNT - 1) {
+            && gSelectedIndex < ROW_COUNT - 1) {
             gSelectedIndex++;
         }
         sync_selection_table(toroot);
@@ -142,7 +142,7 @@ function search_changed(e, kd, toroot) {
         for (var i = 0; i < DATA.length; i++) {
             var s = DATA[i];
             if (text.length != 0 &&
-                    s.label.toLowerCase().indexOf(text.toLowerCase()) != -1) {
+                s.label.toLowerCase().indexOf(text.toLowerCase()) != -1) {
                 gMatches[matchedCount] = s;
                 matchedCount++;
             }
@@ -167,7 +167,7 @@ function rank_autocomplete_results(query) {
 
     // helper function that gets the last occurence index of the given regex
     // in the given string, or -1 if not found
-    var _lastSearch = function(s, re) {
+    var _lastSearch = function (s, re) {
         if (s == '')
             return -1;
         var l = -1;
@@ -182,7 +182,7 @@ function rank_autocomplete_results(query) {
 
     // helper function that counts the occurrences of a given character in
     // a given string
-    var _countChar = function(s, c) {
+    var _countChar = function (s, c) {
         var n = 0;
         for (var i = 0; i < s.length; i++)
             if (s.charAt(i) == c) ++n;
@@ -194,7 +194,7 @@ function rank_autocomplete_results(query) {
     var partPrefixAlnumRE = new RegExp('\\b' + queryAlnum);
     var partExactAlnumRE = new RegExp('\\b' + queryAlnum + '\\b');
 
-    var _resultScoreFn = function(result) {
+    var _resultScoreFn = function (result) {
         // scores are calculated based on exact and prefix matches,
         // and then number of path separators (dots) from the last
         // match (i.e. favoring classes and deep package names)
@@ -222,7 +222,7 @@ function rank_autocomplete_results(query) {
         gMatches[i].__resultScore = _resultScoreFn(gMatches[i]);
     }
 
-    gMatches.sort(function(a, b) {
+    gMatches.sort(function (a, b) {
         var n = b.__resultScore - a.__resultScore;
         if (n == 0) // lexicographical sort if scores are the same
             n = (a.label < b.label) ? -1 : 1;
@@ -238,10 +238,10 @@ function highlight_autocomplete_result_labels(query) {
     var queryLower = query.toLowerCase();
     var queryAlnumDot = (queryLower.match(/[\w\.]+/) || [''])[0];
     var queryRE = new RegExp(
-            '(' + queryAlnumDot.replace(/\./g, '\\.') + ')', 'ig');
+        '(' + queryAlnumDot.replace(/\./g, '\\.') + ')', 'ig');
     for (var i = 0; i < gMatches.length; i++) {
         gMatches[i].__hilabel = gMatches[i].label.replace(
-                queryRE, '<b>$1</b>');
+            queryRE, '<b>$1</b>');
     }
 }
 

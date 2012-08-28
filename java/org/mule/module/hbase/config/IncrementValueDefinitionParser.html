@@ -207,11 +207,17 @@
     <li class="api apilevel-">
   <a href="../../../../../../java/org/mule/module/hbase/adapters/package-summary.html">org.mule.module.hbase.adapters</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../../java/org/mule/module/hbase/agents/package-summary.html">org.mule.module.hbase.agents</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../../java/org/mule/module/hbase/api/package-summary.html">org.mule.module.hbase.api</a></li>
     <li class="api apilevel-">
   <a href="../../../../../../java/org/mule/module/hbase/api/impl/package-summary.html">org.mule.module.hbase.api.impl</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../../java/org/mule/module/hbase/api/transformers/package-summary.html">org.mule.module.hbase.api.transformers</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../../java/org/mule/module/hbase/config/package-summary.html">org.mule.module.hbase.config</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../../java/org/mule/module/hbase/process/package-summary.html">org.mule.module.hbase.process</a></li>
     <li class="api apilevel-">
   <a href="../../../../../../java/org/mule/module/hbase/processors/package-summary.html">org.mule.module.hbase.processors</a></li>
     <li class="api apilevel-">
@@ -222,9 +228,15 @@
           <div id="classes-nav">
             <ul>
               
+    <li><h2>Interfaces</h2>
+      <ul>
+          <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">AbstractDefinitionParser.ParseDelegate</a>&lt;T&gt;</li>
+      </ul>
+    </li>
               
     <li><h2>Classes</h2>
       <ul>
+          <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.html">AbstractDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/AddColumnFamilyDefinitionParser.html">AddColumnFamilyDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/CheckAndDeleteValueDefinitionParser.html">CheckAndDeleteValueDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/CheckAndPutValueDefinitionParser.html">CheckAndPutValueDefinitionParser</a></li>
@@ -239,6 +251,7 @@
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/GetValuesDefinitionParser.html">GetValuesDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/HbaseCloudConnectorConfigDefinitionParser.html">HbaseCloudConnectorConfigDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/HbaseCloudConnectorNamespaceHandler.html">HbaseCloudConnectorNamespaceHandler</a></li>
+          <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/HbaseNamespaceHandler.html">HbaseNamespaceHandler</a></li>
           <li class="selected api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/IncrementValueDefinitionParser.html">IncrementValueDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/IsAliveServerDefinitionParser.html">IsAliveServerDefinitionParser</a></li>
           <li class="api apilevel-"><a href="../../../../../../java/org/mule/module/hbase/config/IsEnabledTableDefinitionParser.html">IsEnabledTableDefinitionParser</a></li>
@@ -293,6 +306,15 @@
   
   
   
+   
+  
+  
+
+  
+   
+  
+  
+  
   
 
   
@@ -314,9 +336,9 @@ Summary:
 
 
 
-  <a href="#lfields">Fields</a>
-  
 
+  <a href="#inhfields">Inherited Fields</a>
+  
 
 
   &#124; <a href="#pubctors">Ctors</a>
@@ -327,9 +349,6 @@ Summary:
   &#124; <a href="#pubmethods">Methods</a>
   
 
-
-  &#124; <a href="#promethods">Protected Methods</a>
-  
 
 
   &#124; <a href="#inhmethods">Inherited Methods</a>
@@ -361,17 +380,16 @@ Summary:
 
 
   
-    extends Object<br/>
+  
+  
+
+  
+    extends <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.html">AbstractDefinitionParser</a><br/>
   
   
   
 
   
-  
-      implements 
-      
-        BeanDefinitionParser 
-      
   
   
 
@@ -386,11 +404,21 @@ Summary:
 
     <tr>
         
-        <td colspan="2" class="jd-inheritance-class-cell">java.lang.Object</td>
+        <td colspan="3" class="jd-inheritance-class-cell">java.lang.Object</td>
     </tr>
     
 
     <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+        
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.html">org.mule.module.hbase.config.AbstractDefinitionParser</a></td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
         
@@ -452,9 +480,30 @@ Summary:
 
 
 
-<!-- =========== FIELD SUMMARY =========== -->
-<table id="lfields" class="jd-sumtable"><tr><th colspan="12">Fields</th></tr>
 
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-org.mule.module.hbase.config.AbstractDefinitionParser" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-org.mule.module.hbase.config.AbstractDefinitionParser-trigger"
+          src="../../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html">org.mule.module.hbase.config.AbstractDefinitionParser</a>
+<div id="inherited-fields-org.mule.module.hbase.config.AbstractDefinitionParser">
+  <div id="inherited-fields-org.mule.module.hbase.config.AbstractDefinitionParser-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-org.mule.module.hbase.config.AbstractDefinitionParser-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
 
     
       <tr class="alt-color api apilevel-" >
@@ -463,18 +512,24 @@ Summary:
           
           
           TemplateParser.PatternInfo</nobr></td>
-          <td class="jd-linkcol"><a href="../../../../../../org/mule/module/hbase/config/IncrementValueDefinitionParser.html#patternInfo">patternInfo</a></td>
+          <td class="jd-linkcol"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#patternInfo">patternInfo</a></td>
           <td class="jd-descrcol" width="100%">Mule Pattern Info
  
 </td>
       </tr>
       
     
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
 
 </table>
-
-
-
 
 
 
@@ -524,7 +579,7 @@ Summary:
             BeanDefinition</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/IncrementValueDefinitionParser.html#parse(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext)">parse</a></span>(Element element, ParserContext parserContent)</nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/IncrementValueDefinitionParser.html#parse(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext)">parse</a></span>(Element element, ParserContext parserContext)</nobr>
         
   </td></tr>
 
@@ -535,9 +590,64 @@ Summary:
 
 
 
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="promethods" class="jd-sumtable"><tr><th colspan="12">Protected Methods</th></tr>
 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+<table id="inhmethods" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Methods</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-org.mule.module.hbase.config.AbstractDefinitionParser" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-org.mule.module.hbase.config.AbstractDefinitionParser-trigger"
+          src="../../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html">org.mule.module.hbase.config.AbstractDefinitionParser</a>
+
+<div id="inherited-methods-org.mule.module.hbase.config.AbstractDefinitionParser">
+  <div id="inherited-methods-org.mule.module.hbase.config.AbstractDefinitionParser-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-org.mule.module.hbase.config.AbstractDefinitionParser-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#attachProcessorDefinition(org.springframework.beans.factory.xml.ParserContext, org.springframework.beans.factory.config.BeanDefinition)">attachProcessorDefinition</a></span>(ParserContext parserContext, BeanDefinition definition)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#attachSourceDefinition(org.springframework.beans.factory.xml.ParserContext, org.springframework.beans.factory.config.BeanDefinition)">attachSourceDefinition</a></span>(ParserContext parserContext, BeanDefinition definition)</nobr>
+        
+  </td></tr>
 
 
 	 
@@ -551,22 +661,464 @@ Summary:
             String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/IncrementValueDefinitionParser.html#getAttributeValue(org.w3c.dom.Element, java.lang.String)">getAttributeValue</a></span>(Element element, String attributeName)</nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#generateChildBeanName(org.w3c.dom.Element)">generateChildBeanName</a></span>(Element element)</nobr>
         
   </td></tr>
 
 
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#getAttributeValue(org.w3c.dom.Element, java.lang.String)">getAttributeValue</a></span>(Element element, String attributeName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#hasAttribute(org.w3c.dom.Element, java.lang.String)">hasAttribute</a></span>(Element element, String attributeName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#isMuleExpression(java.lang.String)">isMuleExpression</a></span>(String value)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseConfigName(org.w3c.dom.Element)">parseConfigName</a></span>(Element element)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseConfigRef(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder)">parseConfigRef</a></span>(Element element, BeanDefinitionBuilder builder)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            ManagedList</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseList(org.w3c.dom.Element, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseList</a></span>(Element element, String childElementName, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseListAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseListAndSetProperty</a></span>(Element element, BeanDefinitionBuilder builder, String fieldName, String parentElementName, String childElementName, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseListWithDefaultAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseListWithDefaultAndSetProperty</a></span>(Element element, BeanDefinitionBuilder builder, String fieldName, String parentElementName, String childElementName, String defaultValue, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            ManagedMap</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseMap(org.w3c.dom.Element, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseMap</a></span>(Element element, String childElementName, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseMapAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseMapAndSetProperty</a></span>(Element element, BeanDefinitionBuilder builder, String fieldName, String parentElementName, String childElementName, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseMapWithDefaultAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.mule.module.hbase.config.AbstractDefinitionParser.ParseDelegate)">parseMapWithDefaultAndSetProperty</a></span>(Element element, BeanDefinitionBuilder builder, String fieldName, String parentElementName, String childElementName, String defaultValue, <a href="../../../../../../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">ParseDelegate</a> parserDelegate)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            BeanDefinition</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessor(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext, java.lang.Class)">parseNestedProcessor</a></span>(Element element, ParserContext parserContext, Class factory)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessorAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext, java.lang.Class, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String)">parseNestedProcessorAndSetProperty</a></span>(Element element, ParserContext parserContext, Class factory, BeanDefinitionBuilder builder, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessorAndSetProperty(org.w3c.dom.Element, java.lang.String, org.springframework.beans.factory.xml.ParserContext, java.lang.Class, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String)">parseNestedProcessorAndSetProperty</a></span>(Element element, String childElementName, ParserContext parserContext, Class factory, BeanDefinitionBuilder builder, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            List</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessorAsList(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext, java.lang.Class)">parseNestedProcessorAsList</a></span>(Element element, ParserContext parserContext, Class factory)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessorAsListAndSetProperty(org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext, java.lang.Class, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String)">parseNestedProcessorAsListAndSetProperty</a></span>(Element element, ParserContext parserContext, Class factory, BeanDefinitionBuilder builder, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseNestedProcessorAsListAndSetProperty(org.w3c.dom.Element, java.lang.String, org.springframework.beans.factory.xml.ParserContext, java.lang.Class, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String)">parseNestedProcessorAsListAndSetProperty</a></span>(Element element, String childElementName, ParserContext parserContext, Class factory, BeanDefinitionBuilder builder, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseObjectRef(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String)">parseObjectRef</a></span>(Element element, BeanDefinitionBuilder builder, String elementName, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseObjectRefWithDefault(org.w3c.dom.Element, org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String, java.lang.String)">parseObjectRefWithDefault</a></span>(Element element, BeanDefinitionBuilder builder, String elementName, String propertyName, String defaultValue)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseProperty(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.w3c.dom.Element, java.lang.String)">parseProperty</a></span>(BeanDefinitionBuilder builder, Element element, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseProperty(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.w3c.dom.Element, java.lang.String, java.lang.String)">parseProperty</a></span>(BeanDefinitionBuilder builder, Element element, String attributeName, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parsePropertyRef(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.w3c.dom.Element, java.lang.String)">parsePropertyRef</a></span>(BeanDefinitionBuilder builder, Element element, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parsePropertyRef(org.springframework.beans.factory.support.BeanDefinitionBuilder, org.w3c.dom.Element, java.lang.String, java.lang.String)">parsePropertyRef</a></span>(BeanDefinitionBuilder builder, Element element, String attributeName, String propertyName)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#parseRetryPolicyTemplate(java.lang.String, org.w3c.dom.Element, org.springframework.beans.factory.xml.ParserContext, org.springframework.beans.factory.support.BeanDefinitionBuilder, org.springframework.beans.factory.config.BeanDefinition)">parseRetryPolicyTemplate</a></span>(String elementName, Element element, ParserContext parserContext, BeanDefinitionBuilder builder, BeanDefinition definition)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#setDestroyMethodIfNeeded(org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.Class)">setDestroyMethodIfNeeded</a></span>(BeanDefinitionBuilder builder, Class clazz)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#setInitMethodIfNeeded(org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.Class)">setInitMethodIfNeeded</a></span>(BeanDefinitionBuilder builder, Class clazz)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#setNoRecurseOnDefinition(org.springframework.beans.factory.config.BeanDefinition)">setNoRecurseOnDefinition</a></span>(BeanDefinition definition)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/config/AbstractDefinitionParser.html#setRef(org.springframework.beans.factory.support.BeanDefinitionBuilder, java.lang.String, java.lang.String)">setRef</a></span>(BeanDefinitionBuilder builder, String propertyName, String ref)</nobr>
+        
+  </td></tr>
+
 
 </table>
+  </div>
+</div>
+</td></tr>
 
-
-
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="inhmethods" class="jd-sumtable"><tr><th>
-  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
-  <div style="clear:left;">Inherited Methods</div></th></tr>
 
 
 <tr class="api apilevel-" >
@@ -838,45 +1390,6 @@ From interface
 <!-- Fields -->
 
 
-<!-- ========= FIELD DETAIL ======== -->
-<h2>Fields</h2>
-
-
-
-
-<A NAME="patternInfo"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        private 
-         
-         
-        TemplateParser.PatternInfo
-      </span>
-        patternInfo
-    </h4>
-      <div class="api-level">
-        
-
-
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p>Mule Pattern Info
- 
-</p></div>
-
-    
-    </div>
-</div>
-
-
-
-
 <!-- Public ctors -->
 
 
@@ -944,7 +1457,7 @@ From interface
         BeanDefinition
       </span>
       <span class="sympad">parse</span>
-      <span class="normal">(Element element, ParserContext parserContent)</span>
+      <span class="normal">(Element element, ParserContext parserContext)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -965,7 +1478,7 @@ From interface
           <td></td>
         </tr>
         <tr>
-          <th>parserContent</td>
+          <th>parserContext</td>
           <td></td>
         </tr>
       </table>
@@ -979,55 +1492,6 @@ From interface
 
 
 <!-- ========= METHOD DETAIL ======== -->
-
-<h2>Protected Methods</h2>
-
-
-
-<A NAME="getAttributeValue(org.w3c.dom.Element, java.lang.String)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        protected 
-         
-         
-         
-         
-        String
-      </span>
-      <span class="sympad">getAttributeValue</span>
-      <span class="normal">(Element element, String attributeName)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-  <div class="jd-tagdata">
-      <h5 class="jd-tagtitle">Parameters</h5>
-      <table class="jd-tagtable">
-        <tr>
-          <th>element</td>
-          <td></td>
-        </tr>
-        <tr>
-          <th>attributeName</td>
-          <td></td>
-        </tr>
-      </table>
-  </div>
-
-    </div>
-</div>
-
-
 
 
 

@@ -207,11 +207,17 @@
     <li class="api apilevel-">
   <a href="../../../../../java/org/mule/module/hbase/adapters/package-summary.html">org.mule.module.hbase.adapters</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/agents/package-summary.html">org.mule.module.hbase.agents</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../java/org/mule/module/hbase/api/package-summary.html">org.mule.module.hbase.api</a></li>
     <li class="api apilevel-">
   <a href="../../../../../java/org/mule/module/hbase/api/impl/package-summary.html">org.mule.module.hbase.api.impl</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/api/transformers/package-summary.html">org.mule.module.hbase.api.transformers</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../java/org/mule/module/hbase/config/package-summary.html">org.mule.module.hbase.config</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../java/org/mule/module/hbase/process/package-summary.html">org.mule.module.hbase.process</a></li>
     <li class="api apilevel-">
   <a href="../../../../../java/org/mule/module/hbase/processors/package-summary.html">org.mule.module.hbase.processors</a></li>
     <li class="api apilevel-">
@@ -417,7 +423,11 @@ Summary:
               >
           
             
-              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorLifecycleAdapter.html">HbaseCloudConnectorLifecycleAdapter</a>
+              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorLifecycleAdapter.html">HbaseCloudConnectorLifecycleAdapter</a>,
+            
+              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorMetadataAdapater.html">HbaseCloudConnectorMetadataAdapater</a>,
+            
+              <a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorProcessAdapter.html">HbaseCloudConnectorProcessAdapter</a>
             
           
       </div>
@@ -428,6 +438,14 @@ Summary:
         <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorLifecycleAdapter.html">HbaseCloudConnectorLifecycleAdapter</a></td>
               <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorLifecycleAdapter</code> is a wrapper around <code><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that adds lifecycle methods to the pojo.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorMetadataAdapater.html">HbaseCloudConnectorMetadataAdapater</a></td>
+              <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorMetadataAdapater</code> is a wrapper around <code><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that adds support for querying metadata about the extension.&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../../java/org/mule/module/hbase/adapters/HbaseCloudConnectorProcessAdapter.html">HbaseCloudConnectorProcessAdapter</a></td>
+              <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorProcessAdapter</code> is a wrapper around <code><a href="../../../../../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that enables custom processing strategies.&nbsp;</td>
           </tr>
   </table>
       </div>
@@ -854,7 +872,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#initialise()">initialise</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#initialiseConnector()">initialiseConnector</a></span>()</nobr>
         
   </td></tr>
 
@@ -2189,7 +2207,7 @@ From class
 </div>
 
 
-<A NAME="initialise()"></A>
+<A NAME="initialiseConnector()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2201,7 +2219,7 @@ From class
          
         void
       </span>
-      <span class="sympad">initialise</span>
+      <span class="sympad">initialiseConnector</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">

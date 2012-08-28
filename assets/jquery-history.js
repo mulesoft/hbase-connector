@@ -3,18 +3,18 @@
  * Copyright (c) 2008 Tom Rodenberg <tarodenberg gmail com>
  * Licensed under the GPL (http://www.gnu.org/licenses/gpl.html) license.
  */
-(function($) {
+(function ($) {
     var currentHash, previousNav, timer, hashTrim = /^.*#/;
 
     var msie = {
-        iframe: null,
-        getDoc: function() {
+        iframe:null,
+        getDoc:function () {
             return msie.iframe.contentWindow.document;
         },
-        getHash: function() {
+        getHash:function () {
             return msie.getDoc().location.hash;
         },
-        setHash: function(hash) {
+        setHash:function (hash) {
             var d = msie.getDoc();
             d.open();
             d.close();
@@ -22,7 +22,7 @@
         }
     };
 
-    var historycheck = function() {
+    var historycheck = function () {
         var hash = msie.iframe ? msie.getHash() : location.hash;
         if (hash != currentHash) {
             currentHash = hash;
@@ -36,7 +36,7 @@
     };
 
     $.history = {
-        add: function(hash) {
+        add:function (hash) {
             hash = '#' + hash.replace(hashTrim, '');
             if (currentHash != hash) {
                 var previous = $.history.getCurrent();
@@ -50,7 +50,7 @@
                 timer = setInterval(historycheck, 100);
             }
         },
-        getCurrent: function() {
+        getCurrent:function () {
             if (currentHash) {
                 return currentHash.replace(hashTrim, '');
             } else {
@@ -59,15 +59,15 @@
         }
     };
 
-    $.fn.history = function(fn) {
+    $.fn.history = function (fn) {
         $(this).bind('history', fn);
     };
 
-    $.fn.historyadd = function(fn) {
+    $.fn.historyadd = function (fn) {
         $(this).bind('historyadd', fn);
     };
 
-    $(function() {
+    $(function () {
         currentHash = location.hash;
         if ($.browser.msie) {
             msie.iframe = $('<iframe style="display:none" src="javascript:false;"></iframe>').prependTo('body')[0];

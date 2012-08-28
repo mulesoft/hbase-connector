@@ -207,11 +207,17 @@
     <li class="api apilevel-">
   <a href="../java/org/mule/module/hbase/adapters/package-summary.html">org.mule.module.hbase.adapters</a></li>
     <li class="api apilevel-">
+  <a href="../java/org/mule/module/hbase/agents/package-summary.html">org.mule.module.hbase.agents</a></li>
+    <li class="api apilevel-">
   <a href="../java/org/mule/module/hbase/api/package-summary.html">org.mule.module.hbase.api</a></li>
     <li class="api apilevel-">
   <a href="../java/org/mule/module/hbase/api/impl/package-summary.html">org.mule.module.hbase.api.impl</a></li>
     <li class="api apilevel-">
+  <a href="../java/org/mule/module/hbase/api/transformers/package-summary.html">org.mule.module.hbase.api.transformers</a></li>
+    <li class="api apilevel-">
   <a href="../java/org/mule/module/hbase/config/package-summary.html">org.mule.module.hbase.config</a></li>
+    <li class="api apilevel-">
+  <a href="../java/org/mule/module/hbase/process/package-summary.html">org.mule.module.hbase.process</a></li>
     <li class="api apilevel-">
   <a href="../java/org/mule/module/hbase/processors/package-summary.html">org.mule.module.hbase.processors</a></li>
     <li class="api apilevel-">
@@ -272,6 +278,7 @@
     <a href="#letter_H">H</a>
     <a href="#letter_I">I</a>
     <a href="#letter_M">M</a>
+    <a href="#letter_N">N</a>
     <a href="#letter_P">P</a>
     <a href="#letter_R">R</a>
     <a href="#letter_S">S</a>
@@ -284,12 +291,42 @@
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/AddColumnFamilyDefinitionParser.html">AddColumnFamilyDefinitionParser</a></td>
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/AbstractDefinitionParser.html">AbstractDefinitionParser</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/AbstractDefinitionParser.ParseDelegate.html">AbstractDefinitionParser.ParseDelegate</a>&lt;T&gt;</td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/AbstractExpressionEvaluator.html">AbstractExpressionEvaluator</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/AbstractListeningMessageProcessor.html">AbstractListeningMessageProcessor</a>&lt;O&gt;</td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/AbstractMessageProcessor.html">AbstractMessageProcessor</a>&lt;O&gt;</td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/AddColumnFamilyDefinitionParser.html">AddColumnFamilyDefinitionParser</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/AddColumnFamilyMessageProcessor.html">AddColumnFamilyMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">AddColumnFamilyMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#addColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer)">addColumnFamily(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Boolean, java.lang.Integer)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
@@ -309,12 +346,18 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/transformers/BloomFilterTypeEnumTransformer.html">BloomFilterTypeEnumTransformer</a></td>
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/api/transformers/BloomFilterTypeEnumTransformer.html">BloomFilterTypeEnumTransformer</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/transformers/BloomFilterTypeEnumTransformer.html">BloomFilterTypeEnumTransformer</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/api/ByteArrayConverter.html">ByteArrayConverter</a></td>
             <td class="jd-descrcol" width="100%">Object to byte array converter.&nbsp;</td>
         </tr>
@@ -358,18 +401,24 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/transformers/CompressionTypeEnumTransformer.html">CompressionTypeEnumTransformer</a></td>
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/api/transformers/CompressionTypeEnumTransformer.html">CompressionTypeEnumTransformer</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
-            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/CreateTableDefinitionParser.html">CreateTableDefinitionParser</a></td>
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/transformers/CompressionTypeEnumTransformer.html">CompressionTypeEnumTransformer</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/CreateTableDefinitionParser.html">CreateTableDefinitionParser</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/CreateTableMessageProcessor.html">CreateTableMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">CreateTableMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#createTable(java.lang.String)">createTable(java.lang.String)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
@@ -383,48 +432,56 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/agents/DefaultSplashScreenAgent.html">DefaultSplashScreenAgent</a></td>
+            <td class="jd-descrcol" width="100%">Agent implementation to add splash screen information for DevKit extensions at application startup
+ 
+&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/DeleteColumnFamilyDefinitionParser.html">DeleteColumnFamilyDefinitionParser</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/DeleteColumnFamilyMessageProcessor.html">DeleteColumnFamilyMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">DeleteColumnFamilyMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#deleteColumnFamily(java.lang.String, java.lang.String)">deleteColumnFamily(java.lang.String, java.lang.String)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/DeleteTableDefinitionParser.html">DeleteTableDefinitionParser</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/DeleteTableMessageProcessor.html">DeleteTableMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">DeleteTableMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#deleteTable(java.lang.String)">deleteTable(java.lang.String)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/DeleteValuesDefinitionParser.html">DeleteValuesDefinitionParser</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/DeleteValuesMessageProcessor.html">DeleteValuesMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">DeleteValuesMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#deleteValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)">deleteValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, boolean, org.apache.hadoop.hbase.client.RowLock)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/DisableTableDefinitionParser.html">DisableTableDefinitionParser</a></td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/DisableTableMessageProcessor.html">DisableTableMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">DisableTableMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#disableTable(java.lang.String)">disableTable(java.lang.String)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
@@ -530,24 +587,42 @@
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/adapters/HbaseCloudConnectorMetadataAdapater.html">HbaseCloudConnectorMetadataAdapater</a></td>
+            <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorMetadataAdapater</code> is a wrapper around <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that adds support for querying metadata about the extension.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/HbaseCloudConnectorNamespaceHandler.html">HbaseCloudConnectorNamespaceHandler</a></td>
             <td class="jd-descrcol" width="100%">Registers bean definitions parsers for handling elements in <code>http://www.mulesoft.org/schema/mule/hbase</code>.&nbsp;</td>
         </tr>
     
     
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/adapters/HbaseCloudConnectorProcessAdapter.html">HbaseCloudConnectorProcessAdapter</a></td>
+            <td class="jd-descrcol" width="100%">A <code>HbaseCloudConnectorProcessAdapter</code> is a wrapper around <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code> that enables custom processing strategies.&nbsp;</td>
+        </tr>
+    
+    
         <tr class=" api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/HbaseNamespaceHandler.html">HbaseNamespaceHandler</a></td>
+            <td class="jd-descrcol" width="100%">Registers bean definitions parsers for handling elements in <code>http://www.mulesoft.org/schema/mule/hbase</code>.&nbsp;</td>
+        </tr>
+    
+    
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></td>
             <td class="jd-descrcol" width="100%">The service exposes several actions to manage and use an HBase database&nbsp;</td>
         </tr>
     
     
-        <tr class="alt-color api apilevel-" >
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/HBaseServiceAdaptor.html">HBaseServiceAdaptor</a></td>
             <td class="jd-descrcol" width="100%">Proxy factory for creating <code><a href="../java/org/mule/module/hbase/api/HBaseService.html">HBaseService</a></code>s that log operations&nbsp;</td>
         </tr>
     
     
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/api/HBaseServiceException.html">HBaseServiceException</a></td>
             <td class="jd-descrcol" width="100%">Wrapper for every checked exception throw by the HBase RPC client&nbsp;</td>
         </tr>
@@ -618,6 +693,19 @@
 </table>
 
 
+<h2 id="letter_N">N</h2>
+<table class="jd-sumtable">
+    
+    
+        <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/process/NestedProcessorChain.html">NestedProcessorChain</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+</table>
+
+
 <h2 id="letter_P">P</h2>
 <table class="jd-sumtable">
     
@@ -630,12 +718,18 @@
     
     
         <tr class=" api apilevel-" >
-            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/PutValueDefinitionParser.html">PutValueDefinitionParser</a></td>
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/process/ProcessCallbackProcessInterceptor.html">ProcessCallbackProcessInterceptor</a>&lt;T,&nbsp;O&gt;</td>
             <td class="jd-descrcol" width="100%">&nbsp;</td>
         </tr>
     
     
         <tr class="alt-color api apilevel-" >
+            <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/config/PutValueDefinitionParser.html">PutValueDefinitionParser</a></td>
+            <td class="jd-descrcol" width="100%">&nbsp;</td>
+        </tr>
+    
+    
+        <tr class=" api apilevel-" >
             <td class="jd-linkcol"><a href="../java/org/mule/module/hbase/processors/PutValueMessageProcessor.html">PutValueMessageProcessor</a></td>
             <td class="jd-descrcol" width="100%">PutValueMessageProcessor invokes the <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html#putValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)">putValue(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Object, boolean, org.apache.hadoop.hbase.client.RowLock)</a></code> method in <code><a href="../java/org/mule/module/hbase/HbaseCloudConnector.html">HbaseCloudConnector</a></code>.&nbsp;</td>
         </tr>
