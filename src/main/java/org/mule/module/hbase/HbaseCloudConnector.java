@@ -51,7 +51,7 @@ import org.apache.hadoop.hbase.client.RowLock;
  * @author Pablo Martin Grigolatto
  * @since Apr 18, 2011
  */
-@Module(name = "hbase", schemaVersion = "2.0")
+@Module(name = "hbase", schemaVersion = "2.0", friendlyName = "HBase")
 public class HbaseCloudConnector {
 	/** The HBaseService You may change it for mocking purposes */
 	@Configurable
