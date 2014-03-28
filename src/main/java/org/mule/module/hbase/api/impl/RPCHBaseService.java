@@ -550,7 +550,7 @@ public class RPCHBaseService implements HBaseService
 
                 return new ResultIterable(scan, fetchSize, hTable);
             }
-        });
+        }, false);
     }
 
     private static class ScannerAndResults
@@ -617,8 +617,24 @@ public class RPCHBaseService implements HBaseService
         @Override
         protected boolean hasNextPage(ScannerAndResults page)
         {
-            return page.getResults().length == fetchSize;
+            boolean hasNextPage = page.getResults().length == fetchSize;
+            if(!hasNextPage){
+            	closeHTable();
+            }
+        	return hasNextPage;
         }
+
+        private void closeHTable() {
+        	try
+        	{
+        		hTable.close();
+			} 
+        	catch (IOException e) 
+        	{
+				throw new UnhandledException(e);
+			}
+			
+		}
 
         @Override
         protected ScannerAndResults nextPage(ScannerAndResults currentPage)
@@ -905,8 +921,11 @@ public class RPCHBaseService implements HBaseService
         }
     }
 
+    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback){
+    	return doWithHTable(tableName, callback, true);
+    }
     /** Retain and release the {@link HTable} */
-    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback)
+    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback, boolean closeHtable)
     {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.notNull(callback);
