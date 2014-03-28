@@ -867,7 +867,7 @@ public class RPCHBaseService implements HBaseService
         return timestamp != null ? timestamp : HConstants.LATEST_TIMESTAMP;
     }
 
-    private HTableInterface createHTable(String tableName)
+    public HTableInterface createHTable(String tableName)
     {
         return hTableInterfaceFactory.createHTableInterface(configuration, tableName.getBytes(UTF8));
     }
