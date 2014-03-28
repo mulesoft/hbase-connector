@@ -13,6 +13,7 @@ import org.mule.module.hbase.api.ByteArrayConverter;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
+import org.mule.transport.NullPayload;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -719,10 +720,12 @@ public class RPCHBaseService implements HBaseService
         {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
-                final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier,
-                    deleteTimestamp, deleteAllVersions, deleteLock);
-                return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
-                    checkColumnQualifier.getBytes(UTF8), toByteArray(checkValue), delete);
+            	final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, deleteLock);
+            	byte[] byteValue = null;
+            	if(checkValue != null && !(checkValue instanceof NullPayload)){
+            		byteValue = toByteArray(checkValue);
+            	}
+            	return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), checkColumnQualifier.getBytes(UTF8), byteValue, delete);
             }
         });
     }
