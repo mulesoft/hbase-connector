@@ -944,7 +944,7 @@ public class RPCHBaseService implements HBaseService
         }
         finally
         {
-            if (hTable != null)
+            if (closeHtable && hTable != null)
             {
                 try
                 {
