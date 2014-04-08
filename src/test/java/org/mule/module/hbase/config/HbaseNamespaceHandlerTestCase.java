@@ -52,7 +52,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
     public void testFlowGet() throws Exception
     {
         final Result mockResult = new Result();
-        when(mockService.get(eq("t1"), eq("r1"), anyInt(), anyLong())).thenReturn(mockResult);
+        when(mockService.get(eq("t1"), eq("r1"), eq("f1"), eq("q1"), anyInt(), anyLong())).thenReturn(mockResult);
 
         final MessageProcessor flow = lookupFlowConstruct("flowGet");
         final MuleEvent event = getTestEvent(null);
@@ -60,7 +60,7 @@ public class HbaseNamespaceHandlerTestCase extends FunctionalTestCase
 
         final Result response = responseEvent.getMessage().getPayload(Result.class);
         assertEquals(mockResult, response);
-        verify(mockService).get(eq("t1"), eq("r1"), anyInt(), anyLong());
+        verify(mockService).get(eq("t1"), eq("r1"), eq("f1"), eq("q1"), anyInt(), anyLong());
     }
 
     public void testFlowPut() throws Exception

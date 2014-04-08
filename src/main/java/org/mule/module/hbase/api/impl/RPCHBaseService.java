@@ -422,14 +422,13 @@ public class RPCHBaseService implements HBaseService
 
     // ------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String rowKey, final Integer maxVersions, final Long timestamp)
-
+    public Result get(String tableName, final String rowKey, final String columnFamilyName, final String columnQualifier, final Integer maxVersions, final Long timestamp)
     {
         return doWithHTable(tableName, new TableCallback<Result>()
         {
             public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
-                return hTable.get(createGet(rowKey, maxVersions, timestamp));
+                return hTable.get(createGet(rowKey, columnFamilyName, columnQualifier, maxVersions, timestamp));
             }
         });
     }
@@ -463,7 +462,7 @@ public class RPCHBaseService implements HBaseService
     public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp)
 
     {
-        final Result result = get(tableName, row, maxVersions, timestamp);
+        final Result result = get(tableName, row, null, null, maxVersions, timestamp);
         return result != null && !result.isEmpty();
     }
 
@@ -783,9 +782,20 @@ public class RPCHBaseService implements HBaseService
         }
     }
 
-    private Get createGet(String rowKey, Integer maxVersions, Long timestamp)
+    private Get createGet(String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)
     {
         Get get = new Get(rowKey.getBytes(UTF8));
+        if (columnFamilyName != null)
+        {
+            if (columnQualifier != null)
+            {
+            	get.addColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+            }
+            else
+            {
+            	get.addFamily(columnFamilyName.getBytes(UTF8));
+            }
+        }
         if (maxVersions != null)
         {
             try

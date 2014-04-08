@@ -289,6 +289,11 @@ public class HbaseCloudConnector {
 	 *            required the target table
 	 * @param rowKey
 	 *            the key of the row to update
+	 * @param columnFamilyName
+	 *            limits the scan to a specific column family or null
+	 * @param columnQualifier
+	 *            limits the scan to a specific column or null. Requires a
+	 *            columnFamilyName to be defined.            
 	 * @param maxVersions
 	 *            the maximum number of versions to retrieved
 	 * @param timestamp
@@ -296,8 +301,9 @@ public class HbaseCloudConnector {
 	 * @return the {@link Result}
 	 */
 	@Processor
-	public Result getValues(final String tableName, final String rowKey, @Optional final Integer maxVersions, @Optional final Long timestamp) {
-		return facade.get(tableName, rowKey, maxVersions, timestamp);
+	public Result getValues(final String tableName, final String rowKey,  @Optional final String columnFamilyName,
+			@Optional final String columnQualifier, @Optional final Integer maxVersions, @Optional final Long timestamp) {
+		return facade.get(tableName, rowKey, columnFamilyName, columnQualifier, maxVersions, timestamp);
 	}
 
 	/**
