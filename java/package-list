@@ -7,5 +7,4 @@ org.mule.module.hbase.api.transformers
 org.mule.module.hbase.config
 org.mule.module.hbase.process
 org.mule.module.hbase.processors
-org.mule.module.hbase.transformers
 
