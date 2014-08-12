@@ -702,7 +702,7 @@ Summary:
             Result</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/api/HBaseService.html#get(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)">get</a></span>(String tableName, String rowKey, Integer maxVersions, Long timestamp)</nobr>
+        <span class="sympad"><a href="../../../../../../org/mule/module/hbase/api/HBaseService.html#get(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)">get</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)</nobr>
         
   </td></tr>
 
@@ -1602,7 +1602,7 @@ Summary:
 </div>
 
 
-<A NAME="get(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)"></A>
+<A NAME="get(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1615,7 +1615,7 @@ Summary:
         Result
       </span>
       <span class="sympad">get</span>
-      <span class="normal">(String tableName, String rowKey, Integer maxVersions, Long timestamp)</span>
+      <span class="normal">(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1637,6 +1637,14 @@ Summary:
         </tr>
         <tr>
           <th>rowKey</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
           <td></td>
         </tr>
         <tr>

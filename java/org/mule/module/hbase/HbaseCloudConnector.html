@@ -831,7 +831,7 @@ Summary:
             Result</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#getValues(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)">getValues</a></span>(String tableName, String rowKey, Integer maxVersions, Long timestamp)</nobr>
+        <span class="sympad"><a href="../../../../../org/mule/module/hbase/HbaseCloudConnector.html#getValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)">getValues</a></span>(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)</nobr>
         
         <div class="jd-descrdiv">Answers the values at the given row - (table, row) combination
  
@@ -2075,7 +2075,7 @@ From class
 </div>
 
 
-<A NAME="getValues(java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)"></A>
+<A NAME="getValues(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.lang.Long)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2088,7 +2088,7 @@ From class
         Result
       </span>
       <span class="sympad">getValues</span>
-      <span class="normal">(String tableName, String rowKey, Integer maxVersions, Long timestamp)</span>
+      <span class="normal">(String tableName, String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2113,6 +2113,15 @@ From class
         <tr>
           <th>rowKey</td>
           <td>The key of the row to update</td>
+        </tr>
+        <tr>
+          <th>columnFamilyName</td>
+          <td>Limits the scan to a specific column family or null</td>
+        </tr>
+        <tr>
+          <th>columnQualifier</td>
+          <td>Limits the scan to a specific column or null. Requires a
+            columnFamilyName to be defined.            </td>
         </tr>
         <tr>
           <th>maxVersions</td>
