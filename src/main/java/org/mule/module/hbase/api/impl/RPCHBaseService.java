@@ -13,6 +13,7 @@ import org.mule.module.hbase.api.ByteArrayConverter;
 import org.mule.module.hbase.api.CompressionType;
 import org.mule.module.hbase.api.HBaseService;
 import org.mule.module.hbase.api.HBaseServiceException;
+import org.mule.transport.NullPayload;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -421,14 +422,13 @@ public class RPCHBaseService implements HBaseService
 
     // ------------ Row Operations
     /** @see HBaseService#get(String, String, Integer, Long) */
-    public Result get(String tableName, final String rowKey, final Integer maxVersions, final Long timestamp)
-
+    public Result get(String tableName, final String rowKey, final String columnFamilyName, final String columnQualifier, final Integer maxVersions, final Long timestamp)
     {
         return doWithHTable(tableName, new TableCallback<Result>()
         {
             public Result doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
-                return hTable.get(createGet(rowKey, maxVersions, timestamp));
+                return hTable.get(createGet(rowKey, columnFamilyName, columnQualifier, maxVersions, timestamp));
             }
         });
     }
@@ -462,7 +462,7 @@ public class RPCHBaseService implements HBaseService
     public boolean exists(String tableName, final String row, final Integer maxVersions, final Long timestamp)
 
     {
-        final Result result = get(tableName, row, maxVersions, timestamp);
+        final Result result = get(tableName, row, null, null, maxVersions, timestamp);
         return result != null && !result.isEmpty();
     }
 
@@ -550,7 +550,7 @@ public class RPCHBaseService implements HBaseService
 
                 return new ResultIterable(scan, fetchSize, hTable);
             }
-        });
+        }, false);
     }
 
     private static class ScannerAndResults
@@ -617,8 +617,24 @@ public class RPCHBaseService implements HBaseService
         @Override
         protected boolean hasNextPage(ScannerAndResults page)
         {
-            return page.getResults().length == fetchSize;
+            boolean hasNextPage = page.getResults().length == fetchSize;
+            if(!hasNextPage){
+            	closeHTable();
+            }
+        	return hasNextPage;
         }
+
+        private void closeHTable() {
+        	try
+        	{
+        		hTable.close();
+			} 
+        	catch (IOException e) 
+        	{
+				throw new UnhandledException(e);
+			}
+			
+		}
 
         @Override
         protected ScannerAndResults nextPage(ScannerAndResults currentPage)
@@ -703,10 +719,12 @@ public class RPCHBaseService implements HBaseService
         {
             public Boolean doWithHBaseAdmin(HTableInterface hTable) throws Exception
             {
-                final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier,
-                    deleteTimestamp, deleteAllVersions, deleteLock);
-                return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8),
-                    checkColumnQualifier.getBytes(UTF8), toByteArray(checkValue), delete);
+            	final Delete delete = createDelete(row, deleteColumnFamilyName, deleteColumnQualifier, deleteTimestamp, deleteAllVersions, deleteLock);
+            	byte[] byteValue = null;
+            	if(checkValue != null && !(checkValue instanceof NullPayload)){
+            		byteValue = toByteArray(checkValue);
+            	}
+            	return hTable.checkAndDelete(row.getBytes(UTF8), checkColumnFamilyName.getBytes(UTF8), checkColumnQualifier.getBytes(UTF8), byteValue, delete);
             }
         });
     }
@@ -764,9 +782,20 @@ public class RPCHBaseService implements HBaseService
         }
     }
 
-    private Get createGet(String rowKey, Integer maxVersions, Long timestamp)
+    private Get createGet(String rowKey, String columnFamilyName, String columnQualifier, Integer maxVersions, Long timestamp)
     {
         Get get = new Get(rowKey.getBytes(UTF8));
+        if (columnFamilyName != null)
+        {
+            if (columnQualifier != null)
+            {
+            	get.addColumn(columnFamilyName.getBytes(UTF8), columnQualifier.getBytes(UTF8));
+            }
+            else
+            {
+            	get.addFamily(columnFamilyName.getBytes(UTF8));
+            }
+        }
         if (maxVersions != null)
         {
             try
@@ -851,7 +880,7 @@ public class RPCHBaseService implements HBaseService
         return timestamp != null ? timestamp : HConstants.LATEST_TIMESTAMP;
     }
 
-    private HTableInterface createHTable(String tableName)
+    public HTableInterface createHTable(String tableName)
     {
         return hTableInterfaceFactory.createHTableInterface(configuration, tableName.getBytes(UTF8));
     }
@@ -905,8 +934,11 @@ public class RPCHBaseService implements HBaseService
         }
     }
 
+    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback){
+    	return doWithHTable(tableName, callback, true);
+    }
     /** Retain and release the {@link HTable} */
-    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback)
+    private <T> T doWithHTable(final String tableName, final TableCallback<T> callback, boolean closeHtable)
     {
         Validate.isTrue(StringUtils.isNotBlank(tableName));
         Validate.notNull(callback);
@@ -922,7 +954,7 @@ public class RPCHBaseService implements HBaseService
         }
         finally
         {
-            if (hTable != null)
+            if (closeHtable && hTable != null)
             {
                 try
                 {

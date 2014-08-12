@@ -38,6 +38,8 @@ public class HbaseTestCase
     private static final String SOME_ROW_KEY = "some-row-key";
     private static final String TABLE_NAME = "table-name";
     private static final String COLUMN_NAME = "column-name";
+    private static final String COLUMN_QUALIFIER = "column-qualifier";
+    
     private HbaseCloudConnector connector;
     private HBaseService facade;
     private RowLock lock;
@@ -126,9 +128,9 @@ public class HbaseTestCase
     {
         Result mockResult = mock(Result.class);
         when(mockResult.isEmpty()).thenReturn(false);
-        when(facade.get(eq(TABLE_NAME), eq(SOME_ROW_KEY), anyInt(), anyLong())).thenReturn(mockResult);
+        when(facade.get(eq(TABLE_NAME), eq(SOME_ROW_KEY), eq(COLUMN_QUALIFIER), eq(COLUMN_NAME), anyInt(), anyLong())).thenReturn(mockResult);
 
-        Result result = connector.getValues(TABLE_NAME, SOME_ROW_KEY, 3, 12345L);
+        Result result = connector.getValues(TABLE_NAME, SOME_ROW_KEY, COLUMN_QUALIFIER, COLUMN_NAME, 3, 12345L);
         assertFalse(result.isEmpty());
 
         connector.putValue(TABLE_NAME, SOME_ROW_KEY, COLUMN_NAME, "q", 123L, "value", true, lock);

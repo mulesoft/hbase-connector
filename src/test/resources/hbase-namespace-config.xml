@@ -27,7 +27,7 @@
 	<hbase:config facade-ref="mockFacade" />
 
 	<flow name="flowGet">
-		<hbase:get-values tableName="t1" rowKey="r1" />
+		<hbase:get-values tableName="t1" rowKey="r1" columnFamilyName="f1" columnQualifier="q1" />
 	</flow>
 
 	<flow name="flowPut">
