@@ -1,0 +1,28 @@
+== Hadoop DB Connector Release Notes
+=== 11/04/2015
+
+=== Contents
+
+- Compatibility
+- Features
+- Fixed in this Release
+- Known Issues
+- Support Resources
+
+Release Notes for version <Connector_Version> of the Hadoop DB connector. These Release Notes accompany the  <Connector_Guide_URL> guide.
+
+=== Compatibility
+The Hadoop DB connector is compatible with:
+
+|===
+|Application/Service|Version
+
+|Mule Runtime|3.4.x or Higher
+|Hadoop DB|2008
+|===
+
+=== Support Resources
+
+- Learn how to link:/mule-user-guide/v/3.7/installing-connectors[Install Anypoint Connectors] using Anypoint Exchange.
+- Access MuleSoft’s MuleForge link:http://forum.mulesoft.org/mulesoft[Forum] to pose questions and get help from Mule’s broad community of users.
+- To access MuleSoft’s expert support team, link:http://www.mulesoft.com/mule-esb-subscription[subscribe] to Mule ESB Enterprise and log in to MuleSoft’s link:http://www.mulesoft.com/support-login[Customer Portal].

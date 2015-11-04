@@ -50,7 +50,7 @@
 <!-- END_INCLUDE(hbase:get-values) -->
 
 <!-- BEGIN_INCLUDE(hbase:put-value) -->
-<hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1" 
+<hbase:put-value tableName="t1" rowKey="r1" columnFamilyName="f1"
                               columnQualifier="q1" value-ref="v1" />
 <!-- END_INCLUDE(hbase:put-value) -->
 
@@ -60,14 +60,14 @@
 
 <!-- BEGIN_INCLUDE(hbase:scan-table) -->
 <hbase:scan-table tableName="#[map-payload:tableName]"
-                               columnFamilyName="#[map-payload:columnFamiliyName]" 
+                               columnFamilyName="#[map-payload:columnFamiliyName]"
                                startRowKey="#[map-payload:firstRowKey]" />
 <!-- END_INCLUDE(hbase:scan-table) -->
 
 <!-- BEGIN_INCLUDE(hbase:increment-value) -->
 <hbase:increment-value tableName="#[map-payload:tableName]"
            columnFamilyName="#[map-payload:columnFamiliyName]"
-           columnQualifier="#[map-payload:columQualifier]" 
+           columnQualifier="#[map-payload:columQualifier]"
            rowKey="#[map-payload:rowKey]"
            amount="10"
            writeToWAL="false"/>
